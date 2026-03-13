@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Learning Fun! 📚</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', cursive;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            animation: bounceIn 1s;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 25px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-icon {
+            font-size: 5em;
+            margin-bottom: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .game-title {
+            font-size: 1.4em;
+            color: #4facfe;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .game-description {
+            font-size: 1em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .play-button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1.8em;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+            margin-top: 10px;
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.6);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 25px;
+            max-width: 900px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideDown 0.5s;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 3em;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+            background: #ffe6e6;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .close-button:hover {
+            color: #f5576c;
+            background: #ffcccc;
+            transform: scale(1.1);
+        }
+
+        .points-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            font-size: 2em;
+            color: #4facfe;
+            font-weight: bold;
+            z-index: 999;
+        }
+
+        .option-button {
+            font-size: 2em;
+            padding: 20px 30px;
+            margin: 10px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            min-width: 180px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+        }
+
+        .option-button:hover {
+            transform: scale(1.1);
+        }
+
+        .option-button:active {
+            transform: scale(0.95);
+        }
+
+        .question-text {
+            font-size: 3em;
+            color: #4facfe;
+            margin: 30px 0;
+            padding: 30px;
+            background: #f0f9ff;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .big-emoji {
+            font-size: 5em;
+            margin: 20px 0;
+            animation: bounce 1s infinite;
+        }
+
+        .feedback {
+            font-size: 3em;
+            margin: 20px 0;
+            min-height: 80px;
+            font-weight: bold;
+        }
+
+        .instruction-text {
+            font-size: 2em;
+            color: #4facfe;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .word-card {
+            display: inline-block;
+            margin: 15px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .word-card:hover {
+            transform: scale(1.1);
+        }
+
+        .word-box {
+            width: 180px;
+            height: 180px;
+            background: white;
+            border: 5px solid #4facfe;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .word-label {
+            font-size: 1.3em;
+            margin-top: 10px;
+            color: #4facfe;
+            font-weight: bold;
+        }
+
+        .sentence-word {
+            display: inline-block;
+            font-size: 2.5em;
+            padding: 15px 25px;
+            margin: 10px 5px;
+            background: white;
+            border: 3px solid #4facfe;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .sentence-word:hover {
+            background: #4facfe;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .sentence-word.selected {
+            background: #00f2fe;
+            color: white;
+            border-color: #00f2fe;
+        }
+
+        .sentence-blank {
+            display: inline-block;
+            min-width: 150px;
+            border-bottom: 4px solid #4facfe;
+            margin: 0 10px;
+            padding: 5px 10px;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #4facfe;
+        }
+
+        .story-text {
+            font-size: 2em;
+            line-height: 1.8;
+            color: #333;
+            background: #f0f9ff;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .letter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .letter-button {
+            font-size: 3em;
+            padding: 20px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .letter-button:hover {
+            transform: scale(1.15);
+        }
+
+        .letter-button.used {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .game-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 10px;
+                padding: 20px;
+            }
+
+            .option-button {
+                font-size: 1.5em;
+                padding: 15px;
+                min-width: 140px;
+            }
+
+            .word-box {
+                width: 140px;
+                height: 140px;
+                font-size: 3em;
+            }
+
+            .sentence-word {
+                font-size: 2em;
+                padding: 12px 20px;
+            }
+
+            .story-text {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="points-display">
+        ⭐ <span id="totalPoints">0</span>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>📚 Learn English! 🎓</h1>
+            <p>Fun Games for ESL Kids!</p>
+        </div>
+
+        <div class="game-grid">
+            <!-- ABC Game -->
+            <div class="game-card" onclick="startABCGame()">
+                <div class="game-icon">🔤</div>
+                <div class="game-title">ABC Fun!</div>
+                <div class="game-description">Learn the Alphabet</div>
+                <button class="play-button">👆 Play</button>
+            </div>
+
+            <!-- Vocabulary Match -->
+            <div class="game-card" onclick="startVocabMatch()">
+                <div class="game-icon">🍎</div>
+                <div class="game-title">Word Match!</div>
+                <div class="game-description">Learn New Words</div>
+                <button class="play-button">👆 Play</button>
+            </div>
+
+            <!-- Sentence Builder -->
+            <div class="game-card" onclick="startSentenceBuilder()">
+                <div class="game-icon">📝</div>
+                <div class="game-title">Make Sentences!</div>
+                <div class="game-description">Build English Sentences</div>
+                <button class="play-button">👆 Play</button>
+            </div>
+
+            <!-- Story Time -->
+            <div class="game-card" onclick="startStoryTime()">
+                <div class="game-icon">📖</div>
+                <div class="game-title">Story Time!</div>
+                <div class="game-description">Read & Answer</div>
+                <button class="play-button">👆 Play</button>
+            </div>
+
+            <!-- Rhyming Words -->
+            <div class="game-card" onclick="startRhymeGame()">
+                <div class="game-icon">🎵</div>
+                <div class="game-title">Rhyme Time!</div>
+                <div class="game-description">Find Rhyming Words</div>
+                <button class="play-button">👆 Play</button>
+            </div>
+
+            <!-- Spelling Bee -->
+            <div class="game-card" onclick="startSpellingBee()">
+                <div class="game-icon">🐝</div>
+                <div class="game-title">Spelling Bee!</div>
+                <div class="game-description">Spell the Word</div>
+                <button class="play-button">👆 Play</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="gameModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">✖</span>
+            <div id="gameArea"></div>
+        </div>
+    </div>
+
+    <script>
+        let totalPoints = 0;
+
+        function updatePoints(points) {
+            totalPoints += points;
+            document.getElementById('totalPoints').innerText = totalPoints;
+            
+            const pointsDisplay = document.querySelector('.points-display');
+            pointsDisplay.style.transform = 'scale(1.3)';
+            setTimeout(() => {
+                pointsDisplay.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        function closeModal() {
+            document.getElementById('gameModal').style.display = 'none';
+        }
+
+        function showFeedback(isCorrect, message) {
+            const feedback = document.getElementById('gameFeedback');
+            if (isCorrect) {
+                feedback.innerHTML = '🎉<br>' + message;
+                feedback.style.color = '#4CAF50';
+                updatePoints(10);
+            } else {
+                feedback.innerHTML = '❌<br>' + message;
+                feedback.style.color = '#f5576c';
+            }
+        }
+
+        // ABC GAME
+        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        
+        function startABCGame() {
+            document.getElementById('gameModal').style.display = 'block';
+            generateABCQuestion();
+        }
+
+        function generateABCQuestion() {
+            const randomIndex = Math.floor(Math.random() * alphabet.length);
+            const correctLetter = alphabet[randomIndex];
+            
+            const options = [correctLetter];
+            while(options.length < 4) {
+                const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+                if(!options.includes(randomLetter)) {
+                    options.push(randomLetter);
+                }
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const sounds = {
+                'A': 'apple', 'B': 'ball', 'C': 'cat', 'D': 'dog', 'E': 'egg',
+                'F': 'fish', 'G': 'goat', 'H': 'hat', 'I': 'ice cream', 'J': 'jump',
+                'K': 'kite', 'L': 'lion', 'M': 'monkey', 'N': 'nose', 'O': 'orange',
+                'P': 'pig', 'Q': 'queen', 'R': 'rabbit', 'S': 'sun', 'T': 'tree',
+                'U': 'umbrella', 'V': 'violin', 'W': 'water', 'X': 'box', 'Y': 'yellow', 'Z': 'zebra'
+            };
+
+            let optionsHTML = '';
+            options.forEach(letter => {
+                optionsHTML += `<button class="option-button" onclick="checkABC('${letter}', '${correctLetter}')">${letter}</button>`;
+            });
+
+            document.getElementById('gameArea').innerHTML = `
+                <div style="text-align: center;">
+                    <div class="big-emoji">🔤</div>
+                    <div class="instruction-text">Find the letter!</div>
+                    <div class="question-text">${correctLetter} is for ${sounds[correctLetter]}</div>
+                    
+                    <div style="margin: 30px 0;">
+                        ${optionsHTML}
+                    </div>
+
+                    <div class="feedback" id="gameFeedback"></div>
+                </div>
+            `;
+        }
+
+        function checkABC(selected, correct) {
+            if(selected === correct) {
+                showFeedback(true, 'Perfect!');
+                setTimeout(generateABCQuestion, 2000);
+            } else {
+                showFeedback(false, 'Try again!');
+            }
+        }
+
+        // VOCABULARY MATCH
+        const vocabWords = [
+            {word: 'Apple', emoji: '🍎', category: 'Fruit'},
+            {word: 'Banana', emoji: '🍌', category: 'Fruit'},
+            {word: 'Cat', emoji: '🐱', category: 'Animal'},
+            {word: 'Dog', emoji: '🐶', category: 'Animal'},
+            {word: 'Car', emoji: '🚗', category: 'Vehicle'},
+            {word: 'Plane', emoji: '✈️', category: 'Vehicle'},
+            {word: 'Sun', emoji: '☀️', category: 'Nature'},
+            {word: 'Moon', emoji: '🌙', category: 'Nature'},
+            {word: 'Book', emoji: '📚', category: 'School'},
+            {word: 'Pencil', emoji: '✏️', category: 'School'}
+        ];
+
+        function startVocabMatch() {
+            document.getElementById('gameModal').style.display = 'block';
+            generateVocabQuestion();
+        }
+
+        function generateVocabQuestion() {
+            const correct = vocabWords[Math.floor(Math.random() * vocabWords.length)];
+            const options = [correct];
+            
+            while(options.length < 3) {
+                const random = vocabWords[Math.floor(Math.random() * vocabWords.length)];
+                if(!options.includes(random)) {
+                    options.push(random);
+                }
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            let optionsHTML = '';
+            options.forEach(item => {
+                optionsHTML += `
+                    <div class="word-card" onclick="checkVocab('${item.word}', '${correct.word}')">
+                        <div class="word-box">${item.emoji}</div>
+                        <div class="word-label">${item.word}</div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('gameArea').innerHTML = `
+                <div style="text-align: center;">
+                    <div class="big-emoji">🍎</div>
+                    <div class="instruction-text">What is this?</div>
+                    <div class="question-text">${correct.emoji}</div>
+                    
+                    <div style="margin: 30px 0;">
+                        ${optionsHTML}
+                    </div>
+
+                    <div class="feedback" id="gameFeedback"></div>
+                </div>
+            `;
+        }
+
+        function checkVocab(selected, correct) {
+            if(selected === correct) {
+                showFeedback(true, 'Great job!');
+                setTimeout(generateVocabQuestion, 2000);
+            } else {
+                showFeedback(false, 'Try again!');
+            }
+        }
+
+        // SENTENCE BUILDER
+        const sentences = [
+            {words: ['I', 'am', 'happy'], emoji: '😊'},
+            {words: ['The', 'cat', 'is', 'big'], emoji: '🐱'},
+            {words: ['I', 'like', 'apples'], emoji: '🍎'},
+            {words: ['We', 'go', 'to', 'school'], emoji: '🏫'},
+            {words: ['Birds', 'can', 'fly'], emoji: '🐦'},
+            {words: ['The', 'sun', 'is', 'yellow'], emoji: '☀️'}
+        ];
+
+        let selectedWords = [];
+
+        function startSentenceBuilder() {
+            document.getElementById('gameModal').style.display = 'block';
+            generateSentenceQuestion();
+        }
+
+        function generateSentenceQuestion() {
+            selectedWords = [];
+            const correct = sentences[Math.floor(Math.random() * sentences.length)];
+            const shuffled = [...correct.words].sort(() => Math.random() - 0.5);
+
+            let wordsHTML = '';
+            shuffled.forEach((word, index) => {
+                wordsHTML += `<span class="sentence-word" onclick="selectWord('${word}', ${index})" id="word${index}">${word}</span>`;
+            });
+
+            document.getElementById('gameArea').innerHTML = `
+                <div style="text-align: center;">
+                    <div class="big-emoji">📝</div>
+                    <div class="instruction-text">Put the words in order!</div>
+                    <div style="font-size: 4em; margin: 20px 0;">${correct.emoji}</div>
+                    
+                    <div style="margin: 30px 0;">
+                        ${wordsHTML}
+                    </div>
+
+                    <div class="question-text" id="sentenceDisplay" style="min-height: 100px;">
+                        Click words in order...
+                    </div>
+
+                    <button class="option-button" onclick="checkSentence('${correct.words.join(' ')}')" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        ✓ Check!
+                    </button>
+                    <button class="option-button" onclick="resetSentence()" style="background: #ccc; color: #333;">
+                        🔄 Reset
+                    </button>
+
+                    <div class="feedback" id="gameFeedback"></div>
+                </div>
+            `;
+        }
+
+        function selectWord(word, index) {
+            const wordElement = document.getElementById('word' + index);
+            if(wordElement.classList.contains('selected')) {
+                return;
+            }
+            
+            selectedWords.push(word);
+            wordElement.classList.add('selected');
+            
+            document.getElementById('sentenceDisplay').innerHTML = selectedWords.join(' ');
+        }
+
+        function resetSentence() {
+            selectedWords = [];
+            document.querySelectorAll('.sentence-word').forEach(el => {
+                el.classList.remove('selected');
+            });
+            document.getElementById('sentenceDisplay').innerHTML = 'Click words in order...';
+        }
+
+        function checkSentence(correct) {
+            const userSentence = selectedWords.join(' ');
+            if(userSentence === correct) {
+                showFeedback(true, 'Perfect sentence!');
+                setTimeout(generateSentenceQuestion, 2500);
+            } else {
+                showFeedback(false, 'Try again!');
+            }
+        }
+
+        // STORY TIME
+        const stories = [
+            {
+                text: "Tom has a red ball. He likes to play with his ball in the park. Tom kicks the ball very high!",
+                question: "What color is Tom's ball?",
+                options: ['Red', 'Blue', 'Green'],
+                answer: 'Red',
+                emoji: '⚽'
+            },
+            {
+                text: "Sally has a cute cat. Her cat's name is Fluffy. Fluffy likes to drink milk and sleep on the sofa.",
+                question: "What is the cat's name?",
+                options: ['Fluffy', 'Kitty', 'Whiskers'],
+                answer: 'Fluffy',
+                emoji: '🐱'
+            },
+            {
+                text: "It is a sunny day. Birds are singing in the trees. Children are playing in the park. Everyone is happy!",
+                question: "What kind of day is it?",
+                options: ['Rainy', 'Sunny', 'Cloudy'],
+                answer: 'Sunny',
+                emoji: '☀️'
+            }
+        ];
+
+        function startStoryTime() {
+            document.getElementById('gameModal').style.display = 'block';
+            generateStoryQuestion();
+        }
+
+        function generateStoryQuestion() {
+            const story = stories[Math.floor(Math.random() * stories.length)];
+
+            let optionsHTML = '';
+            story.options.forEach(option => {
+                optionsHTML += `<button class="option-button" onclick="checkStory('${option}', '${story.answer}')">${option}</button>`;
+            });
+
+            document.getElementById('gameArea').innerHTML = `
+                <div style="text-align: center;">
+                    <div class="big-emoji">📖</div>
+                    <div class="instruction-text">Read the story!</div>
+                    
+                    <div class="story-text">
+                        ${story.text}
+                    </div>
+
+                    <div class="question-text">${story.emoji} ${story.question}</div>
+                    
+                    <div style="margin: 30px 0;">
+                        ${optionsHTML}
+                    </div>
+
+                    <div class="feedback" id="gameFeedback"></div>
+                </div>
+            `;
+        }
+
+        function checkStory(selected, correct) {
+            if(selected === correct) {
+                showFeedback(true, 'You read well!');
+                setTimeout(generateStoryQuestion, 2500);
+            } else {
+                showFeedback(false, 'Read again!');
+            }
+        }
+
+        // RHYMING WORDS
+        const rhymes = [
+            {word: 'Cat', rhymes: ['Hat', 'Bat', 'Mat'], notRhymes: ['Dog', 'Sun', 'Car']},
+            {word: 'Bee', rhymes: ['Tree', 'Sea', 'Key'], notRhymes: ['House', 'Book', 'Ball']},
+            {word: 'Sun', rhymes: ['Run', 'Fun', 'Bun'], notRhymes: ['Moon', 'Star', 'Sky']},
+            {word: 'Dog', rhymes: ['Frog', 'Log', 'Hog'], notRhymes: ['Cat', 'Fish', 'Bird']}
+        ];
+
+        function startRhymeGame() {
+            document.getElementById('gameModal').style.display = 'block';
+            generateRhymeQuestion();
+        }
+
+        function generateRhymeQuestion() {
+            const rhyme = rhymes[Math.floor(Math.random() * rhymes.length)];
+            const correctWord = rhyme.rhymes[Math.floor(Math.random() * rhyme.rhymes.length)];
+            
+            const options = [correctWord];
+            while(options.length < 3) {
+                const wrong = rhyme.notRhymes[Math.floor(Math.random() * rhyme.notRhymes.length)];
+                if(!options.includes(wrong)) {
+                    options.push(wrong);
+                }
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            let optionsHTML = '';
+            options.forEach(option => {
+                optionsHTML += `<button class="option-button" onclick="checkRhyme('${option}', '${correctWord}')">${option}</button>`;
+            });
+
+            document.getElementById('gameArea').innerHTML = `
+                <div style="text-align: center;">
+                    <div class="big-emoji">🎵</div>
+                    <div class="instruction-text">Find a rhyming word!</div>
+                    <div class="question-text">Which word rhymes with<br><strong>${rhyme.word}</strong>?</div>
+                    
+                    <div style="margin: 30px 0;">
+                        ${optionsHTML}
+                    </div>
+
+                    <div class="feedback" id="gameFeedback"></div>
+                </div>
+            `;
+        }
+
+        function checkRhyme(selected, correct) {
+            if(selected === correct) {
+                showFeedback(true, 'They rhyme!');
+                setTimeout(generateRhymeQuestion, 2500);
+            } else {
+                showFeedback(false, 'Try again!');
+            }
+        }
+
+        // SPELLING BEE
+        const spellingWords = [
+            {word: 'CAT', emoji: '🐱', hint: 'A pet that says meow'},
+            {word: 'DOG', emoji: '🐶', hint: 'A pet that says woof'},
+            {word: 'SUN', emoji: '☀️', hint: 'It shines in the sky'},
+            {word: 'HAT', emoji: '🎩', hint: 'You wear it on your head'},
+            {word: 'BAT', emoji: '🦇', hint: 'Flies at night'},
+            {word: 'PIG', emoji: '🐷', hint: 'Says oink oink'}
+        ];
+
+        let currentSpellingWord = '';
+        let currentSpelling = '';
+
+        function startSpellingBee() {
+            document.getElementById('gameModal').style.display = 'block';
+            generateSpellingQuestion();
+        }
+
+        function generateSpellingQuestion() {
+            currentSpelling = '';
+            const word = spellingWords[Math.floor(Math.random() * spellingWords.length)];
+            currentSpellingWord = word.word;
+
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+            let lettersHTML = '';
+            letters.forEach(letter => {
+                lettersHTML += `<button class="letter-button" onclick="addLetter('${letter}')" id="btn${letter}">${letter}</button>`;
+            });
+
+            document.getElementById('gameArea').innerHTML = `
+                <div style="text-align: center;">
+                    <div class="big-emoji">🐝</div>
+                    <div class="instruction-text">Spell the word!</div>
+                    <div style="font-size: 5em; margin: 20px 0;">${word.emoji}</div>
+                    <div style="font-size: 1.5em; color: #666; margin: 10px 0;">${word.hint}</div>
+                    
+                    <div class="question-text" id="spellingDisplay" style="min-height: 100px;">
+                        _ _ _
+                    </div>
+
+                    <div class="letter-grid">
+                        ${lettersHTML}
+                    </div>
+
+                    <button class="option-button" onclick="checkSpelling()" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); margin: 10px;">
+                        ✓ Check!
+                    </button>
+                    <button class="option-button" onclick="resetSpelling()" style="background: #ccc; color: #333; margin: 10px;">
+                        🔄 Clear
+                    </button>
+
+                    <div class="feedback" id="gameFeedback"></div>
+                </div>
+            `;
+        }
+
+        function addLetter(letter) {
+            if(currentSpelling.length < currentSpellingWord.length) {
+                currentSpelling += letter;
+                document.getElementById('spellingDisplay').innerHTML = currentSpelling;
+                document.getElementById('btn' + letter).classList.add('used');
+            }
+        }
+
+        function resetSpelling() {
+            currentSpelling = '';
+            document.getElementById('spellingDisplay').innerHTML = '_ _ _';
+            document.querySelectorAll('.letter-button').forEach(btn => {
+                btn.classList.remove('used');
+            });
+        }
+
+        function checkSpelling() {
+            if(currentSpelling === currentSpellingWord) {
+                showFeedback(true, 'Perfect spelling!');
+                setTimeout(generateSpellingQuestion, 2500);
+            } else if(currentSpelling.length === 0) {
+                showFeedback(false, 'Spell the word!');
+            } else {
+                showFeedback(false, 'Try again!');
+            }
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('gameModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
