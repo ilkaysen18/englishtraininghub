@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun Learning Adventures! 🎮</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', cursive;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            animation: bounceIn 1s;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.5em;
+            animation: fadeIn 2s;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .game-card:hover::before {
+            left: 100%;
+        }
+
+        .game-icon {
+            font-size: 4em;
+            text-align: center;
+            margin-bottom: 15px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .game-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .game-description {
+            font-size: 1.1em;
+            color: #666;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .play-button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .play-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.6);
+        }
+
+        .play-button:active {
+            transform: scale(0.98);
+        }
+
+        /* Modal/Game Area */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 50px auto;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideDown 0.5s;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2em;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        .close-button:hover {
+            color: #f5576c;
+        }
+
+        /* Math Challenge Game */
+        .math-game {
+            text-align: center;
+        }
+
+        .math-question {
+            font-size: 3em;
+            color: #667eea;
+            margin: 30px 0;
+            padding: 30px;
+            background: #f0f0f0;
+            border-radius: 15px;
+        }
+
+        .answer-input {
+            font-size: 2em;
+            padding: 15px;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            text-align: center;
+            width: 200px;
+            margin: 20px;
+        }
+
+        .submit-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.5em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+
+        .submit-button:hover {
+            transform: scale(1.1);
+        }
+
+        .score {
+            font-size: 2em;
+            color: #f5576c;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .feedback {
+            font-size: 2em;
+            margin: 20px 0;
+            min-height: 60px;
+        }
+
+        /* Word Scramble Game */
+        .word-scramble {
+            text-align: center;
+        }
+
+        .scrambled-word {
+            font-size: 3em;
+            color: #f5576c;
+            letter-spacing: 10px;
+            margin: 30px 0;
+            padding: 30px;
+            background: #fff4e6;
+            border-radius: 15px;
+        }
+
+        .hint {
+            font-size: 1.3em;
+            color: #666;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        /* Color Memory Game */
+        .color-game {
+            text-align: center;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            gap: 15px;
+            justify-content: center;
+            margin: 30px auto;
+        }
+
+        .color-box {
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-box:hover {
+            transform: scale(1.1);
+        }
+
+        .color-box.flipped {
+            background: #ddd !important;
+        }
+
+        /* Animations */
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .stars {
+            font-size: 3em;
+            margin: 20px 0;
+        }
+
+        /* Points Display */
+        .points-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            font-size: 1.5em;
+            color: #667eea;
+            font-weight: bold;
+            z-index: 999;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .game-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            .color-grid {
+                grid-template-columns: repeat(3, 80px);
+            }
+
+            .color-box {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="points-display">
+        🏆 Points: <span id="totalPoints">0</span>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🎮 Fun Learning Adventures! 🚀</h1>
+            <p>Pick a game and let's have some fun!</p>
+        </div>
+
+        <div class="game-grid">
+            <!-- Math Challenge -->
+            <div class="game-card">
+                <div class="game-icon">🔢</div>
+                <h2 class="game-title">Math Challenge</h2>
+                <p class="game-description">Solve quick math problems and beat the timer!</p>
+                <button class="play-button" onclick="startMathGame()">Play Now!</button>
+            </div>
+
+            <!-- Word Scramble -->
+            <div class="game-card">
+                <div class="game-icon">📝</div>
+                <h2 class="game-title">Word Scramble</h2>
+                <p class="game-description">Unscramble the letters to find the hidden word!</p>
+                <button class="play-button" onclick="startWordGame()">Play Now!</button>
+            </div>
+
+            <!-- Color Memory -->
+            <div class="game-card">
+                <div class="game-icon">🎨</div>
+                <h2 class="game-title">Color Memory</h2>
+                <p class="game-description">Remember the pattern and match the colors!</p>
+                <button class="play-button" onclick="startColorGame()">Play Now!</button>
+            </div>
+
+            <!-- Quick Quiz -->
+            <div class="game-card">
+                <div class="game-icon">🧠</div>
+                <h2 class="game-title">Quick Quiz</h2>
+                <p class="game-description">Answer fun trivia questions and learn new facts!</p>
+                <button class="play-button" onclick="startQuizGame()">Play Now!</button>
+            </div>
+
+            <!-- Drawing Canvas -->
+            <div class="game-card">
+                <div class="game-icon">🖌️</div>
+                <h2 class="game-title">Drawing Fun</h2>
+                <p class="game-description">Draw and color whatever you imagine!</p>
+                <button class="play-button" onclick="startDrawingGame()">Play Now!</button>
+            </div>
+
+            <!-- Story Builder -->
+            <div class="game-card">
+                <div class="game-icon">📚</div>
+                <h2 class="game-title">Story Builder</h2>
+                <p class="game-description">Create your own funny stories with random words!</p>
+                <button class="play-button" onclick="startStoryGame()">Play Now!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Games -->
+    <div id="gameModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <div id="gameArea"></div>
+        </div>
+    </div>
+
+    <script>
+        let totalPoints = 0;
+
+        function updatePoints(points) {
+            totalPoints += points;
+            document.getElementById('totalPoints').innerText = totalPoints;
+            
+            // Animate points
+            const pointsDisplay = document.querySelector('.points-display');
+            pointsDisplay.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                pointsDisplay.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        function closeModal() {
+            document.getElementById('gameModal').style.display = 'none';
+        }
+
+        // Math Game
+        let mathScore = 0;
+        let currentAnswer = 0;
+
+        function startMathGame() {
+            mathScore = 0;
+            document.getElementById('gameModal').style.display = 'block';
+            document.getElementById('gameArea').innerHTML = `
+                <div class="math-game">
+                    <h2 style="color: #667eea; font-size: 2.5em;">🔢 Math Challenge!</h2>
+                    <div class="score">Score: <span id="mathScore">0</span>/10</div>
+                    <div class="math-question" id="mathQuestion"></div>
+                    <input type="number" class="answer-input" id="mathAnswer" placeholder="?" />
+                    <br>
+                    <button class="submit-button" onclick="checkMathAnswer()">Submit ✓</button>
+                    <button class="submit-button" onclick="skipMathQuestion()">Skip ➔</button>
+                    <div class="feedback" id="mathFeedback"></div>
+                </div>
+            `;
+            generateMathQuestion();
+
+            // Allow Enter key to submit
+            document.getElementById('mathAnswer').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkMathAnswer();
+            });
+        }
+
+        function generateMathQuestion() {
+            const num1 = Math.floor(Math.random() * 20) + 1;
+            const num2 = Math.floor(Math.random() * 20) + 1;
+            const operations = ['+', '-', '×'];
+            const operation = operations[Math.floor(Math.random() * operations.length)];
+
+            let question = `${num1} ${operation} ${num2}`;
+            
+            switch(operation) {
+                case '+':
+                    currentAnswer = num1 + num2;
+                    break;
+                case '-':
+                    currentAnswer = num1 - num2;
+                    break;
+                case '×':
+                    currentAnswer = num1 * num2;
+                    break;
+            }
+
+            document.getElementById('mathQuestion').innerText = question + ' = ?';
+            document.getElementById('mathAnswer').value = '';
+            document.getElementById('mathAnswer').focus();
+        }
+
+        function checkMathAnswer() {
+            const userAnswer = parseInt(document.getElementById('mathAnswer').value);
+            const feedback = document.getElementById('mathFeedback');
+
+            if (userAnswer === currentAnswer) {
+                feedback.innerHTML = '🎉 Awesome! That\'s correct!';
+                feedback.style.color = '#4CAF50';
+                mathScore++;
+                updatePoints(10);
+                document.getElementById('mathScore').innerText = mathScore;
+                
+                setTimeout(() => {
+                    if (mathScore < 10) {
+                        generateMathQuestion();
+                        feedback.innerHTML = '';
+                    } else {
+                        feedback.innerHTML = `<div class="stars">⭐⭐⭐</div><h2>You're a Math Star! 🌟</h2><p>Perfect score!</p>`;
+                        updatePoints(50); // Bonus for perfect score
+                    }
+                }, 1500);
+            } else {
+                feedback.innerHTML = `❌ Oops! The answer was ${currentAnswer}. Try the next one!`;
+                feedback.style.color = '#f5576c';
+                
+                setTimeout(() => {
+                    if (mathScore < 10) {
+                        generateMathQuestion();
+                        feedback.innerHTML = '';
+                    }
+                }, 2000);
+            }
+        }
+
+        function skipMathQuestion() {
+            document.getElementById('mathFeedback').innerHTML = '⏭️ Skipped! Here\'s a new one!';
+            setTimeout(() => {
+                generateMathQuestion();
+                document.getElementById('mathFeedback').innerHTML = '';
+            }, 1000);
+        }
+
+        // Word Scramble Game
+        const words = [
+            {word: 'ELEPHANT', hint: 'A big animal with a trunk'},
+            {word: 'RAINBOW', hint: 'Colorful arc in the sky'},
+            {word: 'DINOSAUR', hint: 'Ancient giant reptile'},
+            {word: 'BUTTERFLY', hint: 'Colorful flying insect'},
+            {word: 'COMPUTER', hint: 'You\'re looking at one!'},
+            {word: 'CHOCOLATE', hint: 'Sweet brown treat'},
+            {word: 'SUNSHINE', hint: 'Bright light from the sky'},
+            {word: 'MOUNTAIN', hint: 'Very tall landform'},
+            {word: 'PENGUIN', hint: 'Bird that can\'t fly but swims'},
+            {word: 'TREASURE', hint: 'Pirates search for this'}
+        ];
+
+        let currentWord = '';
+
+        function startWordGame() {
+            document.getElementById('gameModal').style.display = 'block';
+            const randomWord = words[Math.floor(Math.random() * words.length)];
+            currentWord = randomWord.word;
+            const scrambled = scrambleWord(currentWord);
+            
+            document.getElementById('gameArea').innerHTML = `
+                <div class="word-scramble">
+                    <h2 style="color: #f5576c; font-size: 2.5em;">📝 Word Scramble!</h2>
+                    <p style="font-size: 1.3em; margin: 20px 0;">Unscramble the letters:</p>
+                    <div class="scrambled-word">${scrambled}</div>
+                    <div class="hint">💡 Hint: ${randomWord.hint}</div>
+                    <input type="text" class="answer-input" id="wordAnswer" placeholder="Type here" style="text-transform: uppercase;" />
+                    <br>
+                    <button class="submit-button" onclick="checkWordAnswer()">Check Answer ✓</button>
+                    <button class="submit-button" onclick="startWordGame()">New Word ➔</button>
+                    <div class="feedback" id="wordFeedback"></div>
+                </div>
+            `;
+
+            document.getElementById('wordAnswer').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkWordAnswer();
+            });
+            document.getElementById('wordAnswer').focus();
+        }
+
+        function scrambleWord(word) {
+            const arr = word.split('');
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr.join(' ');
+        }
+
+        function checkWordAnswer() {
+            const userAnswer = document.getElementById('wordAnswer').value.toUpperCase();
+            const feedback = document.getElementById('wordFeedback');
+
+            if (userAnswer === currentWord) {
+                feedback.innerHTML = '🎉 Perfect! You got it right!';
+                feedback.style.color = '#4CAF50';
+                updatePoints(20);
+                
+                setTimeout(() => {
+                    startWordGame();
+                }, 2000);
+            } else {
+                feedback.innerHTML = '❌ Not quite! Try again or get a new word!';
+                feedback.style.color = '#f5576c';
+            }
+        }
+
+        // Color Memory Game
+        let colorSequence = [];
+        let playerSequence = [];
+        let colorLevel = 1;
+
+        function startColorGame() {
+            colorSequence = [];
+            playerSequence = [];
+            colorLevel = 1;
+            
+            document.getElementById('gameModal').style.display = 'block';
+            document.getElementById('gameArea').innerHTML = `
+                <div class="color-game">
+                    <h2 style="color: #667eea; font-size: 2.5em;">🎨 Color Memory!</h2>
+                    <p style="font-size: 1.3em; margin: 20px 0;">Watch the pattern, then repeat it!</p>
+                    <div class="score">Level: <span id="colorLevel">1</span></div>
+                    <div class="color-grid" id="colorGrid">
+                        <div class="color-box" style="background: #FF6B6B;" onclick="playerClickColor(0)"></div>
+                        <div class="color-box" style="background: #4ECDC4;" onclick="playerClickColor(1)"></div>
+                        <div class="color-box" style="background: #45B7D1;" onclick="playerClickColor(2)"></div>
+                        <div class="color-box" style="background: #FFA07A;" onclick="playerClickColor(3)"></div>
+                        <div class="color-box" style="background: #98D8C8;" onclick="playerClickColor(4)"></div>
+                        <div class="color-box" style="background: #F7DC6F;" onclick="playerClickColor(5)"></div>
+                    </div>
+                    <button class="submit-button" onclick="startColorSequence()">Start Game! 🎮</button>
+                    <div class="feedback" id="colorFeedback"></div>
+                </div>
+            `;
+        }
+
+        function startColorSequence() {
+            playerSequence = [];
+            colorSequence.push(Math.floor(Math.random() * 6));
+            playColorSequence();
+        }
+
+        function playColorSequence() {
+            const boxes = document.querySelectorAll('.color-box');
+            let i = 0;
+            
+            const interval = setInterval(() => {
+                if (i > 0) {
+                    boxes[colorSequence[i - 1]].style.opacity = '1';
+                }
+                
+                if (i < colorSequence.length) {
+                    boxes[colorSequence[i]].style.opacity = '0.3';
+                    // Play sound would go here
+                    i++;
+                } else {
+                    boxes[colorSequence[i - 1]].style.opacity = '1';
+                    clearInterval(interval);
+                    document.getElementById('colorFeedback').innerHTML = '👆 Your turn! Repeat the pattern!';
+                    document.getElementById('colorFeedback').style.color = '#667eea';
+                }
+            }, 800);
+        }
+
+        function playerClickColor(index) {
+            if (playerSequence.length >= colorSequence.length) return;
+            
+            playerSequence.push(index);
+            
+            // Flash the box
+            const boxes = document.querySelectorAll('.color-box');
+            boxes[index].style.opacity = '0.5';
+            setTimeout(() => {
+                boxes[index].style.opacity = '1';
+            }, 200);
+            
+            // Check if player made a mistake
+            if (playerSequence[playerSequence.length - 1] !== colorSequence[playerSequence.length - 1]) {
+                document.getElementById('colorFeedback').innerHTML = '❌ Oops! Let\'s try again from level 1!';
+                document.getElementById('colorFeedback').style.color = '#f5576c';
+                colorSequence = [];
+                colorLevel = 1;
+                document.getElementById('colorLevel').innerText = colorLevel;
+                
+                setTimeout(() => {
+                    startColorSequence();
+                }, 2000);
+                return;
+            }
+            
+            // Check if player completed the sequence
+            if (playerSequence.length === colorSequence.length) {
+                document.getElementById('colorFeedback').innerHTML = '🎉 Amazing! Get ready for the next level!';
+                document.getElementById('colorFeedback').style.color = '#4CAF50';
+                colorLevel++;
+                document.getElementById('colorLevel').innerText = colorLevel;
+                updatePoints(15);
+                
+                setTimeout(() => {
+                    startColorSequence();
+                }, 1500);
+            }
+        }
+
+        // Quick Quiz Game
+        const quizQuestions = [
+            {
+                question: "What color is the sky on a clear day?",
+                options: ["Red", "Blue", "Green", "Yellow"],
+                correct: 1
+            },
+            {
+                question: "How many legs does a spider have?",
+                options: ["6", "8", "10", "4"],
+                correct: 1
+            },
+            {
+                question: "What do bees make?",
+                options: ["Milk", "Honey", "Bread", "Water"],
+                correct: 1
+            },
+            {
+                question: "Which animal says 'Moo'?",
+                options: ["Dog", "Cat", "Cow", "Pig"],
+                correct: 2
+            },
+            {
+                question: "How many days are in a week?",
+                options: ["5", "6", "7", "8"],
+                correct: 2
+            },
+            {
+                question: "What do you use to write?",
+                options: ["Fork", "Spoon", "Pencil", "Plate"],
+                correct: 2
+            },
+            {
+                question: "What shape is a ball?",
+                options: ["Square", "Triangle", "Circle", "Rectangle"],
+                correct: 2
+            },
+            {
+                question: "What comes after 9?",
+                options: ["8", "10", "11", "9"],
+                correct: 1
+            }
+        ];
+
+        let currentQuizQuestion = 0;
+        let quizScore = 0;
+
+        function startQuizGame() {
+            currentQuizQuestion = 0;
+            quizScore = 0;
+            document.getElementById('gameModal').style.display = 'block';
+            showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            if (currentQuizQuestion >= quizQuestions.length) {
+                document.getElementById('gameArea').innerHTML = `
+                    <div style="text-align: center;">
+                        <div class="stars">⭐⭐⭐</div>
+                        <h2 style="color: #667eea; font-size: 2.5em;">Quiz Complete!</h2>
+                        <p style="font-size: 2em; margin: 20px 0;">You got ${quizScore} out of ${quizQuestions.length} correct!</p>
+                        <button class="submit-button" onclick="startQuizGame()">Play Again! 🔄</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const q = quizQuestions[currentQuizQuestion];
+            let optionsHTML = '';
+            
+            q.options.forEach((option, index) => {
+                optionsHTML += `<button class="submit-button" style="margin: 10px; width: 80%;" onclick="checkQuizAnswer(${index})">${option}</button><br>`;
+            });
+
+            document.getElementById('gameArea').innerHTML = `
+                <div style="text-align: center;">
+                    <h2 style="color: #667eea; font-size: 2.5em;">🧠 Quick Quiz!</h2>
+                    <div class="score">Question ${currentQuizQuestion + 1} of ${quizQuestions.length}</div>
+                    <div class="score">Score: ${quizScore}</div>
+                    <div style="font-size: 1.8em; margin: 30px 0; padding: 30px; background: #f0f0f0; border-radius: 15px;">
+                        ${q.question}
+                    </div>
+                    ${optionsHTML}
+                    <div class="feedback" id="quizFeedback"></div>
+                </div>
+            `;
+        }
+
+        function checkQuizAnswer(selected) {
+            const q = quizQuestions[currentQuizQuestion];
+            const feedback = document.getElementById('quizFeedback');
+            
+            if (selected === q.correct) {
+                feedback.innerHTML = '🎉 Correct! Well done!';
+                feedback.style.color = '#4CAF50';
+                quizScore++;
+                updatePoints(10);
+            } else {
+                feedback.innerHTML = `❌ The correct answer was: ${q.options[q.correct]}`;
+                feedback.style.color = '#f5576c';
+            }
+            
+            currentQuizQuestion++;
+            
+            setTimeout(() => {
+                showQuizQuestion();
+            }, 2000);
+        }
+
+        // Drawing Game
+        function startDrawingGame() {
+            document.getElementById('gameModal').style.display = 'block';
+            document.getElementById('gameArea').innerHTML = `
+                <div style="text-align: center;">
+                    <h2 style="color: #667eea; font-size: 2.5em;">🖌️ Drawing Fun!</h2>
+                    <p style="font-size: 1.3em; margin: 20px 0;">Pick a color and draw!</p>
+                    <div style="margin: 20px 0;">
+                        <button onclick="changeColor('#FF6B6B')" style="background: #FF6B6B; width: 50px; height: 50px; border: none; border-radius: 50%; cursor: pointer; margin: 5px;"></button>
+                        <button onclick="changeColor('#4ECDC4')" style="background: #4ECDC4; width: 50px; height: 50px; border: none; border-radius: 50%; cursor: pointer; margin: 5px;"></button>
+                        <button onclick="changeColor('#45B7D1')" style="background: #45B7D1; width: 50px; height: 50px; border: none; border-radius: 50%; cursor: pointer; margin: 5px;"></button>
+                        <button onclick="changeColor('#FFA07A')" style="background: #FFA07A; width: 50px; height: 50px; border: none; border-radius: 50%; cursor: pointer; margin: 5px;"></button>
+                        <button onclick="changeColor('#98D8C8')" style="background: #98D8C8; width: 50px; height: 50px; border: none; border-radius: 50%; cursor: pointer; margin: 5px;"></button>
+                        <button onclick="changeColor('#F7DC6F')" style="background: #F7DC6F; width: 50px; height: 50px; border: none; border-radius: 50%; cursor: pointer; margin: 5px;"></button>
+                        <button onclick="changeColor('#000000')" style="background: #000000; width: 50px; height: 50px; border: none; border-radius: 50%; cursor: pointer; margin: 5px;"></button>
+                        <button onclick="clearCanvas()" style="background: white; width: 50px; height: 50px; border: 2px solid #666; border-radius: 50%; cursor: pointer; margin: 5px;">🗑️</button>
+                    </div>
+                    <canvas id="drawingCanvas" width="700" height="500" style="border: 3px solid #667eea; border-radius: 15px; cursor: crosshair; background: white;"></canvas>
+                    <br>
+                    <button class="submit-button" style="margin-top: 20px;" onclick="updatePoints(25); alert('🎨 Amazing artwork! +25 points!')">Save My Drawing! 💾</button>
+                </div>
+            `;
+            
+            initCanvas();
+        }
+
+        let canvas, ctx, isDrawing = false;
+        let currentColor = '#000000';
+
+        function initCanvas() {
+            canvas = document.getElementById('drawingCanvas');
+            ctx = canvas.getContext('2d');
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = currentColor;
+
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+
+            // Touch events for mobile
+            canvas.addEventListener('touchstart', handleTouch);
+            canvas.addEventListener('touchmove', handleTouch);
+            canvas.addEventListener('touchend', stopDrawing);
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function handleTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 'mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+
+        function changeColor(color) {
+            currentColor = color;
+            ctx.strokeStyle = color;
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Story Builder Game
+        const storyWords = {
+            characters: ['a brave knight', 'a silly monkey', 'a friendly dragon', 'a magical unicorn', 'a clever robot', 'a tiny mouse'],
+            actions: ['decided to dance', 'started singing', 'began flying', 'went on an adventure', 'built a castle', 'cooked a pizza'],
+            places: ['in outer space', 'under the ocean', 'in a candy kingdom', 'on top of a rainbow', 'inside a volcano', 'at the North Pole'],
+            endings: ['and everyone lived happily ever after!', 'and they became best friends!', 'and it was the best day ever!', 'and they had a huge party!', 'and they laughed all day long!', 'and they couldn\'t stop smiling!']
+        };
+
+        function startStoryGame() {
+            document.getElementById('gameModal').style.display = 'block';
+            document.getElementById('gameArea').innerHTML = `
+                <div style="text-align: center;">
+                    <h2 style="color: #f5576c; font-size: 2.5em;">📚 Story Builder!</h2>
+                    <p style="font-size: 1.3em; margin: 20px 0;">Click the button to create a random funny story!</p>
+                    <button class="submit-button" onclick="generateStory()">Create Story! ✨</button>
+                    <div id="storyDisplay" style="font-size: 1.5em; line-height: 2; margin: 30px; padding: 30px; background: #fff4e6; border-radius: 15px; min-height: 200px;"></div>
+                    <button class="submit-button" onclick="shareStory()">I Love It! ❤️</button>
+                </div>
+            `;
+        }
+
+        function generateStory() {
+            const character = storyWords.characters[Math.floor(Math.random() * storyWords.characters.length)];
+            const action = storyWords.actions[Math.floor(Math.random() * storyWords.actions.length)];
+            const place = storyWords.places[Math.floor(Math.random() * storyWords.places.length)];
+            const ending = storyWords.endings[Math.floor(Math.random() * storyWords.endings.length)];
+
+            const story = `Once upon a time, <strong>${character}</strong> ${action} ${place}. Then, ${ending}`;
+            
+            document.getElementById('storyDisplay').innerHTML = story;
+            updatePoints(15);
+        }
+
+        function shareStory() {
+            alert('🎉 Amazing story! +25 bonus points!');
+            updatePoints(25);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('gameModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
