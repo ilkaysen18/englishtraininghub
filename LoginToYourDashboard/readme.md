@@ -10,6 +10,7 @@ Copy these scripts below to add in any HTML file where you want login protection
 2. In Firestore, manually set your own user document to:
 * role: "admin"
 * status: "approved"
+
 Only accounts with role: "admin" can access the admin panel — everyone else gets "Access denied".
 
 
