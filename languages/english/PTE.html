@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTE Academic Speaking Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#0a1f7a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+    body {
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    /* Gradient header - gold to teal for PTE brand */
+    .header-gradient {
+        background: linear-gradient(135deg, #F9D423 0%, #1E90FF 100%);
+    }
+
+    /* Level card with gradient border */
+    .level-card {
+        transition: all 0.3s ease;
+        background: #fffdf5;
+        border: 3px solid transparent;
+        background-image: linear-gradient(#fffdf5, #fffdf5), linear-gradient(135deg, #F9D423, #1E90FF);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+    }
+    .level-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        background-image: linear-gradient(135deg, #F9D423, #1E90FF), linear-gradient(135deg, #F9D423, #1E90FF);
+    }
+    .level-card:hover .card-title,
+    .level-card:hover .card-desc,
+    .level-card:hover .card-feat,
+    .level-card:hover .card-badge {
+        color: #fff !important;
+    }
+    .level-card:hover .cta-btn {
+        background: rgba(255,255,255,0.25) !important;
+        color: #fff !important;
+    }
+
+    .dark .level-card {
+        background-image: linear-gradient(#1e1e1e, #1e1e1e), linear-gradient(135deg, #F9D423, #1E90FF);
+    }
+    .dark .level-card:hover {
+        background-image: linear-gradient(135deg, #F9D423, #1E90FF), linear-gradient(135deg, #F9D423, #1E90FF);
+    }
+
+    /* Topic card */
+    .topic-card {
+        transition: all 0.3s ease;
+        background: #fffdf5;
+        border: 3px solid transparent;
+        background-image: linear-gradient(#fffdf5, #fffdf5), linear-gradient(135deg, #F9D423, #1E90FF);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        cursor: pointer;
+    }
+    .topic-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        background-image: linear-gradient(135deg, #F9D423, #1E90FF), linear-gradient(135deg, #F9D423, #1E90FF);
+    }
+    .topic-card:hover .topic-title,
+    .topic-card:hover .topic-num,
+    .topic-card:hover .topic-meta {
+        color: #fff !important;
+    }
+
+    .dark .topic-card {
+        background-image: linear-gradient(#1e1e1e, #1e1e1e), linear-gradient(135deg, #F9D423, #1E90FF);
+    }
+    .dark .topic-card:hover {
+        background-image: linear-gradient(135deg, #F9D423, #1E90FF), linear-gradient(135deg, #F9D423, #1E90FF);
+    }
+
+    /* Passage card / cue card */
+    .passage-card {
+        background: linear-gradient(135deg, #fffbe6 0%, #e8f4fd 100%);
+        border-left: 5px solid #F9D423;
+    }
+    .dark .passage-card {
+        background: linear-gradient(135deg, #2a2510 0%, #1a2a3a 100%);
+        border-left-color: #F9D423;
+    }
+
+    /* Tip box */
+    .tip-box {
+        background: linear-gradient(135deg, #e8f4fd 0%, #f0fdf4 100%);
+        border-left: 4px solid #1E90FF;
+    }
+    .dark .tip-box {
+        background: linear-gradient(135deg, #1a2a3a 0%, #1a2e20 100%);
+        border-left-color: #1E90FF;
+    }
+
+    /* Animations */
+    .hero-text {
+        animation: slideDown 0.6s ease-out;
+    }
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.6s ease-in;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-stagger {
+        animation: scaleIn 0.5s ease-out both;
+    }
+    @keyframes scaleIn {
+        from { opacity: 0; transform: scale(0.92); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Question / item hover */
+    .q-item {
+        transition: all 0.2s ease;
+    }
+    .q-item:hover {
+        background-color: #f0f7ff;
+        transform: translateX(4px);
+    }
+    .dark .q-item:hover {
+        background-color: #2a3040;
+    }
+
+    /* Task type badges */
+    .task-badge {
+        display: inline-block;
+        padding: 2px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+    .badge-speaking { background: #F9D423; color: #0a1f7a; }
+    .badge-info { background: #1E90FF; color: #fff; }
+    .badge-scored { background: #22c55e; color: #fff; }
+    .badge-unscored { background: #94a3b8; color: #fff; }
+
+    /* Primary text */
+    .text-navy { color: #0a1f7a; }
+    .dark .text-navy { color: #93b5ff; }
+
+    /* Smooth view transitions */
+    .view { display: none; }
+    .view.active { display: block; animation: fadeIn 0.4s ease-out; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #c0c0c0; border-radius: 4px; }
+    .dark ::-webkit-scrollbar-thumb { background: #555; }
+
+    /* Number circle */
+    .num-circle {
+        background: linear-gradient(135deg, #F9D423, #1E90FF);
+        color: #0a1f7a;
+        font-weight: 700;
+    }
+    </style>
+</head>
+<body class="bg-white dark:bg-[#121212] text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div class="min-h-screen flex flex-col">
+
+        <!-- Header -->
+        <header class="header-gradient text-white shadow-lg">
+            <div class="container mx-auto px-4 py-5">
+                <div class="flex items-center justify-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+                    <h1 class="text-2xl md:text-3xl font-bold text-center hero-text" style="color: #0a1f7a; text-shadow: 0 2px 4px rgba(0,0,0,0.12);">
+                        <i class="fa-solid fa-desktop" style="color:#0a1f7a;"></i> PTE Academic Speaking
+                    </h1>
+                </div>
+                <p class="text-center mt-1 hero-text text-sm md:text-base" style="color: #f0f0f0;">Pearson Test of English &mdash; Speaking Practice</p>
+            </div>
+        </header>
+
+        <!-- ===================== HOME VIEW ===================== -->
+        <div id="home-view" class="view active flex-1">
+            <main class="flex-1 px-4 py-10">
+                <div class="container max-w-5xl mx-auto">
+                    <div class="text-center mb-10 fade-in">
+                        <h2 class="text-2xl md:text-4xl font-bold mb-3 text-gray-800 dark:text-gray-100">Choose a Speaking Task Type</h2>
+                        <p class="text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                            The PTE Academic Speaking &amp; Writing section lasts 77-93 minutes. Below are the six speaking task types.
+                            Select one to practise with exam-style questions.
+                        </p>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 card-stagger">
+                        <!-- Card 1: Personal Introduction -->
+                        <div class="level-card rounded-xl shadow-lg p-6 cursor-pointer" onclick="navigateTo('personal')">
+                            <div class="text-center">
+                                <div class="text-4xl mb-2">&#x1F464;</div>
+                                <h3 class="text-lg font-bold mb-1 card-title text-navy">Personal Introduction</h3>
+                                <span class="task-badge badge-unscored mb-2 card-badge">Not Scored</span>
+                                <p class="text-gray-600 dark:text-gray-400 text-xs mt-2 card-desc">Read the prompt and give information about yourself. Sent to institutions with your score.</p>
+                                <div class="mt-3 space-y-1 text-left">
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">25 seconds to read</span></div>
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">30 seconds to speak</span></div>
+                                </div>
+                                <div class="cta-btn mt-4 inline-block px-5 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg font-semibold text-xs" style="color: #0a1f7a;">Practise <i class="fa-solid fa-arrow-right ml-1"></i></div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Read Aloud -->
+                        <div class="level-card rounded-xl shadow-lg p-6 cursor-pointer" onclick="navigateTo('readaloud')">
+                            <div class="text-center">
+                                <div class="text-4xl mb-2">&#x1F4D6;</div>
+                                <h3 class="text-lg font-bold mb-1 card-title text-navy">Read Aloud</h3>
+                                <span class="task-badge badge-scored mb-2 card-badge">Scored</span>
+                                <p class="text-gray-600 dark:text-gray-400 text-xs mt-2 card-desc">A text appears on screen. Read the text aloud clearly and naturally.</p>
+                                <div class="mt-3 space-y-1 text-left">
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">6-7 items in real test</span></div>
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">Up to 60 words each</span></div>
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">Tests pronunciation &amp; fluency</span></div>
+                                </div>
+                                <div class="cta-btn mt-4 inline-block px-5 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg font-semibold text-xs" style="color: #0a1f7a;">Practise <i class="fa-solid fa-arrow-right ml-1"></i></div>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Repeat Sentence -->
+                        <div class="level-card rounded-xl shadow-lg p-6 cursor-pointer" onclick="navigateTo('repeat')">
+                            <div class="text-center">
+                                <div class="text-4xl mb-2">&#x1F50A;</div>
+                                <h3 class="text-lg font-bold mb-1 card-title text-navy">Repeat Sentence</h3>
+                                <span class="task-badge badge-scored mb-2 card-badge">Scored</span>
+                                <p class="text-gray-600 dark:text-gray-400 text-xs mt-2 card-desc">Listen to a sentence recording and repeat it exactly as you heard it.</p>
+                                <div class="mt-3 space-y-1 text-left">
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">10-12 items in real test</span></div>
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">3-9 seconds each</span></div>
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">Tests listening &amp; oral fluency</span></div>
+                                </div>
+                                <div class="cta-btn mt-4 inline-block px-5 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg font-semibold text-xs" style="color: #0a1f7a;">Practise <i class="fa-solid fa-arrow-right ml-1"></i></div>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Describe Image -->
+                        <div class="level-card rounded-xl shadow-lg p-6 cursor-pointer" onclick="navigateTo('describe')">
+                            <div class="text-center">
+                                <div class="text-4xl mb-2">&#x1F4CA;</div>
+                                <h3 class="text-lg font-bold mb-1 card-title text-navy">Describe Image</h3>
+                                <span class="task-badge badge-scored mb-2 card-badge">Scored</span>
+                                <p class="text-gray-600 dark:text-gray-400 text-xs mt-2 card-desc">An image appears on screen. Describe in detail what the image shows.</p>
+                                <div class="mt-3 space-y-1 text-left">
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">6-7 items in real test</span></div>
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">25 seconds to prepare</span></div>
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">40 seconds to speak</span></div>
+                                </div>
+                                <div class="cta-btn mt-4 inline-block px-5 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg font-semibold text-xs" style="color: #0a1f7a;">Practise <i class="fa-solid fa-arrow-right ml-1"></i></div>
+                            </div>
+                        </div>
+
+                        <!-- Card 5: Re-tell Lecture -->
+                        <div class="level-card rounded-xl shadow-lg p-6 cursor-pointer" onclick="navigateTo('retell')">
+                            <div class="text-center">
+                                <div class="text-4xl mb-2">&#x1F3A4;</div>
+                                <h3 class="text-lg font-bold mb-1 card-title text-navy">Re-tell Lecture</h3>
+                                <span class="task-badge badge-scored mb-2 card-badge">Scored</span>
+                                <p class="text-gray-600 dark:text-gray-400 text-xs mt-2 card-desc">After listening to or watching a lecture, re-tell it in your own words.</p>
+                                <div class="mt-3 space-y-1 text-left">
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">3-4 items in real test</span></div>
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">Up to 90 seconds lecture</span></div>
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">40 seconds to re-tell</span></div>
+                                </div>
+                                <div class="cta-btn mt-4 inline-block px-5 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg font-semibold text-xs" style="color: #0a1f7a;">Practise <i class="fa-solid fa-arrow-right ml-1"></i></div>
+                            </div>
+                        </div>
+
+                        <!-- Card 6: Answer Short Question -->
+                        <div class="level-card rounded-xl shadow-lg p-6 cursor-pointer" onclick="navigateTo('shortq')">
+                            <div class="text-center">
+                                <div class="text-4xl mb-2">&#x2753;</div>
+                                <h3 class="text-lg font-bold mb-1 card-title text-navy">Answer Short Question</h3>
+                                <span class="task-badge badge-scored mb-2 card-badge">Scored</span>
+                                <p class="text-gray-600 dark:text-gray-400 text-xs mt-2 card-desc">After listening to a question, answer with a single word or a few words.</p>
+                                <div class="mt-3 space-y-1 text-left">
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">10-12 items in real test</span></div>
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">3-9 seconds per question</span></div>
+                                    <div class="flex items-start"><span class="text-sm mr-1.5 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-xs card-feat">Tests vocabulary</span></div>
+                                </div>
+                                <div class="cta-btn mt-4 inline-block px-5 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg font-semibold text-xs" style="color: #0a1f7a;">Practise <i class="fa-solid fa-arrow-right ml-1"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Info section -->
+                    <div class="mt-10 fade-in" style="animation-delay: 0.3s;">
+                        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-md p-6 max-w-4xl mx-auto">
+                            <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100"><i class="fa-solid fa-lightbulb" style="color:#F9D423;"></i> About PTE Academic Speaking</h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-sm mb-3">
+                                PTE Academic is a computer-based, computer-assessed test of English. The Speaking &amp; Writing section is Part 1 of the exam (77-93 minutes).
+                                Unlike IELTS, there is no human examiner &mdash; you speak into a microphone and responses are scored by AI.
+                            </p>
+                            <div class="grid sm:grid-cols-3 gap-3 text-center text-xs">
+                                <div class="bg-white dark:bg-gray-700 rounded-lg p-3 shadow-sm">
+                                    <div class="text-2xl mb-1">&#x1F4BB;</div>
+                                    <div class="font-semibold text-navy">Computer-Based</div>
+                                    <div class="text-gray-500 dark:text-gray-400">No human examiner</div>
+                                </div>
+                                <div class="bg-white dark:bg-gray-700 rounded-lg p-3 shadow-sm">
+                                    <div class="text-2xl mb-1">&#x23F1;</div>
+                                    <div class="font-semibold text-navy">Score: 10-90</div>
+                                    <div class="text-gray-500 dark:text-gray-400">Results in 5 business days</div>
+                                </div>
+                                <div class="bg-white dark:bg-gray-700 rounded-lg p-3 shadow-sm">
+                                    <div class="text-2xl mb-1">&#x1F3AF;</div>
+                                    <div class="font-semibold text-navy">Enabling Skills</div>
+                                    <div class="text-gray-500 dark:text-gray-400">Fluency, pronunciation, vocab</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- ===================== PERSONAL INTRODUCTION VIEW ===================== -->
+        <div id="personal-view" class="view flex-1">
+            <div class="container mx-auto px-4 py-6 max-w-4xl">
+                <button onclick="navigateTo('home')" class="mb-5 px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Back to Home
+                </button>
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg p-5 mb-6">
+                    <div class="flex items-center gap-2 mb-2">
+                        <h2 class="text-2xl md:text-3xl font-bold text-navy"><i class="fa-solid fa-user mr-2"></i> Personal Introduction</h2>
+                        <span class="task-badge badge-unscored">Not Scored</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        Read the prompt and give some information about yourself. You have 25 seconds to read the prompt, then 30 seconds to record your response.
+                        This is sent to institutions along with your score report but is <strong>not scored</strong>.
+                    </p>
+                </div>
+
+                <div class="tip-box rounded-lg p-4 mb-5">
+                    <h4 class="font-semibold text-sm mb-1 text-navy"><i class="fa-solid fa-circle-info mr-1"></i> Tips</h4>
+                    <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-1 list-disc ml-4">
+                        <li>Speak clearly and at a natural pace &mdash; don't rush.</li>
+                        <li>Cover all points mentioned in the prompt.</li>
+                        <li>This is your first impression to the institution, so be confident!</li>
+                    </ul>
+                </div>
+
+                <div id="personal-topics" class="mb-6">
+                    <h3 class="text-lg font-bold mb-3 text-gray-800 dark:text-gray-100">Practice Prompts:</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="personal-topic-grid"></div>
+                </div>
+                <div id="personal-detail" class="hidden">
+                    <button onclick="showTopicGrid('personal')" class="mb-4 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm">
+                        <i class="fa-solid fa-table-cells mr-1"></i> All Prompts
+                    </button>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 mb-4">
+                        <h3 id="personal-item-title" class="text-xl font-bold mb-4 text-navy"></h3>
+                        <div id="personal-item-content"></div>
+                    </div>
+                    <div class="flex justify-between mt-4">
+                        <button id="personal-prev" onclick="navigateSection('personal', -1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium"><i class="fa-solid fa-chevron-left mr-1"></i> Previous</button>
+                        <button id="personal-next" onclick="navigateSection('personal', 1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">Next <i class="fa-solid fa-chevron-right ml-1"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== READ ALOUD VIEW ===================== -->
+        <div id="readaloud-view" class="view flex-1">
+            <div class="container mx-auto px-4 py-6 max-w-4xl">
+                <button onclick="navigateTo('home')" class="mb-5 px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Back to Home
+                </button>
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg p-5 mb-6">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <h2 class="text-2xl md:text-3xl font-bold text-navy"><i class="fa-solid fa-book-open mr-2"></i> Read Aloud</h2>
+                        <span class="task-badge badge-scored">Scored</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        A text of up to 60 words appears on screen. You have 30-40 seconds to prepare, then you must read the text aloud.
+                        You are scored on <strong>content</strong>, <strong>oral fluency</strong>, and <strong>pronunciation</strong>.
+                    </p>
+                </div>
+                <div class="tip-box rounded-lg p-4 mb-5">
+                    <h4 class="font-semibold text-sm mb-1 text-navy"><i class="fa-solid fa-circle-info mr-1"></i> Tips</h4>
+                    <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-1 list-disc ml-4">
+                        <li>Use preparation time to identify difficult words and plan your intonation.</li>
+                        <li>Speak at a steady pace &mdash; don't speed up or slow down unnaturally.</li>
+                        <li>Pay attention to word stress and sentence rhythm.</li>
+                        <li>Don't go back and correct yourself; continue smoothly.</li>
+                    </ul>
+                </div>
+                <div id="readaloud-topics" class="mb-6">
+                    <h3 class="text-lg font-bold mb-3 text-gray-800 dark:text-gray-100">Practice Passages:</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" id="readaloud-topic-grid"></div>
+                </div>
+                <div id="readaloud-detail" class="hidden">
+                    <button onclick="showTopicGrid('readaloud')" class="mb-4 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm"><i class="fa-solid fa-table-cells mr-1"></i> All Passages</button>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 mb-4">
+                        <h3 id="readaloud-item-title" class="text-xl font-bold mb-4 text-navy"></h3>
+                        <div id="readaloud-item-content"></div>
+                    </div>
+                    <div class="flex justify-between mt-4">
+                        <button id="readaloud-prev" onclick="navigateSection('readaloud', -1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium"><i class="fa-solid fa-chevron-left mr-1"></i> Previous</button>
+                        <button id="readaloud-next" onclick="navigateSection('readaloud', 1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">Next <i class="fa-solid fa-chevron-right ml-1"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== REPEAT SENTENCE VIEW ===================== -->
+        <div id="repeat-view" class="view flex-1">
+            <div class="container mx-auto px-4 py-6 max-w-4xl">
+                <button onclick="navigateTo('home')" class="mb-5 px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Back to Home
+                </button>
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg p-5 mb-6">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <h2 class="text-2xl md:text-3xl font-bold text-navy"><i class="fa-solid fa-volume-high mr-2"></i> Repeat Sentence</h2>
+                        <span class="task-badge badge-scored">Scored</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        You hear a sentence (3-9 seconds long). After the recording stops, repeat the sentence exactly as you heard it.
+                        Scored on <strong>content</strong>, <strong>oral fluency</strong>, and <strong>pronunciation</strong>.
+                    </p>
+                </div>
+                <div class="tip-box rounded-lg p-4 mb-5">
+                    <h4 class="font-semibold text-sm mb-1 text-navy"><i class="fa-solid fa-circle-info mr-1"></i> Tips</h4>
+                    <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-1 list-disc ml-4">
+                        <li>Focus on key content words first, then filler words.</li>
+                        <li>Shadow the rhythm and intonation you hear.</li>
+                        <li>If you forget a word, keep going &mdash; don't pause too long.</li>
+                        <li>Practice by reading each sentence, covering it, and repeating from memory.</li>
+                    </ul>
+                </div>
+                <div id="repeat-topics" class="mb-6">
+                    <h3 class="text-lg font-bold mb-3 text-gray-800 dark:text-gray-100">Practice Sentences:</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" id="repeat-topic-grid"></div>
+                </div>
+                <div id="repeat-detail" class="hidden">
+                    <button onclick="showTopicGrid('repeat')" class="mb-4 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm"><i class="fa-solid fa-table-cells mr-1"></i> All Sentences</button>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 mb-4">
+                        <h3 id="repeat-item-title" class="text-xl font-bold mb-4 text-navy"></h3>
+                        <div id="repeat-item-content"></div>
+                    </div>
+                    <div class="flex justify-between mt-4">
+                        <button id="repeat-prev" onclick="navigateSection('repeat', -1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium"><i class="fa-solid fa-chevron-left mr-1"></i> Previous</button>
+                        <button id="repeat-next" onclick="navigateSection('repeat', 1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">Next <i class="fa-solid fa-chevron-right ml-1"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== DESCRIBE IMAGE VIEW ===================== -->
+        <div id="describe-view" class="view flex-1">
+            <div class="container mx-auto px-4 py-6 max-w-4xl">
+                <button onclick="navigateTo('home')" class="mb-5 px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Back to Home
+                </button>
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg p-5 mb-6">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <h2 class="text-2xl md:text-3xl font-bold text-navy"><i class="fa-solid fa-chart-column mr-2"></i> Describe Image</h2>
+                        <span class="task-badge badge-scored">Scored</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        An image (graph, chart, table, map, or diagram) appears on screen. You have 25 seconds to study it, then 40 seconds to describe what you see.
+                        Scored on <strong>content</strong>, <strong>oral fluency</strong>, and <strong>pronunciation</strong>.
+                    </p>
+                </div>
+                <div class="tip-box rounded-lg p-4 mb-5">
+                    <h4 class="font-semibold text-sm mb-1 text-navy"><i class="fa-solid fa-circle-info mr-1"></i> Tips</h4>
+                    <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-1 list-disc ml-4">
+                        <li>Start with an overview: "This image shows / This graph illustrates..."</li>
+                        <li>Identify the key features, trends, and any significant data points.</li>
+                        <li>Use comparison language: higher, lower, increased, decreased, similar.</li>
+                        <li>Conclude with a summary statement if time allows.</li>
+                    </ul>
+                </div>
+                <div id="describe-topics" class="mb-6">
+                    <h3 class="text-lg font-bold mb-3 text-gray-800 dark:text-gray-100">Practice Scenarios:</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="describe-topic-grid"></div>
+                </div>
+                <div id="describe-detail" class="hidden">
+                    <button onclick="showTopicGrid('describe')" class="mb-4 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm"><i class="fa-solid fa-table-cells mr-1"></i> All Scenarios</button>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 mb-4">
+                        <h3 id="describe-item-title" class="text-xl font-bold mb-4 text-navy"></h3>
+                        <div id="describe-item-content"></div>
+                    </div>
+                    <div class="flex justify-between mt-4">
+                        <button id="describe-prev" onclick="navigateSection('describe', -1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium"><i class="fa-solid fa-chevron-left mr-1"></i> Previous</button>
+                        <button id="describe-next" onclick="navigateSection('describe', 1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">Next <i class="fa-solid fa-chevron-right ml-1"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== RE-TELL LECTURE VIEW ===================== -->
+        <div id="retell-view" class="view flex-1">
+            <div class="container mx-auto px-4 py-6 max-w-4xl">
+                <button onclick="navigateTo('home')" class="mb-5 px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Back to Home
+                </button>
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg p-5 mb-6">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <h2 class="text-2xl md:text-3xl font-bold text-navy"><i class="fa-solid fa-microphone-lines mr-2"></i> Re-tell Lecture</h2>
+                        <span class="task-badge badge-scored">Scored</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        You hear or watch a lecture (up to 90 seconds). After it finishes, you have 10 seconds to prepare, then 40 seconds to re-tell the lecture in your own words.
+                        Scored on <strong>content</strong>, <strong>oral fluency</strong>, and <strong>pronunciation</strong>.
+                    </p>
+                </div>
+                <div class="tip-box rounded-lg p-4 mb-5">
+                    <h4 class="font-semibold text-sm mb-1 text-navy"><i class="fa-solid fa-circle-info mr-1"></i> Tips</h4>
+                    <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-1 list-disc ml-4">
+                        <li>Take brief notes while listening &mdash; focus on main idea, key points, and examples.</li>
+                        <li>Structure your re-telling: introduction, main points, conclusion.</li>
+                        <li>Use linking words: firstly, moreover, in addition, finally.</li>
+                        <li>Paraphrase where possible &mdash; don't try to memorize exact words.</li>
+                    </ul>
+                </div>
+                <div id="retell-topics" class="mb-6">
+                    <h3 class="text-lg font-bold mb-3 text-gray-800 dark:text-gray-100">Practice Lectures:</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="retell-topic-grid"></div>
+                </div>
+                <div id="retell-detail" class="hidden">
+                    <button onclick="showTopicGrid('retell')" class="mb-4 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm"><i class="fa-solid fa-table-cells mr-1"></i> All Lectures</button>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 mb-4">
+                        <h3 id="retell-item-title" class="text-xl font-bold mb-4 text-navy"></h3>
+                        <div id="retell-item-content"></div>
+                    </div>
+                    <div class="flex justify-between mt-4">
+                        <button id="retell-prev" onclick="navigateSection('retell', -1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium"><i class="fa-solid fa-chevron-left mr-1"></i> Previous</button>
+                        <button id="retell-next" onclick="navigateSection('retell', 1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">Next <i class="fa-solid fa-chevron-right ml-1"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== ANSWER SHORT QUESTION VIEW ===================== -->
+        <div id="shortq-view" class="view flex-1">
+            <div class="container mx-auto px-4 py-6 max-w-4xl">
+                <button onclick="navigateTo('home')" class="mb-5 px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Back to Home
+                </button>
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg p-5 mb-6">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <h2 class="text-2xl md:text-3xl font-bold text-navy"><i class="fa-solid fa-circle-question mr-2"></i> Answer Short Question</h2>
+                        <span class="task-badge badge-scored">Scored</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        You hear a question (3-9 seconds). Answer with a single word or a few words. You have 10 seconds to respond.
+                        Scored on <strong>vocabulary</strong>.
+                    </p>
+                </div>
+                <div class="tip-box rounded-lg p-4 mb-5">
+                    <h4 class="font-semibold text-sm mb-1 text-navy"><i class="fa-solid fa-circle-info mr-1"></i> Tips</h4>
+                    <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-1 list-disc ml-4">
+                        <li>Answer concisely &mdash; one word or a short phrase is enough.</li>
+                        <li>Don't overthink; the answer is usually a common English word.</li>
+                        <li>Questions test general knowledge and vocabulary, not specialist knowledge.</li>
+                        <li>Click "Show Answer" to check your response after attempting each question.</li>
+                    </ul>
+                </div>
+                <div id="shortq-topics" class="mb-6">
+                    <h3 class="text-lg font-bold mb-3 text-gray-800 dark:text-gray-100">Practice Questions:</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" id="shortq-topic-grid"></div>
+                </div>
+                <div id="shortq-detail" class="hidden">
+                    <button onclick="showTopicGrid('shortq')" class="mb-4 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm"><i class="fa-solid fa-table-cells mr-1"></i> All Questions</button>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 mb-4">
+                        <h3 id="shortq-item-title" class="text-xl font-bold mb-4 text-navy"></h3>
+                        <div id="shortq-item-content"></div>
+                    </div>
+                    <div class="flex justify-between mt-4">
+                        <button id="shortq-prev" onclick="navigateSection('shortq', -1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium"><i class="fa-solid fa-chevron-left mr-1"></i> Previous</button>
+                        <button id="shortq-next" onclick="navigateSection('shortq', 1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">Next <i class="fa-solid fa-chevron-right ml-1"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-100 dark:bg-gray-900 py-5 mt-auto">
+            <div class="container mx-auto px-4 text-center text-gray-500 dark:text-gray-500 text-xs">
+                <p>PTE Academic Speaking! &mdash; Ace your PTE Speaking section! <i class="fa-solid fa-graduation-cap" style="color:#F9D423;"></i></p>
+                <p class="mt-1">Brought to you by English Training Hub! © <span id="year"></span> — All Rights Reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+<script>
+// ============== DARK MODE ==============
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add('dark');
+}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(event) {
+    if (event.matches) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+});
+
+// ============== DATA ==============
+
+var sectionData = {};
+var sectionIndex = {};
+
+// --- Personal Introduction ---
+sectionData.personal = [
+    {
+        name: "General Introduction",
+        icon: "fa-solid fa-id-card",
+        type: "prompt",
+        content: {
+            instruction: "Please introduce yourself. For example, you could talk about one or more of the following:",
+            points: ["Your name and where you are from", "Your studies or work experience", "Your interests and hobbies", "Why you are taking the PTE Academic test", "Your plans for the future"]
+        }
+    },
+    {
+        name: "Academic Background",
+        icon: "fa-solid fa-graduation-cap",
+        type: "prompt",
+        content: {
+            instruction: "Please introduce yourself. For example, you could talk about one or more of the following:",
+            points: ["Your educational background", "Your favourite subjects at school or university", "A teacher or professor who influenced you", "Academic achievements you are proud of", "Your goals for further education"]
+        }
+    },
+    {
+        name: "Career & Ambitions",
+        icon: "fa-solid fa-briefcase",
+        type: "prompt",
+        content: {
+            instruction: "Please introduce yourself. For example, you could talk about one or more of the following:",
+            points: ["Your current or most recent job", "Skills you have developed through work", "What career you would like to pursue", "Why you chose your profession", "How this test relates to your career goals"]
+        }
+    },
+    {
+        name: "Personal Interests",
+        icon: "fa-solid fa-heart",
+        type: "prompt",
+        content: {
+            instruction: "Please introduce yourself. For example, you could talk about one or more of the following:",
+            points: ["Hobbies or activities you enjoy in your free time", "A sport or creative activity you participate in", "Books, films, or music you enjoy", "A place you like to visit", "Something interesting about your hometown"]
+        }
+    },
+    {
+        name: "Life Experience",
+        icon: "fa-solid fa-globe",
+        type: "prompt",
+        content: {
+            instruction: "Please introduce yourself. For example, you could talk about one or more of the following:",
+            points: ["A country or city you have visited", "An experience that changed your perspective", "A challenge you have overcome", "Something you learned from a different culture", "Your experience learning English"]
+        }
+    },
+    {
+        name: "Future Plans",
+        icon: "fa-solid fa-rocket",
+        type: "prompt",
+        content: {
+            instruction: "Please introduce yourself. For example, you could talk about one or more of the following:",
+            points: ["Where you see yourself in five years", "A country you would like to study or work in", "Skills you want to develop", "A personal goal you are working towards", "How achieving a good PTE score will help you"]
+        }
+    }
+];
+
+// --- Read Aloud ---
+sectionData.readaloud = [
+    { name: "Climate Change", icon: "fa-solid fa-cloud-sun", type: "passage", content: "Climate change refers to long-term shifts in temperatures and weather patterns. While natural causes like volcanic eruptions have historically driven changes, human activities have been the main driver since the 1800s, primarily through the burning of fossil fuels like coal, oil, and gas, which produce heat-trapping greenhouse gases." },
+    { name: "The Internet", icon: "fa-solid fa-wifi", type: "passage", content: "The Internet has fundamentally transformed the way people communicate, access information, and conduct business. Originally developed as a military communication network in the late 1960s, it has since evolved into a global infrastructure that connects billions of devices and facilitates an unprecedented exchange of data across borders." },
+    { name: "Photosynthesis", icon: "fa-solid fa-leaf", type: "passage", content: "Photosynthesis is the process by which green plants and certain other organisms convert light energy into chemical energy. During this process, carbon dioxide and water are transformed into glucose and oxygen using sunlight. This biological mechanism is fundamental to life on Earth, as it produces the oxygen that most living organisms depend upon." },
+    { name: "Urbanization", icon: "fa-solid fa-city", type: "passage", content: "Urbanization is a global trend in which an increasing proportion of the population moves from rural to urban areas. This shift is driven by the search for better employment opportunities, education, and healthcare facilities. However, rapid urbanization also presents challenges, including overcrowding, pollution, and strain on public infrastructure." },
+    { name: "Biodiversity", icon: "fa-solid fa-frog", type: "passage", content: "Biodiversity refers to the variety of life found on Earth at all levels, from genes to ecosystems. It encompasses the diversity within species, between species, and of ecosystems. Maintaining biodiversity is essential because it supports the ecosystem services upon which all human life depends, including food production, water purification, and climate regulation." },
+    { name: "Artificial Intelligence", icon: "fa-solid fa-robot", type: "passage", content: "Artificial intelligence is a branch of computer science that aims to create machines capable of performing tasks that typically require human intelligence. These tasks include learning from experience, understanding natural language, recognizing patterns, and making decisions. Recent advances in machine learning have accelerated progress in this field considerably." },
+    { name: "The Water Cycle", icon: "fa-solid fa-droplet", type: "passage", content: "The water cycle describes the continuous movement of water within the Earth and its atmosphere. Water evaporates from oceans and lakes, rises as water vapour, condenses into clouds, and falls back to the surface as precipitation. This cycle is essential for distributing fresh water across the planet and supporting all forms of life." },
+    { name: "Economic Globalization", icon: "fa-solid fa-earth-americas", type: "passage", content: "Economic globalization refers to the increasing integration of national economies through trade, investment, and the flow of capital across borders. While it has led to significant economic growth and improved living standards in many countries, critics argue that it has also widened the gap between rich and poor nations and contributed to environmental degradation." },
+    { name: "Public Health", icon: "fa-solid fa-heart-pulse", type: "passage", content: "Public health is the science of protecting and improving the health of communities through education, policy, and research. It addresses broad issues such as disease prevention, access to healthcare, and environmental health hazards. Effective public health systems are crucial for responding to pandemics, reducing health disparities, and promoting overall well-being." },
+    { name: "Space Exploration", icon: "fa-solid fa-shuttle-space", type: "passage", content: "Space exploration has expanded humanity's understanding of the universe and our place within it. From the first human spaceflight in 1961 to current missions exploring Mars and beyond, space programmes have yielded technological innovations, scientific discoveries, and international cooperation. The quest to explore space continues to inspire new generations of scientists and engineers." }
+];
+
+// --- Repeat Sentence ---
+sectionData.repeat = [
+    { name: "Sentence 1", icon: "fa-solid fa-1", type: "sentence", content: "The university library has extended its opening hours during the examination period." },
+    { name: "Sentence 2", icon: "fa-solid fa-2", type: "sentence", content: "Students are required to submit their assignments before the end of the semester." },
+    { name: "Sentence 3", icon: "fa-solid fa-3", type: "sentence", content: "The research findings were published in a leading international journal last month." },
+    { name: "Sentence 4", icon: "fa-solid fa-4", type: "sentence", content: "Climate change is one of the most pressing issues facing the world today." },
+    { name: "Sentence 5", icon: "fa-solid fa-5", type: "sentence", content: "The professor suggested that we refer to the additional reading materials for the essay." },
+    { name: "Sentence 6", icon: "fa-solid fa-6", type: "sentence", content: "The new laboratory equipment will be installed during the summer break." },
+    { name: "Sentence 7", icon: "fa-solid fa-7", type: "sentence", content: "Effective communication skills are essential for success in any professional environment." },
+    { name: "Sentence 8", icon: "fa-solid fa-8", type: "sentence", content: "The seminar on renewable energy attracted a large number of participants from various disciplines." },
+    { name: "Sentence 9", icon: "fa-solid fa-9", type: "sentence", content: "International students must register with the administration office upon arrival at the campus." },
+    { name: "Sentence 10", icon: "fa-solid fa-hashtag", type: "sentence", content: "The government has allocated additional funding for scientific research in the coming fiscal year." },
+    { name: "Sentence 11", icon: "fa-solid fa-hashtag", type: "sentence", content: "Technological innovation continues to transform the way we access and share information globally." },
+    { name: "Sentence 12", icon: "fa-solid fa-hashtag", type: "sentence", content: "The conference will feature keynote speeches by several distinguished academics from around the world." },
+    { name: "Sentence 13", icon: "fa-solid fa-hashtag", type: "sentence", content: "Participants are advised to arrive at least fifteen minutes before the scheduled start time." },
+    { name: "Sentence 14", icon: "fa-solid fa-hashtag", type: "sentence", content: "A thorough understanding of the methodology is crucial for conducting reliable research." },
+    { name: "Sentence 15", icon: "fa-solid fa-hashtag", type: "sentence", content: "The museum's collection includes artefacts dating back to the ancient civilizations of Mesopotamia." }
+];
+
+// --- Describe Image ---
+sectionData.describe = [
+    {
+        name: "Bar Chart: Energy",
+        icon: "fa-solid fa-chart-bar",
+        type: "image-scenario",
+        content: {
+            imageType: "Bar Chart",
+            description: "A bar chart showing energy consumption by source (coal, oil, natural gas, nuclear, and renewables) across five countries: the USA, China, India, Germany, and Brazil.",
+            keyFeatures: ["The USA and China have the highest total energy consumption.", "Coal is the dominant source in China and India.", "Renewables make up the largest share in Brazil.", "Nuclear energy is most significant in Germany and the USA."],
+            practicePrompt: "Describe the main trends and comparisons you observe in this chart."
+        }
+    },
+    {
+        name: "Line Graph: Population",
+        icon: "fa-solid fa-chart-line",
+        type: "image-scenario",
+        content: {
+            imageType: "Line Graph",
+            description: "A line graph showing the population growth of four major cities (Tokyo, Delhi, Shanghai, and Lagos) from 1950 to 2020, with projections to 2050.",
+            keyFeatures: ["Tokyo had the largest population until 2010, when Delhi overtook it.", "Lagos shows the steepest growth trajectory, especially after 2000.", "Shanghai's growth levelled off after 2010.", "All four cities are projected to continue growing, though at different rates."],
+            practicePrompt: "Describe the trends in population growth for these cities over time."
+        }
+    },
+    {
+        name: "Pie Chart: Budget",
+        icon: "fa-solid fa-chart-pie",
+        type: "image-scenario",
+        content: {
+            imageType: "Pie Chart",
+            description: "A pie chart showing the allocation of a university's annual budget across different departments: Teaching (35%), Research (25%), Administration (15%), Student Services (15%), and Infrastructure (10%).",
+            keyFeatures: ["Teaching receives the largest share at 35%.", "Research is the second-largest allocation at 25%.", "Administration and Student Services each receive 15%.", "Infrastructure receives the smallest proportion at 10%."],
+            practicePrompt: "Describe how the university budget is distributed across departments."
+        }
+    },
+    {
+        name: "Table: Exam Results",
+        icon: "fa-solid fa-table",
+        type: "image-scenario",
+        content: {
+            imageType: "Table",
+            description: "A table showing average exam scores for five subjects (Maths, Science, English, History, Art) across three years (2021, 2022, 2023) at a secondary school.",
+            keyFeatures: ["Maths scores improved steadily from 68 to 74 over the three years.", "English scores remained relatively stable around 72-73.", "Art had the highest average score in all three years (78-82).", "History showed a slight decline from 70 to 67."],
+            practicePrompt: "Describe the key patterns and changes in exam results over the three years."
+        }
+    },
+    {
+        name: "Process Diagram",
+        icon: "fa-solid fa-arrows-spin",
+        type: "image-scenario",
+        content: {
+            imageType: "Process Diagram",
+            description: "A flow diagram showing the process of how recycled paper is made, from collection of waste paper through sorting, pulping, cleaning, de-inking, and finally pressing and drying into new paper sheets.",
+            keyFeatures: ["The process begins with the collection of waste paper from recycling bins.", "Paper is sorted by type and grade before being processed.", "Pulping involves mixing paper with water to create a slurry.", "The final stages include pressing and drying the sheets."],
+            practicePrompt: "Describe the stages of the paper recycling process from start to finish."
+        }
+    },
+    {
+        name: "Map: Campus Layout",
+        icon: "fa-solid fa-map",
+        type: "image-scenario",
+        content: {
+            imageType: "Map",
+            description: "A map of a university campus showing the locations of the main library, science building, student union, sports centre, lecture halls, and car parks. The library is centrally located, with the science building to the north and sports centre to the south-east.",
+            keyFeatures: ["The library occupies a central position on campus.", "The science building and lecture halls are in the northern section.", "The sports centre is located in the south-east corner.", "Two car parks are situated at the east and west entrances."],
+            practicePrompt: "Describe the layout of the campus, noting the positions of key buildings."
+        }
+    },
+    {
+        name: "Bar Chart: Transport",
+        icon: "fa-solid fa-train",
+        type: "image-scenario",
+        content: {
+            imageType: "Grouped Bar Chart",
+            description: "A grouped bar chart comparing the number of daily commuters using different modes of transport (car, bus, train, bicycle) in two cities: London and Amsterdam, measured in thousands.",
+            keyFeatures: ["Cars are the most common transport in London, but bicycles dominate in Amsterdam.", "Bus usage is roughly similar in both cities.", "Train usage is significantly higher in London than Amsterdam.", "Amsterdam has approximately three times more bicycle commuters than London."],
+            practicePrompt: "Compare the transport habits of commuters in London and Amsterdam."
+        }
+    },
+    {
+        name: "Line Graph: Temperature",
+        icon: "fa-solid fa-temperature-high",
+        type: "image-scenario",
+        content: {
+            imageType: "Line Graph",
+            description: "A line graph showing average monthly temperatures in Sydney and Moscow over a twelve-month period, measured in degrees Celsius.",
+            keyFeatures: ["Sydney's temperatures peak in January (summer) at around 26°C.", "Moscow's temperatures are lowest in January at approximately -10°C.", "The two lines show an inverse pattern due to opposite hemispheres.", "Both cities experience moderate temperatures around April and October."],
+            practicePrompt: "Describe and compare the monthly temperature patterns of Sydney and Moscow."
+        }
+    }
+];
+
+// --- Re-tell Lecture ---
+sectionData.retell = [
+    {
+        name: "Ocean Acidification",
+        icon: "fa-solid fa-water",
+        type: "lecture",
+        content: {
+            topic: "The Effects of Ocean Acidification on Marine Ecosystems",
+            summary: "The lecturer discusses how increased carbon dioxide absorption by the oceans is lowering the pH of seawater. This acidification threatens coral reefs, shellfish, and plankton that form the base of the marine food chain. The lecturer explains the chemical process involved and highlights studies from the Great Barrier Reef. Solutions discussed include reducing CO2 emissions and exploring marine protected areas.",
+            keyPoints: ["CO2 from the atmosphere dissolves into the ocean, forming carbonic acid.", "Acidification weakens shells and skeletons of marine organisms.", "Coral bleaching events have increased dramatically in recent decades.", "The lecturer advocates for both emission reduction and conservation strategies."]
+        }
+    },
+    {
+        name: "Sleep & Memory",
+        icon: "fa-solid fa-bed",
+        type: "lecture",
+        content: {
+            topic: "The Role of Sleep in Memory Consolidation",
+            summary: "The professor explains how sleep, particularly the deep sleep and REM stages, plays a vital role in consolidating newly learned information into long-term memory. Studies involving students who slept after learning new vocabulary showed significantly better recall than those who stayed awake. The lecture also covers the negative effects of sleep deprivation on cognitive function and academic performance.",
+            keyPoints: ["Deep sleep helps transfer information from short-term to long-term memory.", "REM sleep is associated with the consolidation of procedural and emotional memories.", "Sleep deprivation impairs concentration, problem-solving, and critical thinking.", "The lecturer recommends 7-9 hours of sleep for optimal cognitive performance."]
+        }
+    },
+    {
+        name: "Renewable Energy",
+        icon: "fa-solid fa-solar-panel",
+        type: "lecture",
+        content: {
+            topic: "The Transition to Renewable Energy Sources",
+            summary: "The lecturer outlines the global shift from fossil fuels to renewable energy sources such as solar, wind, and hydroelectric power. Key points include the declining cost of solar panels, government incentives driving adoption, and the challenges of energy storage. The lecture highlights examples from countries leading the transition, including Denmark and Costa Rica.",
+            keyPoints: ["Solar energy costs have dropped by over 80% in the last decade.", "Wind power now accounts for a significant share of electricity in several European countries.", "Energy storage technology remains a major challenge for reliability.", "Government policies and subsidies play a crucial role in accelerating the transition."]
+        }
+    },
+    {
+        name: "Language Acquisition",
+        icon: "fa-solid fa-language",
+        type: "lecture",
+        content: {
+            topic: "Critical Period Hypothesis in Language Acquisition",
+            summary: "The professor discusses the theory that there is an optimal window for language learning in childhood. Evidence from cases of children deprived of language input and studies of second language learners supports the idea that younger learners achieve more native-like proficiency. However, the lecturer also notes that adults can still become highly proficient through immersion and practice.",
+            keyPoints: ["The critical period is generally believed to end around puberty.", "Children acquire pronunciation and grammar more naturally than adults.", "Adults compensate with stronger cognitive and analytical skills.", "Immersion and motivation are key factors for adult language learners."]
+        }
+    },
+    {
+        name: "Urban Planning",
+        icon: "fa-solid fa-building",
+        type: "lecture",
+        content: {
+            topic: "Sustainable Urban Planning and Green Cities",
+            summary: "The lecture explores the principles of sustainable urban planning, focusing on reducing carbon footprints through public transport, green spaces, and energy-efficient buildings. The speaker uses Singapore and Copenhagen as case studies, demonstrating how integrated planning can improve quality of life while minimizing environmental impact. Challenges such as political resistance and funding are also discussed.",
+            keyPoints: ["Green spaces in cities reduce heat island effects and improve air quality.", "Public transport investment reduces reliance on private vehicles.", "Singapore uses vertical gardens and rooftop greenery extensively.", "Copenhagen aims to become the first carbon-neutral capital by 2025."]
+        }
+    },
+    {
+        name: "Behavioural Economics",
+        icon: "fa-solid fa-coins",
+        type: "lecture",
+        content: {
+            topic: "Nudge Theory and Decision-Making",
+            summary: "The professor explains how behavioural economics challenges the assumption that people always make rational decisions. Drawing on the work of Thaler and Sunstein, the lecture describes how 'nudges' — small changes in the way choices are presented — can significantly influence behaviour. Examples include organ donation opt-out systems, healthy food placement in cafeterias, and default retirement savings plans.",
+            keyPoints: ["Traditional economics assumes rational decision-making, but people are often influenced by biases.", "A 'nudge' alters the choice architecture without restricting freedom.", "Opt-out organ donation systems dramatically increase donor rates.", "Governments and organisations increasingly use nudges in public policy."]
+        }
+    }
+];
+
+// --- Answer Short Question ---
+sectionData.shortq = [
+    { name: "Q1", icon: "fa-solid fa-1", type: "shortanswer", content: { question: "What do we call a person who treats sick animals?", answer: "A veterinarian (vet)" } },
+    { name: "Q2", icon: "fa-solid fa-2", type: "shortanswer", content: { question: "What is the name of the device used to measure temperature?", answer: "A thermometer" } },
+    { name: "Q3", icon: "fa-solid fa-3", type: "shortanswer", content: { question: "In which organ of the human body is blood pumped?", answer: "The heart" } },
+    { name: "Q4", icon: "fa-solid fa-4", type: "shortanswer", content: { question: "What do we call a piece of land surrounded by water on all sides?", answer: "An island" } },
+    { name: "Q5", icon: "fa-solid fa-5", type: "shortanswer", content: { question: "What is the opposite of 'ancient'?", answer: "Modern" } },
+    { name: "Q6", icon: "fa-solid fa-6", type: "shortanswer", content: { question: "What do we call a scientist who studies rocks and minerals?", answer: "A geologist" } },
+    { name: "Q7", icon: "fa-solid fa-7", type: "shortanswer", content: { question: "How many sides does a hexagon have?", answer: "Six" } },
+    { name: "Q8", icon: "fa-solid fa-8", type: "shortanswer", content: { question: "What do we call the study of stars, planets, and the universe?", answer: "Astronomy" } },
+    { name: "Q9", icon: "fa-solid fa-9", type: "shortanswer", content: { question: "What is the frozen form of water called?", answer: "Ice" } },
+    { name: "Q10", icon: "fa-solid fa-hashtag", type: "shortanswer", content: { question: "What do you call the person who flies an aeroplane?", answer: "A pilot" } },
+    { name: "Q11", icon: "fa-solid fa-hashtag", type: "shortanswer", content: { question: "What is the collective term for cows, sheep, and pigs raised on a farm?", answer: "Livestock" } },
+    { name: "Q12", icon: "fa-solid fa-hashtag", type: "shortanswer", content: { question: "In which season do leaves typically fall from deciduous trees?", answer: "Autumn (fall)" } },
+    { name: "Q13", icon: "fa-solid fa-hashtag", type: "shortanswer", content: { question: "What do we call a book that contains the meanings and definitions of words?", answer: "A dictionary" } },
+    { name: "Q14", icon: "fa-solid fa-hashtag", type: "shortanswer", content: { question: "What substance do bees produce?", answer: "Honey" } },
+    { name: "Q15", icon: "fa-solid fa-hashtag", type: "shortanswer", content: { question: "What do we call the imaginary line that divides the Earth into the Northern and Southern Hemispheres?", answer: "The equator" } },
+    { name: "Q16", icon: "fa-solid fa-hashtag", type: "shortanswer", content: { question: "What is the process by which plants make their own food using sunlight?", answer: "Photosynthesis" } },
+    { name: "Q17", icon: "fa-solid fa-hashtag", type: "shortanswer", content: { question: "What do we call the person who designs buildings?", answer: "An architect" } },
+    { name: "Q18", icon: "fa-solid fa-hashtag", type: "shortanswer", content: { question: "How many years are there in a century?", answer: "One hundred" } },
+    { name: "Q19", icon: "fa-solid fa-hashtag", type: "shortanswer", content: { question: "What do we call a vehicle that is used to transport patients to hospital?", answer: "An ambulance" } },
+    { name: "Q20", icon: "fa-solid fa-hashtag", type: "shortanswer", content: { question: "What is the largest planet in our solar system?", answer: "Jupiter" } }
+];
+
+
+// ============== NAVIGATION ==============
+function navigateTo(view) {
+    var views = document.querySelectorAll('.view');
+    views.forEach(function(v) { v.classList.remove('active'); });
+    document.getElementById(view + '-view').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============== GENERIC SECTION RENDERING ==============
+function renderTopicGrid(sectionKey) {
+    var grid = document.getElementById(sectionKey + '-topic-grid');
+    var items = sectionData[sectionKey];
+    grid.innerHTML = '';
+    items.forEach(function(item, index) {
+        var card = document.createElement('div');
+        card.className = 'topic-card rounded-lg shadow-md p-4 text-center card-stagger';
+        card.style.animationDelay = (index * 0.04) + 's';
+        card.onclick = function() { loadSectionItem(sectionKey, index); };
+        card.innerHTML =
+            '<div class="text-2xl mb-2"><i class="' + item.icon + ' topic-num" style="color:#1E90FF;"></i></div>' +
+            '<div class="text-sm font-semibold topic-title text-navy">' + item.name + '</div>';
+        grid.appendChild(card);
+    });
+}
+
+function loadSectionItem(sectionKey, index) {
+    sectionIndex[sectionKey] = index;
+    var item = sectionData[sectionKey][index];
+    var titleEl = document.getElementById(sectionKey + '-item-title');
+    var contentEl = document.getElementById(sectionKey + '-item-content');
+
+    titleEl.innerHTML = '<i class="' + item.icon + ' mr-2" style="color:#1E90FF;"></i>' + item.name;
+    contentEl.innerHTML = '';
+
+    if (item.type === 'prompt') {
+        contentEl.innerHTML = renderPrompt(item.content);
+    } else if (item.type === 'passage') {
+        contentEl.innerHTML = renderPassage(item.content);
+    } else if (item.type === 'sentence') {
+        contentEl.innerHTML = renderSentence(item.content);
+    } else if (item.type === 'image-scenario') {
+        contentEl.innerHTML = renderImageScenario(item.content);
+    } else if (item.type === 'lecture') {
+        contentEl.innerHTML = renderLecture(item.content);
+    } else if (item.type === 'shortanswer') {
+        contentEl.innerHTML = renderShortAnswer(item.content);
+    }
+
+    document.getElementById(sectionKey + '-topics').classList.add('hidden');
+    document.getElementById(sectionKey + '-detail').classList.remove('hidden');
+
+    var items = sectionData[sectionKey];
+    document.getElementById(sectionKey + '-prev').style.visibility = index === 0 ? 'hidden' : 'visible';
+    document.getElementById(sectionKey + '-next').style.visibility = index === items.length - 1 ? 'hidden' : 'visible';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showTopicGrid(sectionKey) {
+    document.getElementById(sectionKey + '-topics').classList.remove('hidden');
+    document.getElementById(sectionKey + '-detail').classList.add('hidden');
+}
+
+function navigateSection(sectionKey, direction) {
+    var items = sectionData[sectionKey];
+    var newIndex = (sectionIndex[sectionKey] || 0) + direction;
+    if (newIndex >= 0 && newIndex < items.length) {
+        loadSectionItem(sectionKey, newIndex);
+    }
+}
+
+// ============== RENDERERS ==============
+function renderPrompt(c) {
+    var html = '<div class="passage-card rounded-lg p-5">';
+    html += '<p class="text-sm font-semibold mb-3">' + c.instruction + '</p>';
+    html += '<ul class="space-y-2">';
+    c.points.forEach(function(p) {
+        html += '<li class="q-item bg-white dark:bg-gray-700 p-3 rounded-lg flex items-start gap-3 text-sm">' +
+            '<i class="fa-solid fa-circle-dot flex-shrink-0 mt-0.5" style="color:#F9D423; font-size:0.6rem;"></i> ' + p + '</li>';
+    });
+    html += '</ul>';
+    html += '<p class="mt-4 text-xs text-gray-500 dark:text-gray-400 italic"><i class="fa-solid fa-clock mr-1"></i> 25 seconds to read &bull; 30 seconds to speak</p>';
+    html += '</div>';
+    return html;
+}
+
+function renderPassage(text) {
+    var wordCount = text.split(/\s+/).length;
+    return '<div class="passage-card rounded-lg p-5">' +
+        '<p class="text-sm leading-relaxed mb-3" style="line-height:1.8;">' + text + '</p>' +
+        '<p class="text-xs text-gray-500 dark:text-gray-400 italic"><i class="fa-solid fa-font mr-1"></i> ' + wordCount + ' words &bull; <i class="fa-solid fa-clock mr-1"></i> 30-40 seconds to prepare, then read aloud</p>' +
+        '</div>' +
+        '<div class="tip-box rounded-lg p-3 mt-3">' +
+        '<p class="text-xs text-gray-600 dark:text-gray-400"><strong>Practice:</strong> Read the passage aloud. Focus on clear pronunciation, natural pacing, and appropriate intonation. Stress key content words.</p>' +
+        '</div>';
+}
+
+function renderSentence(text) {
+    return '<div class="passage-card rounded-lg p-5">' +
+        '<p class="text-base font-semibold leading-relaxed mb-3">"' + text + '"</p>' +
+        '<p class="text-xs text-gray-500 dark:text-gray-400 italic"><i class="fa-solid fa-clock mr-1"></i> In the test: listen once, then repeat immediately</p>' +
+        '</div>' +
+        '<div class="tip-box rounded-lg p-3 mt-3">' +
+        '<p class="text-xs text-gray-600 dark:text-gray-400"><strong>Practice:</strong> Read the sentence once, then look away and try to repeat it from memory. Focus on getting the key content words right and maintaining the natural rhythm.</p>' +
+        '</div>';
+}
+
+function renderImageScenario(c) {
+    var html = '<div class="mb-3">' +
+        '<span class="task-badge badge-speaking mr-2">' + c.imageType + '</span>' +
+        '</div>';
+    html += '<div class="passage-card rounded-lg p-5 mb-3">';
+    html += '<p class="text-sm font-semibold mb-3"><i class="fa-solid fa-image mr-1"></i> Image Description:</p>';
+    html += '<p class="text-sm text-gray-700 dark:text-gray-300 mb-3">' + c.description + '</p>';
+    html += '<p class="text-sm font-semibold mb-2">Key Features to Include:</p>';
+    html += '<ul class="space-y-1.5">';
+    c.keyFeatures.forEach(function(f) {
+        html += '<li class="q-item bg-white dark:bg-gray-700 p-2.5 rounded-lg flex items-start gap-2 text-sm">' +
+            '<span class="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs" style="background:#1E90FF;color:#fff;"><i class="fa-solid fa-check" style="font-size:0.55rem;"></i></span>' +
+            f + '</li>';
+    });
+    html += '</ul></div>';
+    html += '<div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">';
+    html += '<p class="text-sm font-semibold mb-1"><i class="fa-solid fa-microphone mr-1" style="color:#F9D423;"></i> Your Task:</p>';
+    html += '<p class="text-sm text-gray-700 dark:text-gray-300">' + c.practicePrompt + '</p>';
+    html += '<p class="text-xs text-gray-500 dark:text-gray-400 mt-2 italic"><i class="fa-solid fa-clock mr-1"></i> 25 seconds to prepare &bull; 40 seconds to speak</p>';
+    html += '</div>';
+    return html;
+}
+
+function renderLecture(c) {
+    var html = '<div class="passage-card rounded-lg p-5 mb-3">';
+    html += '<p class="text-sm font-bold mb-1" style="color:#1E90FF;"><i class="fa-solid fa-chalkboard-user mr-1"></i> Lecture Topic:</p>';
+    html += '<p class="text-base font-semibold mb-3">' + c.topic + '</p>';
+    html += '<p class="text-sm font-semibold mb-1">Lecture Summary:</p>';
+    html += '<p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-3">' + c.summary + '</p>';
+    html += '<p class="text-sm font-semibold mb-2">Key Points to Cover:</p>';
+    html += '<ul class="space-y-1.5">';
+    c.keyPoints.forEach(function(p) {
+        html += '<li class="q-item bg-white dark:bg-gray-700 p-2.5 rounded-lg flex items-start gap-2 text-sm">' +
+            '<span class="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs" style="background:#F9D423;color:#0a1f7a;"><i class="fa-solid fa-check" style="font-size:0.55rem;"></i></span>' +
+            p + '</li>';
+    });
+    html += '</ul></div>';
+    html += '<div class="tip-box rounded-lg p-3">';
+    html += '<p class="text-xs text-gray-600 dark:text-gray-400"><strong>Practice:</strong> Read the summary as if it were a lecture you just heard. Close the summary and try to re-tell the main ideas in your own words within 40 seconds. Use linking phrases like "The lecturer discussed...", "Additionally...", "In conclusion..."</p>';
+    html += '</div>';
+    return html;
+}
+
+function renderShortAnswer(c) {
+    var answerId = 'answer-' + Math.random().toString(36).substring(7);
+    return '<div class="passage-card rounded-lg p-5 mb-3">' +
+        '<p class="text-sm font-bold mb-2" style="color:#1E90FF;"><i class="fa-solid fa-headphones mr-1"></i> Question:</p>' +
+        '<p class="text-base font-semibold mb-4">"' + c.question + '"</p>' +
+        '<p class="text-xs text-gray-500 dark:text-gray-400 italic"><i class="fa-solid fa-clock mr-1"></i> 10 seconds to answer with one word or a few words</p>' +
+        '</div>' +
+        '<div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">' +
+        '<button onclick="document.getElementById(\'' + answerId + '\').classList.toggle(\'hidden\')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors" style="background:linear-gradient(135deg,#F9D423,#1E90FF);color:#0a1f7a;">' +
+        '<i class="fa-solid fa-eye mr-1"></i> Show Answer</button>' +
+        '<div id="' + answerId + '" class="hidden mt-3 p-3 bg-white dark:bg-gray-800 rounded-lg">' +
+        '<p class="text-sm"><strong>Answer:</strong> <span style="color:#22c55e; font-weight:600;">' + c.answer + '</span></p>' +
+        '</div></div>';
+}
+
+// ============== INIT ==============
+var sections = ['personal', 'readaloud', 'repeat', 'describe', 'retell', 'shortq'];
+sections.forEach(function(key) {
+    renderTopicGrid(key);
+    sectionIndex[key] = 0;
+});
+<script>
+</body>
+</html>
