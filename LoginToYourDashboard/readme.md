@@ -18,5 +18,5 @@ Only accounts with role: "admin" can access the admin panel — everyone else ge
 ### Important Files - do not delete:
 * admin-panel.html --------- This is for Admins approving new user signups.
 * loginfeature.html --------- These are scripts to add to HTML files where you want login protection.
-* loginfeature.js --------- This is the Login Feature.
+* [loginfeature.js](https://englishtraininghub.org/LoginToYourDashboard/admin-panel.html) --------- This is the Login Feature.
 
