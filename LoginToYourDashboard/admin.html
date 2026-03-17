@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel — User Management</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            min-height: 100vh;
+        }
+
+        /* ——— Auth Gate ——— */
+        #auth-gate {
+            display: flex; align-items: center; justify-content: center;
+            min-height: 100vh;
+        }
+        #auth-box {
+            text-align: center; padding: 2.5rem; max-width: 420px; width: 90%;
+            background: #fff; border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+        #auth-box h2 { margin-bottom: 0.5rem; font-size: 1.5rem; }
+        #auth-box p { color: #666; margin-bottom: 1.5rem; }
+        #auth-box .icon { font-size: 3rem; margin-bottom: 1rem; }
+        .google-btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 12px 24px; border-radius: 8px; border: 2px solid #ddd;
+            background: #fff; color: #333; font-size: 1rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .google-btn:hover { border-color: #4285F4; box-shadow: 0 2px 8px rgba(66,133,244,0.3); }
+        .google-btn img { width: 20px; height: 20px; }
+        .error-text { color: #e74c3c; margin-top: 1rem; font-size: 0.9rem; }
+
+        /* ——— Admin Dashboard ——— */
+        #admin-dashboard { display: none; }
+
+        .top-bar {
+            background: #fff;
+            padding: 1rem 2rem;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .top-bar h1 { font-size: 1.3rem; }
+        .top-bar .admin-info {
+            display: flex; align-items: center; gap: 10px; font-size: 0.9rem;
+        }
+        .top-bar .admin-info img {
+            width: 32px; height: 32px; border-radius: 50%;
+            border: 2px solid #F9D423;
+        }
+        .top-bar .admin-info button {
+            padding: 6px 14px; border-radius: 6px; border: 1px solid #ddd;
+            background: #fff; cursor: pointer; font-size: 0.8rem;
+        }
+        .top-bar .admin-info button:hover { background: #f5f5f5; }
+
+        .dashboard-body { padding: 2rem; max-width: 1000px; margin: 0 auto; }
+
+        /* Stats */
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card {
+            background: #fff; padding: 1.25rem; border-radius: 10px;
+            text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .stat-card .number { font-size: 2rem; font-weight: 700; }
+        .stat-card .label { font-size: 0.85rem; color: #777; margin-top: 0.25rem; }
+        .stat-card.pending .number { color: #F4B400; }
+        .stat-card.approved .number { color: #0F9D58; }
+        .stat-card.rejected .number { color: #DB4437; }
+        .stat-card.total .number { color: #4285F4; }
+
+        /* Tabs */
+        .tabs {
+            display: flex; gap: 0; margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .tab-btn {
+            padding: 0.75rem 1.5rem; border: none; background: none;
+            cursor: pointer; font-size: 0.95rem; font-weight: 600;
+            color: #888; position: relative; transition: color 0.2s;
+        }
+        .tab-btn:hover { color: #333; }
+        .tab-btn.active { color: #4285F4; }
+        .tab-btn.active::after {
+            content: ""; position: absolute; bottom: -2px; left: 0; right: 0;
+            height: 2px; background: #4285F4;
+        }
+        .tab-btn .badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            min-width: 20px; height: 20px; padding: 0 6px;
+            border-radius: 10px; font-size: 0.75rem; font-weight: 700;
+            margin-left: 6px; color: #fff;
+        }
+        .badge-pending { background: #F4B400; }
+        .badge-approved { background: #0F9D58; }
+        .badge-rejected { background: #DB4437; }
+
+        /* User List */
+        .user-list { display: flex; flex-direction: column; gap: 0.75rem; }
+        .user-card {
+            background: #fff; border-radius: 10px; padding: 1rem 1.25rem;
+            display: flex; align-items: center; gap: 1rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s;
+        }
+        .user-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .user-card img {
+            width: 44px; height: 44px; border-radius: 50%;
+            border: 2px solid #eee; flex-shrink: 0;
+        }
+        .user-card .user-details { flex: 1; min-width: 0; }
+        .user-card .user-name { font-weight: 600; font-size: 1rem; }
+        .user-card .user-email { color: #888; font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .user-card .user-date { color: #aaa; font-size: 0.78rem; margin-top: 2px; }
+        .user-card .actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+
+        .btn {
+            padding: 8px 16px; border-radius: 6px; border: none;
+            font-size: 0.85rem; font-weight: 600; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-approve { background: #0F9D58; color: #fff; }
+        .btn-approve:hover { background: #0b8043; }
+        .btn-reject { background: #DB4437; color: #fff; }
+        .btn-reject:hover { background: #c33; }
+        .btn-pending { background: #F4B400; color: #fff; }
+        .btn-pending:hover { background: #e0a800; }
+
+        .status-badge {
+            display: inline-block; padding: 4px 12px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600; text-transform: capitalize;
+        }
+        .status-approved { background: #e6f4ea; color: #0F9D58; }
+        .status-rejected { background: #fce8e6; color: #DB4437; }
+        .status-pending { background: #fef7e0; color: #F4B400; }
+
+        .empty-state { text-align: center; padding: 3rem; color: #999; }
+        .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+
+        .loading { text-align: center; padding: 3rem; color: #999; }
+
+        /* Confirmation modal */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+        }
+        .modal-overlay.visible { opacity: 1; pointer-events: auto; }
+        .modal-box {
+            background: #fff; padding: 2rem; border-radius: 12px;
+            max-width: 400px; width: 90%; text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .modal-box h3 { margin-bottom: 0.5rem; }
+        .modal-box p { color: #666; margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .modal-box .modal-actions { display: flex; gap: 0.75rem; justify-content: center; }
+        .modal-box .btn-cancel {
+            padding: 8px 20px; border-radius: 6px; border: 1px solid #ddd;
+            background: #fff; cursor: pointer; font-size: 0.9rem;
+        }
+        .modal-box .btn-cancel:hover { background: #f5f5f5; }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            body { background: #1a1a2e; color: #e0e0e0; }
+            #auth-box, .user-card, .stat-card, .top-bar, .modal-box
+                { background: #2a2a3e; }
+            #auth-box p, .user-card .user-email, .modal-box p { color: #aaa; }
+            .google-btn { background: #3a3a4e; color: #eee; border-color: #555; }
+            .tabs { border-bottom-color: #3a3a4e; }
+            .tab-btn { color: #777; }
+            .tab-btn:hover { color: #ccc; }
+            .top-bar .admin-info button { background: #3a3a4e; border-color: #555; color: #ccc; }
+            .btn-cancel { background: #3a3a4e !important; border-color: #555 !important; color: #ccc; }
+            .status-approved { background: #1a3a2a; }
+            .status-rejected { background: #3a1a1a; }
+            .status-pending { background: #3a3a1a; }
+        }
+
+        @media (max-width: 600px) {
+            .dashboard-body { padding: 1rem; }
+            .user-card { flex-wrap: wrap; }
+            .user-card .actions { width: 100%; justify-content: flex-end; }
+            .top-bar { padding: 0.75rem 1rem; }
+            .top-bar h1 { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ——— Auth Gate ——— -->
+    <div id="auth-gate">
+        <div id="auth-box">
+            <div class="icon">🛡️</div>
+            <h2>Admin Panel</h2>
+            <p>Sign in with your admin Google account to manage users.</p>
+            <button class="google-btn" id="admin-login-btn">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
+                Sign in with Google
+            </button>
+            <div id="auth-error" class="error-text" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- ——— Admin Dashboard ——— -->
+    <div id="admin-dashboard">
+        <div class="top-bar">
+            <h1>🛡️ User Management</h1>
+            <div class="admin-info">
+                <img id="admin-avatar" src="" alt="">
+                <span id="admin-name"></span>
+                <button id="admin-signout">Sign Out</button>
+            </div>
+        </div>
+
+        <div class="dashboard-body">
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat-card pending">
+                    <div class="number" id="count-pending">-</div>
+                    <div class="label">Pending</div>
+                </div>
+                <div class="stat-card approved">
+                    <div class="number" id="count-approved">-</div>
+                    <div class="label">Approved</div>
+                </div>
+                <div class="stat-card rejected">
+                    <div class="number" id="count-rejected">-</div>
+                    <div class="label">Rejected</div>
+                </div>
+                <div class="stat-card total">
+                    <div class="number" id="count-total">-</div>
+                    <div class="label">Total</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="pending">
+                    Pending <span class="badge badge-pending" id="badge-pending">0</span>
+                </button>
+                <button class="tab-btn" data-tab="approved">
+                    Approved <span class="badge badge-approved" id="badge-approved">0</span>
+                </button>
+                <button class="tab-btn" data-tab="rejected">
+                    Rejected <span class="badge badge-rejected" id="badge-rejected">0</span>
+                </button>
+            </div>
+
+            <!-- User Lists -->
+            <div id="user-list-container">
+                <div class="loading">Loading users...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ——— Confirmation Modal ——— -->
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal-box">
+            <h3 id="modal-title">Confirm Action</h3>
+            <p id="modal-message">Are you sure?</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="modal-cancel">Cancel</button>
+                <button class="btn" id="modal-confirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // =============================================
+        //  🔑 REPLACE WITH YOUR FIREBASE CONFIG
+        // =============================================
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "YOUR_APP_ID"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        let allUsers = [];
+        let currentTab = "pending";
+        let modalCallback = null;
+
+        // ——— DOM Elements ———
+        const authGate = document.getElementById("auth-gate");
+        const dashboard = document.getElementById("admin-dashboard");
+        const authError = document.getElementById("auth-error");
+        const listContainer = document.getElementById("user-list-container");
+
+        // ——— Auth ———
+        document.getElementById("admin-login-btn").addEventListener("click", async () => {
+            try {
+                authError.style.display = "none";
+                const provider = new firebase.auth.GoogleAuthProvider();
+                await auth.signInWithPopup(provider);
+            } catch (err) {
+                if (err.code !== "auth/popup-closed-by-user") {
+                    authError.textContent = "Sign-in failed: " + err.message;
+                    authError.style.display = "block";
+                }
+            }
+        });
+
+        document.getElementById("admin-signout").addEventListener("click", () => {
+            auth.signOut();
+        });
+
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                // Check if user is an admin
+                const userDoc = await db.collection("users").doc(user.uid).get();
+                if (userDoc.exists && userDoc.data().role === "admin") {
+                    showDashboard(user);
+                    loadUsers();
+                } else {
+                    authError.textContent = "Access denied. This account is not an admin.";
+                    authError.style.display = "block";
+                    auth.signOut();
+                }
+            } else {
+                authGate.style.display = "flex";
+                dashboard.style.display = "none";
+            }
+        });
+
+        function showDashboard(user) {
+            authGate.style.display = "none";
+            dashboard.style.display = "block";
+            document.getElementById("admin-avatar").src = user.photoURL || "";
+            document.getElementById("admin-name").textContent = user.displayName || "Admin";
+        }
+
+        // ——— Load Users ———
+        async function loadUsers() {
+            listContainer.innerHTML = '<div class="loading">Loading users...</div>';
+            try {
+                const snapshot = await db.collection("users").orderBy("requestedAt", "desc").get();
+                allUsers = [];
+                snapshot.forEach((doc) => {
+                    allUsers.push({ id: doc.id, ...doc.data() });
+                });
+                updateStats();
+                renderUserList();
+            } catch (err) {
+                listContainer.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>Error loading users: ' + err.message + '</p></div>';
+            }
+        }
+
+        // ——— Stats ———
+        function updateStats() {
+            const pending = allUsers.filter(u => u.status === "pending").length;
+            const approved = allUsers.filter(u => u.status === "approved").length;
+            const rejected = allUsers.filter(u => u.status === "rejected").length;
+
+            document.getElementById("count-pending").textContent = pending;
+            document.getElementById("count-approved").textContent = approved;
+            document.getElementById("count-rejected").textContent = rejected;
+            document.getElementById("count-total").textContent = allUsers.length;
+
+            document.getElementById("badge-pending").textContent = pending;
+            document.getElementById("badge-approved").textContent = approved;
+            document.getElementById("badge-rejected").textContent = rejected;
+        }
+
+        // ——— Tabs ———
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                currentTab = btn.dataset.tab;
+                renderUserList();
+            });
+        });
+
+        // ——— Render User List ———
+        function renderUserList() {
+            const filtered = allUsers.filter(u => u.status === currentTab);
+
+            if (filtered.length === 0) {
+                const messages = {
+                    pending: "No pending requests",
+                    approved: "No approved users yet",
+                    rejected: "No rejected users"
+                };
+                const icons = { pending: "📭", approved: "👥", rejected: "🚫" };
+                listContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">${icons[currentTab]}</div>
+                        <p>${messages[currentTab]}</p>
+                    </div>`;
+                return;
+            }
+
+            let html = '<div class="user-list">';
+            filtered.forEach((user) => {
+                const date = user.requestedAt
+                    ? new Date(user.requestedAt.seconds * 1000).toLocaleDateString("en-US", {
+                        year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+                    })
+                    : "Unknown date";
+
+                let actionButtons = "";
+                if (currentTab === "pending") {
+                    actionButtons = `
+                        <button class="btn btn-approve" onclick="confirmAction('${user.id}', 'approved', '${escapeHtml(user.name)}')">Approve</button>
+                        <button class="btn btn-reject" onclick="confirmAction('${user.id}', 'rejected', '${escapeHtml(user.name)}')">Reject</button>`;
+                } else if (currentTab === "approved") {
+                    actionButtons = `
+                        <span class="status-badge status-approved">Approved</span>
+                        <button class="btn btn-reject" onclick="confirmAction('${user.id}', 'rejected', '${escapeHtml(user.name)}')">Reject</button>`;
+                } else if (currentTab === "rejected") {
+                    actionButtons = `
+                        <span class="status-badge status-rejected">Rejected</span>
+                        <button class="btn btn-approve" onclick="confirmAction('${user.id}', 'approved', '${escapeHtml(user.name)}')">Approve</button>`;
+                }
+
+                html += `
+                    <div class="user-card">
+                        <img src="${user.photoURL || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/><text x=%2250%25%22 y=%2255%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22>👤</text></svg>'}" alt="">
+                        <div class="user-details">
+                            <div class="user-name">${escapeHtml(user.name || "Unknown")}</div>
+                            <div class="user-email">${escapeHtml(user.email || "No email")}</div>
+                            <div class="user-date">Requested: ${date}</div>
+                        </div>
+                        <div class="actions">${actionButtons}</div>
+                    </div>`;
+            });
+            html += "</div>";
+            listContainer.innerHTML = html;
+        }
+
+        // ——— Confirmation Modal ———
+        function confirmAction(userId, newStatus, userName) {
+            const modal = document.getElementById("confirm-modal");
+            const action = newStatus === "approved" ? "approve" : "reject";
+
+            document.getElementById("modal-title").textContent =
+                (newStatus === "approved" ? "✅ Approve" : "❌ Reject") + " User";
+            document.getElementById("modal-message").textContent =
+                `Are you sure you want to ${action} ${userName}?`;
+
+            const confirmBtn = document.getElementById("modal-confirm");
+            confirmBtn.className = "btn " + (newStatus === "approved" ? "btn-approve" : "btn-reject");
+            confirmBtn.textContent = newStatus === "approved" ? "Approve" : "Reject";
+
+            modal.classList.add("visible");
+
+            modalCallback = () => updateUserStatus(userId, newStatus);
+        }
+
+        document.getElementById("modal-confirm").addEventListener("click", () => {
+            document.getElementById("confirm-modal").classList.remove("visible");
+            if (modalCallback) modalCallback();
+            modalCallback = null;
+        });
+
+        document.getElementById("modal-cancel").addEventListener("click", () => {
+            document.getElementById("confirm-modal").classList.remove("visible");
+            modalCallback = null;
+        });
+
+        // ——— Update User Status ———
+        async function updateUserStatus(userId, newStatus) {
+            try {
+                await db.collection("users").doc(userId).update({
+                    status: newStatus,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                // Update local data
+                const user = allUsers.find(u => u.id === userId);
+                if (user) user.status = newStatus;
+                updateStats();
+                renderUserList();
+            } catch (err) {
+                // Show error in a non-alert way
+                const errDiv = document.createElement("div");
+                errDiv.style.cssText = "position:fixed;top:1rem;right:1rem;background:#DB4437;color:#fff;padding:1rem 1.5rem;border-radius:8px;z-index:10000;font-size:0.9rem;";
+                errDiv.textContent = "Error: " + err.message;
+                document.body.appendChild(errDiv);
+                setTimeout(() => errDiv.remove(), 4000);
+            }
+        }
+
+        // ——— Helpers ———
+        function escapeHtml(str) {
+            const div = document.createElement("div");
+            div.textContent = str || "";
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
