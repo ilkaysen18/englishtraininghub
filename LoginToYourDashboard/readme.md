@@ -7,4 +7,7 @@ Copy these scripts below to add in any HTML file where you want login protection
 
 
 
-#List of latest features:
+# List of latest features added to "LoginToYourDashboard":
+* admin-panel.html
+* loginfeature.html
+* loginfeature.js
