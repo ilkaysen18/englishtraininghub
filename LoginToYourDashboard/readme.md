@@ -8,6 +8,7 @@ Copy these scripts below to add in any HTML file where you want login protection
 ### Quick Setup Reminder
 1. Replace firebaseConfig in both admin-panel.html and your call code
 2. In Firestore, manually set your own user document to:
+
   role: "admin"
   status: "approved"
 
