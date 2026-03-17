@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Speaking Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FFD700',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+    body {
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    /* Gradient header */
+    .bg-primary {
+        background: linear-gradient(135deg, #F9D423, #1E90FF);
+    }
+
+    /* Primary text color */
+    .text-primary {
+        color: #0a1f7a;
+    }
+
+    /* Level card hover effect */
+    .level-card {
+        transition: all 0.3s ease;
+        background: #fffdf5;
+        border: 3px solid transparent;
+        background-image: linear-gradient(#fffdf5, #fffdf5), linear-gradient(135deg, #F9D423, #1E90FF);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+    }
+    .level-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        background-image: linear-gradient(135deg, #F9D423, #1E90FF), linear-gradient(135deg, #F9D423, #1E90FF);
+    }
+    .level-card:hover .card-title,
+    .level-card:hover .card-desc,
+    .level-card:hover .card-feat {
+        color: #fff !important;
+    }
+    .level-card:hover .card-icon {
+        filter: brightness(1.2);
+    }
+    .level-card:hover .cta-btn {
+        background: rgba(255,255,255,0.25) !important;
+        color: #fff !important;
+    }
+
+    .dark .level-card {
+        background-image: linear-gradient(#1e1e1e, #1e1e1e), linear-gradient(135deg, #F9D423, #1E90FF);
+    }
+    .dark .level-card:hover {
+        background-image: linear-gradient(135deg, #F9D423, #1E90FF), linear-gradient(135deg, #F9D423, #1E90FF);
+    }
+
+    /* Topic card */
+    .topic-card {
+        transition: all 0.3s ease;
+        background: #fffdf5;
+        border: 3px solid transparent;
+        background-image: linear-gradient(#fffdf5, #fffdf5), linear-gradient(135deg, #F9D423, #1E90FF);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        cursor: pointer;
+    }
+    .topic-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        background-image: linear-gradient(135deg, #F9D423, #1E90FF), linear-gradient(135deg, #F9D423, #1E90FF);
+    }
+    .topic-card:hover .topic-title,
+    .topic-card:hover .topic-num {
+        color: #fff !important;
+    }
+
+    .dark .topic-card {
+        background-image: linear-gradient(#1e1e1e, #1e1e1e), linear-gradient(135deg, #F9D423, #1E90FF);
+    }
+    .dark .topic-card:hover {
+        background-image: linear-gradient(135deg, #F9D423, #1E90FF), linear-gradient(135deg, #F9D423, #1E90FF);
+    }
+
+    /* Cue card */
+    .cue-card {
+        background: linear-gradient(135deg, #fffbe6 0%, #e8f4fd 100%);
+        border-left: 5px solid #F9D423;
+    }
+    .dark .cue-card {
+        background: linear-gradient(135deg, #2a2510 0%, #1a2a3a 100%);
+        border-left-color: #F9D423;
+    }
+
+    /* Animations */
+    .hero-text {
+        animation: slideDown 0.6s ease-out;
+    }
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.6s ease-in;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-stagger {
+        animation: scaleIn 0.5s ease-out both;
+    }
+    @keyframes scaleIn {
+        from { opacity: 0; transform: scale(0.92); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Question items */
+    .q-item {
+        transition: all 0.2s ease;
+    }
+    .q-item:hover {
+        background-color: #f0f7ff;
+        transform: translateX(4px);
+    }
+    .dark .q-item:hover {
+        background-color: #2a3040;
+    }
+
+    /* Part label badges */
+    .part-badge {
+        display: inline-block;
+        padding: 2px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+    .part-badge-2 {
+        background: #F9D423;
+        color: #0a1f7a;
+    }
+    .part-badge-3 {
+        background: #1E90FF;
+        color: #fff;
+    }
+
+    /* Smooth view transitions */
+    .view {
+        display: none;
+    }
+    .view.active {
+        display: block;
+        animation: fadeIn 0.4s ease-out;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #c0c0c0; border-radius: 4px; }
+    .dark ::-webkit-scrollbar-thumb { background: #555; }
+    </style>
+</head>
+<body class="bg-white dark:bg-[#121212] text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div class="min-h-screen flex flex-col">
+
+        <!-- Header -->
+        <header class="bg-primary text-white shadow-lg">
+            <div class="container mx-auto px-4 py-5">
+                <div class="flex items-center justify-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+                    <h1 class="text-2xl md:text-3xl font-bold text-center hero-text" style="color: #0a1f7a; text-shadow: 0 2px 4px rgba(0,0,0,0.12);">
+                        <i class="fa-solid fa-comments" style="color:#0a1f7a;"></i> IELTS Speaking Practice
+                    </h1>
+                </div>
+                <p class="text-center mt-1 hero-text text-sm md:text-base" style="color: #f0f0f0;">Master Your IELTS Speaking Exam</p>
+            </div>
+        </header>
+
+        <!-- ===================== HOME VIEW ===================== -->
+        <div id="home-view" class="view active flex-1">
+            <main class="flex-1 flex items-center justify-center px-4 py-10">
+                <div class="container max-w-5xl">
+                    <div class="text-center mb-10 fade-in">
+                        <h2 class="text-2xl md:text-4xl font-bold mb-3 text-gray-800 dark:text-gray-100">Choose Your Speaking Part</h2>
+                        <p class="text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                            Select a section to practice with real IELTS speaking exam questions.
+                            Build fluency and confidence for test day.
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8 card-stagger">
+                        <!-- Part 1 Card -->
+                        <div class="level-card rounded-xl shadow-lg p-7 cursor-pointer" onclick="navigateTo('part1')">
+                            <div class="text-center">
+                                <div class="text-5xl mb-3 card-icon">&#x1F399;</div>
+                                <h3 class="text-2xl md:text-3xl font-bold mb-2 card-title text-primary">Part 1</h3>
+                                <p class="text-gray-500 dark:text-gray-400 mb-1 text-sm font-semibold card-desc">Interview (4-5 minutes)</p>
+                                <p class="text-gray-600 dark:text-gray-300 mb-5 text-sm card-desc">
+                                    General questions about your life, work, studies, and interests.
+                                </p>
+                                <div class="space-y-2 text-left mb-5">
+                                    <div class="flex items-start"><span class="text-lg mr-2 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-sm card-feat">12 topic categories</span></div>
+                                    <div class="flex items-start"><span class="text-lg mr-2 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-sm card-feat">90+ practice questions</span></div>
+                                    <div class="flex items-start"><span class="text-lg mr-2 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-sm card-feat">Personal &amp; everyday topics</span></div>
+                                    <div class="flex items-start"><span class="text-lg mr-2 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-sm card-feat">No right or wrong answers</span></div>
+                                </div>
+                                <div class="cta-btn inline-block px-6 py-2.5 bg-primary text-white rounded-lg font-semibold shadow-md text-sm" style="color: #0a1f7a;">
+                                    Start Practising <i class="fa-solid fa-arrow-right ml-1"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Parts 2 & 3 Card -->
+                        <div class="level-card rounded-xl shadow-lg p-7 cursor-pointer" onclick="navigateTo('part23')">
+                            <div class="text-center">
+                                <div class="text-5xl mb-3 card-icon">&#x1F4DD;</div>
+                                <h3 class="text-2xl md:text-3xl font-bold mb-2 card-title text-primary">Parts 2 &amp; 3</h3>
+                                <p class="text-gray-500 dark:text-gray-400 mb-1 text-sm font-semibold card-desc">Long Turn &amp; Discussion (7-8 minutes)</p>
+                                <p class="text-gray-600 dark:text-gray-300 mb-5 text-sm card-desc">
+                                    Topic cue cards plus follow-up discussion questions with the examiner.
+                                </p>
+                                <div class="space-y-2 text-left mb-5">
+                                    <div class="flex items-start"><span class="text-lg mr-2 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-sm card-feat">9 themed topic sets</span></div>
+                                    <div class="flex items-start"><span class="text-lg mr-2 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-sm card-feat">Cue cards with prompts</span></div>
+                                    <div class="flex items-start"><span class="text-lg mr-2 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-sm card-feat">Themed Part 3 discussions</span></div>
+                                    <div class="flex items-start"><span class="text-lg mr-2 card-feat" style="color:#1E90FF;">&#10003;</span><span class="text-gray-700 dark:text-gray-300 text-sm card-feat">Analytical &amp; opinion questions</span></div>
+                                </div>
+                                <div class="cta-btn inline-block px-6 py-2.5 bg-primary text-white rounded-lg font-semibold shadow-md text-sm" style="color: #0a1f7a;">
+                                    Start Practising <i class="fa-solid fa-arrow-right ml-1"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Info section -->
+                    <div class="mt-10 text-center fade-in" style="animation-delay: 0.3s;">
+                        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-md p-6 max-w-3xl mx-auto">
+                            <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-100"><i class="fa-solid fa-lightbulb" style="color:#F9D423;"></i> About the IELTS Speaking Test</h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">
+                                The IELTS Speaking test lasts 11-14 minutes and is a face-to-face interview.
+                                <strong>Part 1</strong> covers familiar topics. <strong>Part 2</strong> gives you a cue card to speak about for 1-2 minutes.
+                                <strong>Part 3</strong> involves deeper discussion related to the Part 2 topic.
+                                Practice with these real exam-style questions to build your confidence.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- ===================== PART 1 VIEW ===================== -->
+        <div id="part1-view" class="view flex-1">
+            <div class="container mx-auto px-4 py-6 max-w-4xl">
+                <button onclick="navigateTo('home')" class="mb-5 px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Back to Home
+                </button>
+
+                <!-- Part 1 Header -->
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg p-5 mb-6">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-1 text-primary">
+                        <i class="fa-solid fa-microphone-lines mr-2"></i> Part 1: Interview
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        The questions in Part 1 are on general topics about your life.
+                        Your answers are from your life and experience. There is no right or wrong answer.
+                    </p>
+                </div>
+
+                <!-- Topic Selection Grid (Part 1) -->
+                <div id="part1-topics" class="mb-6">
+                    <h3 class="text-lg font-bold mb-3 text-gray-800 dark:text-gray-100">Choose a Topic:</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" id="part1-topic-grid">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+
+                <!-- Topic Detail (Part 1) -->
+                <div id="part1-detail" class="hidden">
+                    <button onclick="showPart1Topics()" class="mb-4 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm">
+                        <i class="fa-solid fa-grid-2 mr-1"></i> All Topics
+                    </button>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 mb-4">
+                        <h3 id="part1-topic-title" class="text-xl md:text-2xl font-bold mb-4 text-primary"></h3>
+                        <div id="part1-questions" class="space-y-2">
+                            <!-- Questions injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Navigation between topics -->
+                    <div class="flex justify-between mt-4">
+                        <button id="part1-prev" onclick="navigatePart1(-1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">
+                            <i class="fa-solid fa-chevron-left mr-1"></i> Previous
+                        </button>
+                        <button id="part1-next" onclick="navigatePart1(1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">
+                            Next <i class="fa-solid fa-chevron-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== PARTS 2 & 3 VIEW ===================== -->
+        <div id="part23-view" class="view flex-1">
+            <div class="container mx-auto px-4 py-6 max-w-4xl">
+                <button onclick="navigateTo('home')" class="mb-5 px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Back to Home
+                </button>
+
+                <!-- Parts 2 & 3 Header -->
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg p-5 mb-6">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-1 text-primary">
+                        <i class="fa-solid fa-comments mr-2"></i> Parts 2 &amp; 3: Long Turn &amp; Discussion
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        In Part 2, you receive a topic card and have one minute to prepare, then speak for 1-2 minutes.
+                        Part 3 involves a discussion with the examiner on questions related to the Part 2 theme.
+                    </p>
+                </div>
+
+                <!-- Topic Selection Grid (Parts 2 & 3) -->
+                <div id="part23-topics" class="mb-6">
+                    <h3 class="text-lg font-bold mb-3 text-gray-800 dark:text-gray-100">Choose a Topic:</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="part23-topic-grid">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+
+                <!-- Topic Detail (Parts 2 & 3) -->
+                <div id="part23-detail" class="hidden">
+                    <button onclick="showPart23Topics()" class="mb-4 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm">
+                        <i class="fa-solid fa-grid-2 mr-1"></i> All Topics
+                    </button>
+
+                    <div id="part23-content" class="space-y-5">
+                        <!-- Content injected by JS -->
+                    </div>
+
+                    <!-- Navigation between topics -->
+                    <div class="flex justify-between mt-5">
+                        <button id="part23-prev" onclick="navigatePart23(-1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">
+                            <i class="fa-solid fa-chevron-left mr-1"></i> Previous
+                        </button>
+                        <button id="part23-next" onclick="navigatePart23(1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors text-sm font-medium">
+                            Next <i class="fa-solid fa-chevron-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-100 dark:bg-gray-900 py-5 mt-auto">
+            <div class="container mx-auto px-4 text-center text-gray-500 dark:text-gray-500 text-xs">
+                <p>IELTS Speaking Practice &mdash; Build your speaking confidence one topic at a time! <i class="fa-solid fa-graduation-cap" style="color:#F9D423;"></i></p>
+            </div>
+        </footer>
+    </div>
+
+<script>
+// ============== DARK MODE ==============
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add('dark');
+}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(event) {
+    if (event.matches) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+});
+
+// ============== PART 1 DATA ==============
+var part1Topics = [
+    {
+        name: "About You",
+        icon: "fa-solid fa-user",
+        questions: [
+            "What is your full name?",
+            "Can I have your name please?",
+            "Could you tell me your full name please?",
+            "What shall I call you?",
+            "How can I address you?",
+            "Does your name have any special meaning?",
+            "Is your name important to you?",
+            "Do people in your country like changing their name? Why?",
+            "Have you ever changed your name? Why or why not?",
+            "Why do so many people change their name?",
+            "Do you work or study?"
+        ]
+    },
+    {
+        name: "Study",
+        icon: "fa-solid fa-book-open",
+        questions: [
+            "What are you studying?",
+            "What's your major?",
+            "Why did you choose that subject?",
+            "What do you find most interesting about your course?",
+            "What is your favorite subject?",
+            "What do you dislike about your study?",
+            "What do you hope to do after your graduation?",
+            "What are your ambitions for the future?",
+            "Do you hope to gain any qualifications?",
+            "What are the advantages of studying instead of working?"
+        ]
+    },
+    {
+        name: "Work",
+        icon: "fa-solid fa-briefcase",
+        questions: [
+            "Can you describe your job to me?",
+            "What do you do for a living?",
+            "How long have you been doing it?",
+            "Can you describe one of your typical working days?",
+            "What's your daily routine on a working day?",
+            "Why did you choose to do that job?",
+            "What things do you enjoy about your work? Why?",
+            "What do you think is the attraction of your work?",
+            "What is your ideal job?",
+            "Do you want to change your current job? Why or why not?",
+            "Are you willing to keep your job permanently?",
+            "What are your plans for the future?"
+        ]
+    },
+    {
+        name: "Your Town",
+        icon: "fa-solid fa-city",
+        questions: [
+            "Can you describe your town or village to me?",
+            "Tell me something about your hometown.",
+            "Where are you from?",
+            "Where is your hometown?",
+            "Where do you come from?",
+            "What is the name of the street you live on?",
+            "What kind of street do you live on?",
+            "What do you like about your town?",
+            "What is the weather like in your town?",
+            "What building is considered famous in your town?",
+            "What jobs do people in your town do?",
+            "How has your town changed over the last twenty years?",
+            "What changes have taken place in your city in recent years?",
+            "Do you think it is better to live in the center of town or outside in the country? Why?"
+        ]
+    },
+    {
+        name: "Free Time",
+        icon: "fa-solid fa-gamepad",
+        questions: [
+            "What do you enjoy doing in your free time?",
+            "How much time do you have each week for doing these things?",
+            "Why do you like doing these activities?",
+            "How did you start doing this activity at first?",
+            "Is there some other hobby or sport you would like to try? Why?",
+            "How has the way people spend their free time changed over the years?"
+        ]
+    },
+    {
+        name: "Holidays",
+        icon: "fa-solid fa-umbrella-beach",
+        questions: [
+            "What do you do when you have a holiday?",
+            "Who do you usually spend holiday with?",
+            "Where do you like to spend your holidays? Why?",
+            "Can you describe a typical day in your holidays?",
+            "Why are holidays important to you?",
+            "If you could take a holiday anywhere in the world, where would you go? Why?",
+            "What do people usually do during holidays in your town?"
+        ]
+    },
+    {
+        name: "Places to Go",
+        icon: "fa-solid fa-map-location-dot",
+        questions: [
+            "What do people do in your town in their free time?",
+            "Where can they go out for entertainment, or to enjoy themselves?",
+            "Which do you prefer: eating in restaurants or eating at home?",
+            "Which are the best places to eat out?"
+        ]
+    },
+    {
+        name: "Transport",
+        icon: "fa-solid fa-bus",
+        questions: [
+            "How did you come here today?",
+            "What is public transport like in your town?",
+            "How do you think it could be improved?",
+            "Do you think people should use public transport more? Why (not)?"
+        ]
+    },
+    {
+        name: "Shopping",
+        icon: "fa-solid fa-cart-shopping",
+        questions: [
+            "How much time do you spend shopping every week?",
+            "Do you enjoy going shopping? Why (not)?",
+            "What is your favourite shop and why do you like it?",
+            "What problems are there with shopping in your area?"
+        ]
+    },
+    {
+        name: "Your Neighbourhood",
+        icon: "fa-solid fa-house-chimney",
+        questions: [
+            "Can you describe the house where you live to me?",
+            "What is there to do in the area where you live?",
+            "What do you like about the area where you live?",
+            "How do you think it could be improved?",
+            "Do you think it is better to live in the centre of town or outside in the country? Why?"
+        ]
+    },
+    {
+        name: "Reading",
+        icon: "fa-solid fa-book",
+        questions: [
+            "Do you enjoy reading? Why?",
+            "What sort of things do you read?",
+            "Tell me something about your favourite book.",
+            "What are the advantages of reading instead of watching television or going to the cinema?"
+        ]
+    },
+    {
+        name: "Sports & Games",
+        icon: "fa-solid fa-futbol",
+        questions: [
+            "What sports are most popular in your country?",
+            "What sports and games did you most enjoy playing when you were a child?",
+            "Do people take as much exercise as in the past?",
+            "Why is exercise good for you?"
+        ]
+    }
+];
+
+// ============== PARTS 2 & 3 DATA ==============
+var part23Topics = [
+    {
+        name: "Beautiful Places",
+        icon: "fa-solid fa-mountain-sun",
+        part2: {
+            prompt: "Describe a beautiful place to visit in your country.",
+            points: [
+                "where it is",
+                "how to get there",
+                "what there is to do when you are there"
+            ],
+            explain: "and explain why you recommend this place."
+        },
+        part3: [
+            {
+                heading: "Attitudes to Tourism",
+                questions: [
+                    "Why do you think people like to travel to different places in their free time?",
+                    "How do you see tourism changing in your country in the future?"
+                ]
+            },
+            {
+                heading: "Conserving the Countryside",
+                questions: [
+                    "Why is it important to protect the countryside?",
+                    "In what ways is the countryside in danger in your country?"
+                ]
+            },
+            {
+                heading: "Historic Buildings and Monuments",
+                questions: [
+                    "Why are historic buildings and monuments important to a city?",
+                    "Is it better to keep old buildings, or build new modern ones?"
+                ]
+            }
+        ]
+    },
+    {
+        name: "Family",
+        icon: "fa-solid fa-people-roof",
+        part2: {
+            prompt: "Describe the person in your family who you most admire.",
+            points: [
+                "what their relationship is to you",
+                "what they have done in their life",
+                "what they do now"
+            ],
+            explain: "and explain why you admire them so much."
+        },
+        part3: [
+            {
+                heading: "Attitudes to Family",
+                questions: [
+                    "In what ways have families in your country changed in recent years?",
+                    "Should husbands and wives have different roles within the family? Why (not)?"
+                ]
+            },
+            {
+                heading: "Family or Friends",
+                questions: [
+                    "Which are more important to you: your family or your friends?",
+                    "What conflicts can arise between a person's family and a person's friends?"
+                ]
+            },
+            {
+                heading: "Family Responsibilities",
+                questions: [
+                    "What responsibilities do parents have towards their children?",
+                    "What responsibilities do children have towards their parents?"
+                ]
+            }
+        ]
+    },
+    {
+        name: "Shopping",
+        icon: "fa-solid fa-bag-shopping",
+        part2: {
+            prompt: "Describe your favorite shop.",
+            points: [
+                "where it is",
+                "what things it sells",
+                "what sort of people are its customers"
+            ],
+            explain: "and explain why you like the shop so much."
+        },
+        part3: [
+            {
+                heading: "Things to Buy",
+                questions: [
+                    "What typical things can visitors to your country buy?",
+                    "What things do young people like to buy in your country?"
+                ]
+            },
+            {
+                heading: "Money",
+                questions: [
+                    "Is it a good idea to save money? Why (not)?",
+                    "Do you think that people are happier if they have money? Why (not)?"
+                ]
+            },
+            {
+                heading: "Shopping",
+                questions: [
+                    "What can shops do to make shopping more pleasant for their customers?",
+                    "Do you think that in the future people will do most of their shopping using the Internet? Why / Why not?"
+                ]
+            }
+        ]
+    },
+    {
+        name: "Eating & Food",
+        icon: "fa-solid fa-utensils",
+        part2: {
+            prompt: "Describe a special occasion when you had a really enjoyable meal.",
+            points: [
+                "what the occasion was",
+                "who was at the meal",
+                "what you ate"
+            ],
+            explain: "and explain why the meal was so enjoyable."
+        },
+        part3: [
+            {
+                heading: "Attitudes to Food",
+                questions: [
+                    "What do you think a healthy diet consists of?",
+                    "Which do people in your country prefer: traditional food or fast food such as hamburgers or pizzas?"
+                ]
+            },
+            {
+                heading: "Learning About Food",
+                questions: [
+                    "Do you think children should be taught about healthy diets and cooking at school? Why (not)?",
+                    "At what age do you think children should be taught to cook?"
+                ]
+            },
+            {
+                heading: "Food Aid",
+                questions: [
+                    "What can be done to prevent poor people in the world going hungry?",
+                    "Should rich countries help poor countries with more than just food?"
+                ]
+            }
+        ]
+    },
+    {
+        name: "Travelling",
+        icon: "fa-solid fa-plane-departure",
+        part2: {
+            prompt: "Describe a memorable journey you have made.",
+            points: [
+                "where you were going",
+                "how you were travelling",
+                "why you were making the journey"
+            ],
+            explain: "and explain what made the journey so memorable."
+        },
+        part3: [
+            {
+                heading: "Travelling and Learning",
+                questions: [
+                    "What do people learn from travelling?",
+                    "Do you think the growth of international tourism is a good thing? Why (not)?"
+                ]
+            },
+            {
+                heading: "Tourism and Culture",
+                questions: [
+                    "How has tourism changed the way people in your country live?",
+                    "How should tourists behave when they visit your country?"
+                ]
+            },
+            {
+                heading: "Ways of Travelling",
+                questions: [
+                    "What do you think is the best way for a tourist to travel if they want to learn about your country?",
+                    "What are the advantages and disadvantages of travelling by plane?"
+                ]
+            }
+        ]
+    },
+    {
+        name: "School",
+        icon: "fa-solid fa-school",
+        part2: {
+            prompt: "Describe a school which you went to.",
+            points: [
+                "when you went there",
+                "how many people studied there",
+                "how long you spent there"
+            ],
+            explain: "and explain what you liked and disliked about it."
+        },
+        part3: [
+            {
+                heading: "Attitudes to Education",
+                questions: [
+                    "How has education changed in your country in the last ten years?",
+                    "Is a good education more important to a boy or a girl? Why?"
+                ]
+            },
+            {
+                heading: "The Focus of Education",
+                questions: [
+                    "How well do you think schools prepare young people for working life?",
+                    "Do you think schools should teach subjects like art, music and dancing? Why (not)?"
+                ]
+            },
+            {
+                heading: "Education and Technology",
+                questions: [
+                    "How important is it for schools to have computers for their students?",
+                    "Is the Internet a valuable educational tool?"
+                ]
+            }
+        ]
+    },
+    {
+        name: "Adventure",
+        icon: "fa-solid fa-person-hiking",
+        part2: {
+            prompt: "Describe an exciting experience in your life.",
+            points: [
+                "when the experience took place",
+                "where the experience took place",
+                "what happened exactly"
+            ],
+            explain: "and explain why the experience was so exciting."
+        },
+        part3: [
+            {
+                heading: "Safety and Danger",
+                questions: [
+                    "In what ways is life becoming safer, and in what ways is it becoming more dangerous?",
+                    "Should people always avoid danger, or is it a good idea sometimes to take risks?"
+                ]
+            },
+            {
+                heading: "Taking Risks",
+                questions: [
+                    "What risks should people try to avoid?",
+                    "Do you think people take fewer risks as they grow older? Why (not)?"
+                ]
+            },
+            {
+                heading: "Adventure",
+                questions: [
+                    "How important is it to have adventure in our lives?",
+                    "What do people learn about themselves from having adventures?"
+                ]
+            }
+        ]
+    },
+    {
+        name: "Newspapers",
+        icon: "fa-solid fa-newspaper",
+        part2: {
+            prompt: "Describe a newspaper or magazine you enjoy reading.",
+            points: [
+                "what kind of newspaper or magazine it is, e.g. fashion",
+                "how often you buy it",
+                "what articles and information it contains"
+            ],
+            explain: "and explain why you enjoy reading it."
+        },
+        part3: [
+            {
+                heading: "Attitudes to Newspapers",
+                questions: [
+                    "In what ways are newspapers better for learning about the news than listening to the radio or watching television?",
+                    "Do you think newspapers should be completely free to say whatever they want?"
+                ]
+            },
+            {
+                heading: "Tastes in Reading",
+                questions: [
+                    "What do people enjoy reading in your country?",
+                    "Do you think it is important for people to read a lot? Why (not)?"
+                ]
+            },
+            {
+                heading: "Public and Private Lives",
+                questions: [
+                    "What sort of stories do newspapers and magazines publish about well-known or famous people in your country?",
+                    "Do you think the media should be allowed to publish stories about the private lives of public figures?"
+                ]
+            }
+        ]
+    },
+    {
+        name: "Sport",
+        icon: "fa-solid fa-medal",
+        part2: {
+            prompt: "Describe an exciting competition or sporting event you have witnessed.",
+            points: [
+                "what the competition or sporting event was",
+                "when and where it took place",
+                "who won"
+            ],
+            explain: "and explain why it was exciting."
+        },
+        part3: [
+            {
+                heading: "Sport & Health",
+                questions: [
+                    "What do you do to keep fit?",
+                    "Are you good at sport?",
+                    "What sports do you play?",
+                    "What is the most popular sport in your country?",
+                    "What are the best ways to keep fit?",
+                    "Do you think most people consider exercise a chore or do they find it fun?",
+                    "What is the most popular form of exercise in your country?",
+                    "Do you think people in your country are less healthy than they used to be?",
+                    "How can we encourage young people to stay healthy?",
+                    "Should governments intervene to force people to be healthier?"
+                ]
+            }
+        ]
+    }
+];
+
+// ============== NAVIGATION ==============
+var currentPart1Index = 0;
+var currentPart23Index = 0;
+
+function navigateTo(view) {
+    var views = document.querySelectorAll('.view');
+    views.forEach(function(v) { v.classList.remove('active'); });
+    document.getElementById(view + '-view').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============== PART 1 FUNCTIONS ==============
+function renderPart1TopicGrid() {
+    var grid = document.getElementById('part1-topic-grid');
+    grid.innerHTML = '';
+    part1Topics.forEach(function(topic, index) {
+        var card = document.createElement('div');
+        card.className = 'topic-card rounded-lg shadow-md p-4 text-center card-stagger';
+        card.style.animationDelay = (index * 0.05) + 's';
+        card.onclick = function() { loadPart1Topic(index); };
+        card.innerHTML =
+            '<div class="text-2xl mb-2"><i class="' + topic.icon + ' topic-num" style="color:#1E90FF;"></i></div>' +
+            '<div class="text-sm font-semibold topic-title text-primary">' + topic.name + '</div>' +
+            '<div class="text-xs text-gray-500 dark:text-gray-400 mt-1">' + topic.questions.length + ' questions</div>';
+        grid.appendChild(card);
+    });
+}
+
+function loadPart1Topic(index) {
+    currentPart1Index = index;
+    var topic = part1Topics[index];
+
+    document.getElementById('part1-topic-title').innerHTML =
+        '<i class="' + topic.icon + ' mr-2" style="color:#1E90FF;"></i>' + topic.name;
+
+    var container = document.getElementById('part1-questions');
+    container.innerHTML = '';
+    topic.questions.forEach(function(q, i) {
+        var item = document.createElement('div');
+        item.className = 'q-item bg-gray-50 dark:bg-gray-700 p-3 rounded-lg flex items-start gap-3';
+        item.innerHTML =
+            '<span class="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold" style="background:linear-gradient(135deg,#F9D423,#1E90FF);color:#0a1f7a;">' + (i + 1) + '</span>' +
+            '<span class="text-sm leading-relaxed">' + q + '</span>';
+        container.appendChild(item);
+    });
+
+    document.getElementById('part1-topics').classList.add('hidden');
+    document.getElementById('part1-detail').classList.remove('hidden');
+
+    // Update nav buttons
+    document.getElementById('part1-prev').style.visibility = index === 0 ? 'hidden' : 'visible';
+    document.getElementById('part1-next').style.visibility = index === part1Topics.length - 1 ? 'hidden' : 'visible';
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showPart1Topics() {
+    document.getElementById('part1-topics').classList.remove('hidden');
+    document.getElementById('part1-detail').classList.add('hidden');
+}
+
+function navigatePart1(direction) {
+    var newIndex = currentPart1Index + direction;
+    if (newIndex >= 0 && newIndex < part1Topics.length) {
+        loadPart1Topic(newIndex);
+    }
+}
+
+// ============== PARTS 2 & 3 FUNCTIONS ==============
+function renderPart23TopicGrid() {
+    var grid = document.getElementById('part23-topic-grid');
+    grid.innerHTML = '';
+    part23Topics.forEach(function(topic, index) {
+        var totalQ = 0;
+        topic.part3.forEach(function(section) { totalQ += section.questions.length; });
+        var card = document.createElement('div');
+        card.className = 'topic-card rounded-lg shadow-md p-4 text-center card-stagger';
+        card.style.animationDelay = (index * 0.05) + 's';
+        card.onclick = function() { loadPart23Topic(index); };
+        card.innerHTML =
+            '<div class="text-2xl mb-2"><i class="' + topic.icon + ' topic-num" style="color:#1E90FF;"></i></div>' +
+            '<div class="text-sm font-semibold topic-title text-primary">' + topic.name + '</div>' +
+            '<div class="text-xs text-gray-500 dark:text-gray-400 mt-1">' + totalQ + ' discussion Qs</div>';
+        grid.appendChild(card);
+    });
+}
+
+function loadPart23Topic(index) {
+    currentPart23Index = index;
+    var topic = part23Topics[index];
+    var container = document.getElementById('part23-content');
+    container.innerHTML = '';
+
+    // Topic title
+    var titleDiv = document.createElement('div');
+    titleDiv.className = 'bg-white dark:bg-gray-800 rounded-xl shadow-md p-5';
+    titleDiv.innerHTML =
+        '<h3 class="text-xl md:text-2xl font-bold text-primary">' +
+        '<i class="' + topic.icon + ' mr-2" style="color:#1E90FF;"></i>' + topic.name +
+        '</h3>';
+    container.appendChild(titleDiv);
+
+    // Part 2 Cue Card
+    var cueDiv = document.createElement('div');
+    cueDiv.className = 'bg-white dark:bg-gray-800 rounded-xl shadow-md p-5';
+    var pointsHtml = '';
+    topic.part2.points.forEach(function(p) {
+        pointsHtml += '<li class="text-sm">' + p + '</li>';
+    });
+    cueDiv.innerHTML =
+        '<div class="flex items-center gap-2 mb-3">' +
+            '<span class="part-badge part-badge-2">PART 2</span>' +
+            '<span class="text-sm text-gray-500 dark:text-gray-400 font-medium">Long Turn</span>' +
+        '</div>' +
+        '<p class="text-xs text-gray-500 dark:text-gray-400 mb-3 italic">' +
+            'Take one minute to prepare a talk on the following subject. Take notes if you like and remember to include reasons and examples. You should then speak for between one and two minutes.' +
+        '</p>' +
+        '<div class="cue-card rounded-lg p-4">' +
+            '<p class="font-semibold text-sm mb-2">' + topic.part2.prompt + '</p>' +
+            '<p class="text-sm text-gray-600 dark:text-gray-400 mb-1">You should say:</p>' +
+            '<ul class="list-disc ml-5 text-gray-700 dark:text-gray-300 mb-2 space-y-1">' + pointsHtml + '</ul>' +
+            '<p class="text-sm font-medium text-gray-700 dark:text-gray-300">' + topic.part2.explain + '</p>' +
+        '</div>';
+    container.appendChild(cueDiv);
+
+    // Part 3 Discussion
+    var discussDiv = document.createElement('div');
+    discussDiv.className = 'bg-white dark:bg-gray-800 rounded-xl shadow-md p-5';
+    var discussHtml =
+        '<div class="flex items-center gap-2 mb-4">' +
+            '<span class="part-badge part-badge-3">PART 3</span>' +
+            '<span class="text-sm text-gray-500 dark:text-gray-400 font-medium">Discussion</span>' +
+        '</div>';
+
+    topic.part3.forEach(function(section) {
+        discussHtml += '<h4 class="font-semibold text-sm mt-4 mb-2 text-primary">' + section.heading + '</h4>';
+        discussHtml += '<div class="space-y-2">';
+        section.questions.forEach(function(q, qi) {
+            discussHtml +=
+                '<div class="q-item bg-gray-50 dark:bg-gray-700 p-3 rounded-lg flex items-start gap-3">' +
+                    '<span class="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold" style="background:#1E90FF;color:#fff;"><i class="fa-solid fa-comment-dots" style="font-size:0.6rem;"></i></span>' +
+                    '<span class="text-sm leading-relaxed">' + q + '</span>' +
+                '</div>';
+        });
+        discussHtml += '</div>';
+    });
+    discussDiv.innerHTML = discussHtml;
+    container.appendChild(discussDiv);
+
+    document.getElementById('part23-topics').classList.add('hidden');
+    document.getElementById('part23-detail').classList.remove('hidden');
+
+    // Update nav buttons
+    document.getElementById('part23-prev').style.visibility = index === 0 ? 'hidden' : 'visible';
+    document.getElementById('part23-next').style.visibility = index === part23Topics.length - 1 ? 'hidden' : 'visible';
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showPart23Topics() {
+    document.getElementById('part23-topics').classList.remove('hidden');
+    document.getElementById('part23-detail').classList.add('hidden');
+}
+
+function navigatePart23(direction) {
+    var newIndex = currentPart23Index + direction;
+    if (newIndex >= 0 && newIndex < part23Topics.length) {
+        loadPart23Topic(newIndex);
+    }
+}
+
+// ============== INIT ==============
+renderPart1TopicGrid();
+renderPart23TopicGrid();
+</script>
+</body>
+</html>
