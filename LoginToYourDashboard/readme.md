@@ -17,7 +17,7 @@ Only accounts with role: "admin" can access the admin panel — everyone else ge
 # List of latest features added to "LoginToYourDashboard":
 ### Important Files - do not delete:
 * admin-panel.html
-This is for 
+** This is for 
 * loginfeature.html
 * loginfeature.js
 
