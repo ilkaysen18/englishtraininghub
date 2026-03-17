@@ -16,7 +16,7 @@
                 }
             }
         }
-    </script>
+    </>
     <style>
     body {
         font-family: sans-serif;
@@ -199,6 +199,20 @@
         </footer>
     </div>
 
-<script>
+      <script>
+        // Dark mode setup
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+          // Auto-update year
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
 </body>
 </html>
