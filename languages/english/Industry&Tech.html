@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechPulse — Global Insights for English Learners</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          navy: '#0a1f7a',
+          gold: '#F9D423',
+          sky: '#1E90FF',
+          warmwhite: '#fffdf5',
+        },
+        fontFamily: {
+          display: ['Merriweather', 'Georgia', 'serif'],
+          body: ['Source Sans 3', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace'],
+        }
+      }
+    }
+  };
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+  }
+
+  .bg-gradient-hero {
+    background: linear-gradient(135deg, #F9D423 0%, #1E90FF 100%);
+  }
+
+  .text-gradient-hero {
+    background: linear-gradient(135deg, #0a1f7a 0%, #1E90FF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .dark .text-gradient-hero {
+    background: linear-gradient(135deg, #F9D423 0%, #60b4ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .insight-card {
+    transition: all 0.3s ease;
+    background: #fffdf5;
+    border: 2px solid transparent;
+    background-image: linear-gradient(#fffdf5, #fffdf5), linear-gradient(135deg, #F9D423, #1E90FF);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+  .insight-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(30, 144, 255, 0.15);
+  }
+  .insight-card.open {
+    box-shadow: 0 8px 30px rgba(30, 144, 255, 0.18);
+  }
+
+  .dark .insight-card {
+    background: #1e1e1e;
+    background-image: linear-gradient(#1e1e1e, #1e1e1e), linear-gradient(135deg, #F9D423, #1E90FF);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+  .dark .insight-card:hover {
+    box-shadow: 0 8px 24px rgba(249, 212, 35, 0.12);
+  }
+
+  .category-pill {
+    transition: all 0.25s ease;
+  }
+  .category-pill.active {
+    background: linear-gradient(135deg, #F9D423, #1E90FF);
+    color: #0a1f7a;
+    font-weight: 700;
+    border-color: transparent;
+  }
+
+  .section-badge {
+    background: linear-gradient(135deg, #F9D423, #1E90FF);
+  }
+
+  .discussion-box {
+    background: linear-gradient(135deg, rgba(249,212,35,0.08), rgba(30,144,255,0.08));
+    border-left: 4px solid #1E90FF;
+  }
+  .dark .discussion-box {
+    background: linear-gradient(135deg, rgba(249,212,35,0.06), rgba(30,144,255,0.06));
+    border-left: 4px solid #F9D423;
+  }
+
+  .vocab-tag {
+    background: rgba(249,212,35,0.15);
+    color: #0a1f7a;
+    border: 1px solid rgba(249,212,35,0.4);
+  }
+  .dark .vocab-tag {
+    background: rgba(249,212,35,0.1);
+    color: #F9D423;
+    border: 1px solid rgba(249,212,35,0.3);
+  }
+
+  .article-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .insight-card.open .article-body {
+    max-height: 900px;
+  }
+
+  .chevron-icon {
+    transition: transform 0.3s ease;
+  }
+  .insight-card.open .chevron-icon {
+    transform: rotate(180deg);
+  }
+
+  .fade-in {
+    animation: fadeIn 0.7s ease-out both;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide-down {
+    animation: slideDown 0.6s ease-out both;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .search-input:focus {
+    border-color: #1E90FF;
+    box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.2);
+  }
+
+  .dark .search-input:focus {
+    border-color: #F9D423;
+    box-shadow: 0 0 0 3px rgba(249, 212, 35, 0.15);
+  }
+
+  .read-more-btn {
+    background: linear-gradient(135deg, #F9D423, #1E90FF);
+    color: #0a1f7a;
+    transition: all 0.25s ease;
+  }
+  .read-more-btn:hover {
+    box-shadow: 0 4px 12px rgba(30, 144, 255, 0.3);
+    transform: translateY(-1px);
+  }
+
+  .stat-card {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+  }
+
+  /* Scrollbar hide for nav */
+  .scroll-hide::-webkit-scrollbar { display: none; }
+  .scroll-hide { scrollbar-width: none; }
+</style>
+</head>
+<body class="bg-gray-50 dark:bg-[#121212] text-gray-900 dark:text-gray-100 min-h-screen">
+
+<!-- HEADER -->
+<header class="bg-gradient-hero shadow-lg slide-down">
+  <div class="max-w-4xl mx-auto px-4 py-8 text-center">
+    <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 mb-4">
+      <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+      <span class="text-xs font-bold tracking-widest uppercase text-white/90" style="font-family: 'JetBrains Mono', monospace;">CURATED INSIGHTS</span>
+    </div>
+    <h1 class="text-3xl md:text-5xl font-black" style="font-family: 'Merriweather', serif; color: #0a1f7a; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      📡 TechPulse — Global Insights
+    </h1>
+    <p class="mt-3 text-base md:text-lg text-white/90 max-w-2xl mx-auto leading-relaxed">
+      Easy-to-read technology news for <strong>ESL learners</strong> in Industry &amp; Tech.<br>
+      Read, learn new words, and practice speaking!
+    </p>
+    <div class="flex flex-wrap justify-center gap-3 mt-5">
+      <div class="stat-card rounded-full px-4 py-1.5 flex items-center gap-2 text-sm font-semibold text-white">
+        <i class="fa-solid fa-newspaper"></i> <span id="totalCount">0</span> insights
+      </div>
+      <div class="stat-card rounded-full px-4 py-1.5 flex items-center gap-2 text-sm font-semibold text-white">
+        <i class="fa-solid fa-layer-group"></i> 7 categories
+      </div>
+      <div class="stat-card rounded-full px-4 py-1.5 flex items-center gap-2 text-sm font-semibold text-white">
+        <i class="fa-solid fa-comments"></i> Discussion Qs
+      </div>
+      <div class="stat-card rounded-full px-4 py-1.5 flex items-center gap-2 text-sm font-semibold text-white">
+        <i class="fa-solid fa-calendar"></i> Mar 2026
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN CONTAINER -->
+<div class="max-w-4xl mx-auto px-4 py-6">
+
+  <!-- HOW TO USE -->
+  <div class="bg-white dark:bg-[#1e1e1e] rounded-xl shadow-md p-5 mb-6 border border-gray-200 dark:border-gray-700 fade-in" style="animation-delay: 0.1s">
+    <h2 class="text-lg font-bold mb-2 flex items-center gap-2">
+      <span class="text-2xl">💡</span> How to Use TechPulse
+    </h2>
+    <ul class="text-gray-600 dark:text-gray-400 text-sm md:text-base space-y-1 ml-1">
+      <li>📖 <strong>Tap any headline</strong> to read a simple summary of the news.</li>
+      <li>🔑 Look for <strong>Key Vocabulary</strong> words to build your tech English.</li>
+      <li>🗣️ Use the <strong>Discussion Questions</strong> to practice speaking with a partner or group.</li>
+      <li>🔍 Use the <strong>search bar</strong> or <strong>category buttons</strong> to find topics you like.</li>
+    </ul>
+  </div>
+
+  <!-- SEARCH BAR -->
+  <div class="relative mb-4 fade-in" style="animation-delay: 0.2s">
+    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none"></i>
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search insights by keyword..."
+      autocomplete="off"
+      class="search-input w-full pl-11 pr-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-[#1e1e1e] text-gray-900 dark:text-gray-100 text-base outline-none transition-all"
+      style="font-size: 16px;"
+    >
+  </div>
+
+  <!-- CATEGORY NAV -->
+  <nav class="flex gap-2 overflow-x-auto scroll-hide pb-4 fade-in" id="categoryNav" style="animation-delay: 0.25s"></nav>
+
+  <!-- CONTENT -->
+  <main id="mainContent"></main>
+
+  <!-- NO RESULTS -->
+  <div class="hidden text-center py-12 text-gray-400 dark:text-gray-500" id="noResults">
+    <i class="fa-solid fa-satellite-dish text-4xl mb-3 block"></i>
+    <p class="text-base">No insights found. Try a different search term.</p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700 text-center pb-10 fade-in">
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Curated from global sources &middot; March 2026</p>
+    <div class="flex flex-wrap justify-center gap-x-4 gap-y-1 mb-3">
+      <a href="https://www.technologyreview.com" target="_blank" rel="noopener" class="text-xs text-sky hover:underline">MIT Tech Review</a>
+      <a href="https://www.deloitte.com" target="_blank" rel="noopener" class="text-xs text-sky hover:underline">Deloitte</a>
+      <a href="https://electrek.co" target="_blank" rel="noopener" class="text-xs text-sky hover:underline">Electrek</a>
+      <a href="https://www.sciencedaily.com" target="_blank" rel="noopener" class="text-xs text-sky hover:underline">ScienceDaily</a>
+      <a href="https://interestingengineering.com" target="_blank" rel="noopener" class="text-xs text-sky hover:underline">Interesting Engineering</a>
+    </div>
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+      💡 Brought to you by <strong>English Training Hub!</strong> &copy; <span id="year"></span> — All Rights Reserved.
+    </p>
+  </footer>
+</div>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+<script>
+const DATA = [
+  {
+    category: "ai",
+    label: "AI & Robotics",
+    icon: "fa-solid fa-robot",
+    color: "#1E90FF",
+    articles: [
+      {
+        title: "China Opens \"Robot Schools\" to Train Humanoid Robots for Factory Work",
+        source: "Interesting Engineering",
+        tag: "China",
+        vocab: ["humanoid", "simulation", "logistics", "automated"],
+        summary: "China has built special schools for humanoid robots. In these schools, robots learn how to do factory jobs using AI-powered training and practice in real environments. The goal is to create many robots that are ready to work in factories, warehouses, and shipping centers. This is part of China's big plan to use more automation in its industries.",
+        questions: [
+          "Do you think robots should replace humans in dangerous factory jobs? Why or why not?",
+          "How would \"robot schools\" change the way we think about education and training?",
+          "What jobs in your industry could robots do in the future?"
+        ],
+        url: "https://interestingengineering.com/ai-robotics/china-robot-schools-to-train-humanoids"
+      },
+      {
+        title: "Boston Dynamics' Electric Atlas Robot Ships to Hyundai & Google",
+        source: "CES 2026 / Global X ETFs",
+        tag: "USA",
+        vocab: ["deploy", "foundation model", "collaboration", "dynamic"],
+        summary: "Boston Dynamics has started sending its new electric robot, called Atlas, to companies. Atlas can lift 110 pounds (50 kg) and work in changing environments. All robots planned for 2026 have already been sold. They are going to Hyundai car factories and to Google DeepMind, where scientists use them for AI research.",
+        questions: [
+          "Would you feel comfortable working next to a robot like Atlas? Explain your answer.",
+          "What are some benefits and risks of using robots in car manufacturing?",
+          "How might AI research with robots improve our daily lives?"
+        ],
+        url: "https://www.globalxetfs.com/articles/ces-2026-ai-and-robotics-shift-from-hype-to-deployment"
+      },
+      {
+        title: "NVIDIA Says 'Physical AI' — Robots That Understand the Real World — Is Here",
+        source: "NVIDIA Newsroom",
+        tag: "Global",
+        vocab: ["physical AI", "open-source", "robotics stack", "accelerator"],
+        summary: "NVIDIA released new AI tools that help robots understand and move in the real world. Big companies like Caterpillar (construction equipment), Franka Robotics, and LG are already using them. NVIDIA's CEO Jensen Huang said we are now in a new era where machines can understand, think, and act in the physical world — not just on screens.",
+        questions: [
+          "What does it mean for a robot to 'understand' the real world? Do you think this is truly possible?",
+          "Which industry do you think will benefit the most from physical AI? Why?",
+          "How is physical AI different from the AI we use on our phones and computers?"
+        ],
+        url: "https://nvidianews.nvidia.com/news/nvidia-releases-new-physical-ai-models-as-global-partners-unveil-next-generation-robots"
+      },
+      {
+        title: "ABB and NVIDIA Create Ultra-Accurate Robot Simulation Software",
+        source: "ABB / NVIDIA",
+        tag: "Europe",
+        vocab: ["simulation", "correlation", "programming", "industrial"],
+        summary: "ABB Robotics and NVIDIA have created a new tool called 'RobotStudio HyperReality.' It simulates (copies) robot behavior on a computer with 99% accuracy compared to real life. This means engineers can program robots on a computer first, saving a lot of time and money before using real machines.",
+        questions: [
+          "Why is it important for simulations to be very close to real life?",
+          "Have you ever used any simulation or virtual training tools? What was your experience?",
+          "How could this technology help smaller companies that cannot afford many robots?"
+        ],
+        url: "https://www.deloitte.com/us/en/insights/topics/technology-management/tech-trends/2026/physical-ai-humanoid-robots.html"
+      },
+      {
+        title: "Norwegian Company 1X Opens Pre-Orders for a Home Robot Called NEO",
+        source: "Sidecar AI / CES 2026",
+        tag: "Norway",
+        vocab: ["pre-order", "consumer", "general-purpose", "milestone"],
+        summary: "A robotics company from Norway called 1X is now accepting pre-orders for NEO, a human-shaped robot designed to help in the home. It is built to be safe around people. The first deliveries are planned for 2026. This is an important step in bringing robots from factories into everyday homes.",
+        questions: [
+          "Would you want a robot helper in your home? What tasks would you want it to do?",
+          "What safety concerns should companies think about when designing home robots?",
+          "Do you think home robots will become common in the next 10 years? Why or why not?"
+        ],
+        url: "https://sidecar.ai/blog/the-chatgpt-moment-for-physical-ai-is-here-robotics-takes-center-stage-at-ces-2026"
+      },
+      {
+        title: "Apple Launches a Completely New Siri, Powered by Google's Gemini AI",
+        source: "IBM / Multiple Sources",
+        tag: "USA",
+        vocab: ["overhaul", "context-aware", "integration", "cloud compute"],
+        summary: "Apple has completely redesigned Siri, its voice assistant. The new Siri uses Google's powerful Gemini AI model and runs on Apple's private cloud servers. It can now understand what is on your screen, work across different apps, and have smarter conversations. This is a major upgrade from the old Siri.",
+        questions: [
+          "Do you use a voice assistant (Siri, Google, Alexa)? How has it helped you?",
+          "What do you think about Apple using Google's technology for Siri? Is this a good partnership?",
+          "How could a smarter voice assistant help ESL learners improve their English?"
+        ],
+        url: "https://www.ibm.com/think/news/ai-tech-trends-predictions-2026"
+      },
+      {
+        title: "AI Startup AMI Labs Raises $1 Billion to Build 'World Models'",
+        source: "Multiple Sources",
+        tag: "Europe",
+        vocab: ["seed round", "world model", "architecture", "Turing Award"],
+        summary: "AMI Labs, founded by famous AI scientist Yann LeCun (a Turing Award winner), raised over $1 billion — the largest startup investment ever in Europe. The company is building 'world models,' a new type of AI that helps machines deeply understand the physical world. This could improve robots, healthcare, and manufacturing.",
+        questions: [
+          "Why do you think investors gave $1 billion to this new company? What makes the idea exciting?",
+          "What is the difference between AI that understands language and AI that understands the physical world?",
+          "Can you think of a way 'world models' might be used in your field of work?"
+        ],
+        url: "https://medium.com/technologai/the-rise-of-ai-powered-robotics-how-2026-is-reshaping-manufacturing-and-automation-638d3122212d"
+      }
+    ]
+  },
+  {
+    category: "semi",
+    label: "Semiconductors",
+    icon: "fa-solid fa-microchip",
+    color: "#8B5CF6",
+    articles: [
+      {
+        title: "The Semiconductor Industry Will Earn Over $1 Trillion in 2026",
+        source: "Tom's Hardware / SIA",
+        tag: "Global",
+        vocab: ["revenue", "supercycle", "year-over-year (YoY)", "trillion"],
+        summary: "The global chip industry earned $791.7 billion in 2025 — a 25.6% increase from the year before. In 2026, it is expected to pass $1 trillion for the first time. This huge growth is driven by the demand for AI chips and memory chips. Experts predict the industry could reach $2 trillion by 2035.",
+        questions: [
+          "Why do you think AI is making the chip industry grow so fast?",
+          "What products in your daily life use semiconductor chips?",
+          "Do you think any country should try to build its own chip industry? Why?"
+        ],
+        url: "https://www.tomshardware.com/tech-industry/semiconductors/semiconductor-industry-on-track-to-hit-usd1-trillion-in-sales-in-2026-sia-predicts-bumper-forecast-follows-usd791-7-billion-haul-for-2025"
+      },
+      {
+        title: "War in Iran Threatens Global Chip Supply and Wipes $200 Billion in Value",
+        source: "Bloomberg / CNBC",
+        tag: "Middle East",
+        vocab: ["supply chain", "disruption", "helium", "geopolitical"],
+        summary: "The conflict between the U.S., Israel, and Iran is causing problems for the chip industry. SK Hynix and Samsung (two major memory chip makers) have lost over $200 billion in stock value. The war puts at risk 25% of the world's helium supply (needed for chip making) and is increasing energy costs for AI data centers.",
+        questions: [
+          "How can a war in one region affect technology companies around the world?",
+          "What is a 'supply chain,' and why is it important for the tech industry?",
+          "What should companies do to protect themselves from supply chain disruptions?"
+        ],
+        url: "https://www.cnbc.com/2026/03/10/iran-war-semiconductor-memory-chip-impact.html"
+      },
+      {
+        title: "Memory Chip Prices Soar — DDR5 Costs 4 Times More Than Before",
+        source: "Bank of America / SK Hynix",
+        tag: "South Korea",
+        vocab: ["supercycle", "DRAM", "NAND", "HBM (High Bandwidth Memory)"],
+        summary: "Bank of America calls 2026 a 'supercycle' for memory chips — similar to the 1990s tech boom. DRAM revenue is expected to grow 51% and NAND 45%. DDR5 memory prices have gone up four times since late 2025. The HBM market (special memory for AI) is expected to reach $54.6 billion.",
+        questions: [
+          "How do rising memory prices affect the cost of laptops and smartphones?",
+          "What is a 'supercycle,' and can you think of another example in any industry?",
+          "Why is special AI memory (HBM) more expensive than regular memory?"
+        ],
+        url: "https://news.skhynix.com/2026-market-outlook-focus-on-the-hbm-led-memory-supercycle/"
+      },
+      {
+        title: "Japan Gives $1.7 Billion to Rapidus for Advanced 2nm Chip Production",
+        source: "Deloitte / Multiple Sources",
+        tag: "Japan",
+        vocab: ["nanometer (nm)", "funding", "cutting-edge", "strategic"],
+        summary: "The Japanese government gave $1.7 billion to a company called Rapidus. The money will help Rapidus build 2nm chips — some of the most advanced in the world. Japan wants to become a leader in chip manufacturing again. At the same time, AMD and Meta made a $100 billion AI deal.",
+        questions: [
+          "Why do governments invest billions of dollars in chip companies?",
+          "What does '2nm' mean, and why are smaller chips better?",
+          "Should governments support private technology companies? What are the pros and cons?"
+        ],
+        url: "https://www.deloitte.com/us/en/insights/industry/technology/technology-media-telecom-outlooks/semiconductor-industry-outlook.html"
+      },
+      {
+        title: "NVIDIA Earns $130.5 Billion — More Than Double Last Year",
+        source: "NVIDIA / Multiple Sources",
+        tag: "USA",
+        vocab: ["fiscal year", "revenue", "accelerator", "data center"],
+        summary: "NVIDIA reported $130.5 billion in total sales for its fiscal year (ending January 2026). That is 114% more than the year before — meaning the company more than doubled its income. NVIDIA makes the most popular chips for AI training, and the demand for these chips keeps growing.",
+        questions: [
+          "What makes NVIDIA so successful in the AI chip market?",
+          "Can one company having so much power in an industry be a problem? Why?",
+          "If you were an investor, would you invest in NVIDIA? Explain your reasoning."
+        ],
+        url: "https://www.deloitte.com/us/en/insights/industry/technology/technology-media-telecom-outlooks/semiconductor-industry-outlook.html"
+      }
+    ]
+  },
+  {
+    category: "quantum",
+    label: "Quantum Computing",
+    icon: "fa-solid fa-atom",
+    color: "#06B6D4",
+    articles: [
+      {
+        title: "D-Wave Achieves a Major Breakthrough in Quantum Computer Scaling",
+        source: "Fast Company",
+        tag: "Canada",
+        vocab: ["cryogenic", "qubit", "scalable", "bottleneck"],
+        summary: "D-Wave, a Canadian quantum computing company, showed a new way to control qubits (the basic units of a quantum computer) using tiny chips that work at extremely cold temperatures. Before this, adding more qubits was very difficult because each one needed its own control line. This breakthrough makes it much easier to build bigger quantum computers.",
+        questions: [
+          "In simple terms, how would you explain what a quantum computer does to a friend?",
+          "Why is 'scaling' (making things bigger) such a big challenge in quantum computing?",
+          "What industries do you think quantum computing will change the most?"
+        ],
+        url: "https://www.fastcompany.com/91469364/d-wave-quantum-computing-first-major-breakthrough-of-2026-scalable-technology"
+      },
+      {
+        title: "Scientists May Have Found a 'Holy Grail' Material for Quantum Computers",
+        source: "ScienceDaily",
+        tag: "Norway",
+        vocab: ["superconductor", "triplet", "zero resistance", "electron spin"],
+        summary: "Researchers in Norway may have discovered a special material called a 'triplet superconductor' in an alloy called NbRe. This material can carry electricity and information with zero energy loss. If confirmed, it could make quantum computers much more stable and energy-efficient — like finding a missing puzzle piece for quantum technology.",
+        questions: [
+          "What does 'zero resistance' mean, and why is it important for computers?",
+          "Why is energy efficiency important in building the computers of the future?",
+          "Have you heard of any other scientific 'holy grail' discoveries? What were they?"
+        ],
+        url: "https://www.sciencedaily.com/releases/2026/02/260221000252.htm"
+      },
+      {
+        title: "Scientists Read Information from Special 'Majorana Qubits' for the First Time",
+        source: "ScienceDaily / CSIC",
+        tag: "Spain",
+        vocab: ["Majorana qubits", "coherence", "noise-resistant", "quantum capacitance"],
+        summary: "For the first time, scientists were able to read data from 'Majorana qubits' — a special type of qubit that naturally resists errors. They used a method called 'quantum capacitance' to measure information. This is very important because error-resistant qubits are key to building reliable quantum computers.",
+        questions: [
+          "Why is it so important for quantum computers to resist errors?",
+          "How is reading information from a qubit different from reading data from a regular computer?",
+          "What everyday problems could a reliable quantum computer help solve?"
+        ],
+        url: "https://www.sciencedaily.com/releases/2026/02/260216084525.htm"
+      },
+      {
+        title: "US Government Labs Make a Key Advance in Ion-Trap Quantum Computing",
+        source: "Fermilab / MIT Lincoln Lab",
+        tag: "USA",
+        vocab: ["ion trap", "cryoelectronics", "thermal noise", "national initiative"],
+        summary: "Scientists at Fermilab and MIT Lincoln Lab used special cold electronics to control ion traps (a way of holding tiny charged particles) inside a vacuum. This reduced 'noise' (unwanted signals) and improved accuracy. It is an important step for building larger quantum computers as part of the U.S. national quantum research program.",
+        questions: [
+          "Why do you think governments invest in quantum computing research?",
+          "What is 'noise' in computing, and why is it a problem for quantum computers?",
+          "Would you like your country to have a national quantum research program? Why or why not?"
+        ],
+        url: "https://news.fnal.gov/2026/02/doe-national-quantum-research-centers-reach-milestone-breakthrough-towards-building-scalable-quantum-computers"
+      },
+      {
+        title: "Turing Award Goes to the Inventors of Quantum Cryptography",
+        source: "CNN",
+        tag: "Global",
+        vocab: ["Turing Award", "cryptography", "quantum key distribution", "protocol"],
+        summary: "Charles Bennett and Gilles Brassard won the 2026 Turing Award (often called the 'Nobel Prize of computing') for inventing BB84 — a way to send secret messages that no one can hack because it uses the laws of quantum physics. Their work created the foundation for quantum-secure communications used around the world today.",
+        questions: [
+          "Why is it important to have communications that no one can hack?",
+          "How do you keep your personal information safe online?",
+          "The Turing Award is named after Alan Turing. Do you know who he was and why he is important?"
+        ],
+        url: "https://www.cnn.com/2026/03/18/science/quantum-key-cryptography-turing-award-winners"
+      },
+      {
+        title: "Experts Say Quantum Tech Has Reached Its 'Transistor Moment'",
+        source: "ScienceDaily / University of Chicago",
+        tag: "USA",
+        vocab: ["transistor moment", "turning point", "integrated circuit", "scaling"],
+        summary: "Researchers compare today's quantum computers to the early days of regular computers. Working quantum systems now exist, but making them powerful enough for big tasks is still a huge challenge — like going from the first simple transistor to a modern chip with billions of transistors. We are at the starting line, not the finish.",
+        questions: [
+          "What does it mean when experts call something a 'transistor moment'?",
+          "How long do you think it will take for quantum computers to be used in everyday life?",
+          "Can you think of another technology that had a similar 'starting point' moment?"
+        ],
+        url: "https://www.sciencedaily.com/releases/2026/01/260127010136.htm"
+      }
+    ]
+  },
+  {
+    category: "space",
+    label: "Space & Aerospace",
+    icon: "fa-solid fa-shuttle-space",
+    color: "#F59E0B",
+    articles: [
+      {
+        title: "NASA's Artemis II: Humans Are Going Back to the Moon",
+        source: "Scientific American / NASA",
+        tag: "USA",
+        vocab: ["crewed mission", "lunar", "habitat", "sustained presence"],
+        summary: "Artemis II is NASA's first mission to send astronauts near the Moon in over 50 years. The launch is planned for 2026. It is part of a bigger plan to build a long-term human presence on the Moon, with habitats (places to live) and scientific equipment from both NASA and private companies.",
+        questions: [
+          "Why do you think it is important for humans to go back to the Moon?",
+          "Would you ever want to travel to space? Why or why not?",
+          "What challenges do astronauts face on long space missions?"
+        ],
+        url: "https://www.scientificamerican.com/article/these-are-the-most-exciting-space-science-events-for-2026/"
+      },
+      {
+        title: "Private Companies Race to Build Space Stations Before the ISS Retires",
+        source: "MIT Technology Review",
+        tag: "USA",
+        vocab: ["deorbit", "commercial", "orbital outpost", "International Space Station (ISS)"],
+        summary: "The International Space Station will be retired around 2031. NASA has given over $500 million to private companies to build replacement stations. Vast Space plans to launch 'Haven-1' in early 2027 for crews of 4 people. In the future, more people — including tourists and scientists — may have access to space.",
+        questions: [
+          "Should space stations be owned by private companies or governments? Why?",
+          "Would you like to visit a commercial space station as a tourist?",
+          "What kinds of research could scientists do on a private space station?"
+        ],
+        url: "https://www.technologyreview.com/2026/01/12/1130030/commercial-space-stations-2026-breakthrough-technology/"
+      },
+      {
+        title: "China's Chang'e 7 Will Search for Water on the Moon's South Pole",
+        source: "Universe Magazine",
+        tag: "China",
+        vocab: ["lunar south pole", "water ice", "permanent base", "exploration"],
+        summary: "China plans to send its Chang'e 7 spacecraft to the Moon's south pole in late 2026. The mission will search for water ice, which could be used for drinking and making rocket fuel. This is an important step toward China's goal of building a permanent base on the Moon.",
+        questions: [
+          "Why is finding water on the Moon so important for future space travel?",
+          "Do you think countries should compete or cooperate in space exploration?",
+          "If you could build a base on the Moon, what would you include in it?"
+        ],
+        url: "https://universemagazine.com/en/top-7-space-technologies-of-2026-that-could-change-the-future/"
+      },
+      {
+        title: "Japan Will Collect Samples from a Moon of Mars for the First Time",
+        source: "Scientific American",
+        tag: "Japan",
+        vocab: ["sample-return", "Phobos", "debris", "solar system"],
+        summary: "Japan's MMX (Martian Moons eXploration) mission will launch in 2026 to collect rock samples from Phobos, one of Mars's moons. Scientists want to know if Phobos was formed from space debris or if it was an asteroid captured by Mars's gravity. This could teach us about the early history of our solar system.",
+        questions: [
+          "Why is it useful to study the moons of Mars?",
+          "What is a 'sample-return' mission, and why is it more valuable than just taking photos?",
+          "What other planets or moons would you like scientists to explore?"
+        ],
+        url: "https://www.scientificamerican.com/article/these-are-the-most-exciting-space-science-events-for-2026/"
+      },
+      {
+        title: "Spacecraft May Soon Refuel in Space — Like a Gas Station in Orbit",
+        source: "Universe Magazine",
+        tag: "Global",
+        vocab: ["orbital refueling", "deep-space", "infrastructure", "lighter launches"],
+        summary: "Imagine a gas station in space! Companies are testing technology that lets spacecraft refuel while in orbit. This means rockets can launch lighter (and cheaper) and then fill up in space for longer trips. Several companies are competing to demonstrate this technology first. It is critical for future Moon and Mars missions.",
+        questions: [
+          "How would orbital refueling change the way we explore space?",
+          "Can you compare orbital refueling to something similar on Earth?",
+          "What other 'infrastructure' do you think we need to build in space?"
+        ],
+        url: "https://universemagazine.com/en/top-7-space-technologies-of-2026-that-could-change-the-future/"
+      },
+      {
+        title: "A Mission to Venus Will Search for Signs of Life in Its Clouds",
+        source: "Scientific American",
+        tag: "USA",
+        vocab: ["biosignature", "astrobiology", "habitability", "probe"],
+        summary: "Rocket Lab and MIT are sending a probe to Venus in summer 2026 to look for signs of life in the planet's thick clouds. While Venus's surface is extremely hot, its upper clouds have temperatures where life could possibly exist. This mission could answer a big question: Is there life beyond Earth?",
+        questions: [
+          "Do you believe there is life on other planets? Why or why not?",
+          "Why are scientists looking at Venus's clouds instead of its surface?",
+          "If we found life on Venus, how would it change the world?"
+        ],
+        url: "https://www.scientificamerican.com/article/these-are-the-most-exciting-space-science-events-for-2026/"
+      }
+    ]
+  },
+  {
+    category: "bio",
+    label: "Biotech & Health",
+    icon: "fa-solid fa-dna",
+    color: "#10B981",
+    articles: [
+      {
+        title: "A Baby Receives the World's First Personalized Gene-Editing Treatment",
+        source: "MIT Technology Review",
+        tag: "USA",
+        vocab: ["gene-editing", "personalized medicine", "FDA-approved", "clinical trial"],
+        summary: "A 7-month-old baby named KJ became the first person to receive a gene-editing treatment made just for him. Doctors changed specific genes to treat his condition. A clinical trial is now being planned. In the future, these custom treatments could be approved by the FDA, starting a new era of medicine designed for each individual person.",
+        questions: [
+          "What does 'personalized medicine' mean, and how is it different from regular medicine?",
+          "Do you think gene-editing is a good thing? Are there any risks?",
+          "How could gene-editing help people in the future?"
+        ],
+        url: "https://www.technologyreview.com/2026/01/16/1131363/three-technologies-shape-biotech-in-2026-gene-editing-embryo-scoring/"
+      },
+      {
+        title: "Beam Therapeutics Corrects a Genetic Disease for the First Time in a Patient",
+        source: "GlobeNewsWire / Beam",
+        tag: "USA",
+        vocab: ["base-editing", "mutation", "alpha-1 antitrypsin", "proof-of-concept"],
+        summary: "Beam Therapeutics used a technology called 'base-editing' to fix a disease-causing gene mutation inside a patient's body. The disease, called AATD, affects the lungs and liver. This is the first time this type of correction has worked in a clinical setting — proving that precision gene-editing can treat real diseases.",
+        questions: [
+          "What is the difference between 'editing' a gene and 'replacing' a gene?",
+          "Why is it important that this treatment worked in a real patient, not just in a lab?",
+          "Would you be willing to try a gene-editing treatment? What would influence your decision?"
+        ],
+        url: "https://www.globenewswire.com/news-release/2026/03/18/3258381/0/en/Biotech-Breakthroughs-and-Strategic-Pivots-Fuel-Market-Momentum.html"
+      },
+      {
+        title: "New Cancer Treatment Reprograms Your Immune Cells Inside Your Body",
+        source: "Atlantis Bioscience",
+        tag: "Global",
+        vocab: ["CAR-T therapy", "in vivo", "immune cells (T-cells)", "accessible"],
+        summary: "Traditional CAR-T cancer therapy takes a patient's immune cells out, changes them in a lab, and puts them back. A new approach called 'in vivo' CAR-T does this inside the body, which is simpler and cheaper. This could make life-saving cancer treatment available to many more patients around the world.",
+        questions: [
+          "Why is it important for cancer treatments to become cheaper and simpler?",
+          "How does the immune system normally fight diseases?",
+          "What other diseases might benefit from this type of 'in vivo' treatment?"
+        ],
+        url: "https://www.atlantisbioscience.com/blog/2026-biotech-outlook-10-breakthrough-trends-scientists-need-to-watch/"
+      },
+      {
+        title: "A New Type of LSD Is Being Tested as Medicine for Depression and Anxiety",
+        source: "GlobeNewsWire",
+        tag: "USA",
+        vocab: ["psychedelic", "clinical trial", "breakthrough therapy", "FDA designation"],
+        summary: "MindMed is testing MM120 — a specially designed form of LSD — to treat depression and anxiety. The U.S. FDA gave it 'breakthrough therapy' status, which means it gets a faster review process. This is part of a growing trend of using psychedelic substances as serious medical treatments for mental health.",
+        questions: [
+          "What do you think about using psychedelic substances as medicine?",
+          "Why do you think mental health treatments are getting more attention now?",
+          "What are some other ways people treat depression and anxiety?"
+        ],
+        url: "https://goinvest.com/2026/03/18/biotech-breakthroughs-and-strategic-pivots-fuel-market-momentum/"
+      },
+      {
+        title: "Illumina Launches Technology to Map Genes Directly on Body Tissue",
+        source: "ZAGENO / Multiple Sources",
+        tag: "USA",
+        vocab: ["spatial biology", "gene expression", "tissue architecture", "multiomics"],
+        summary: "Illumina has launched a commercial tool that lets researchers see which genes are active in specific locations within body tissue. Think of it as a GPS for genes inside your body. The single-cell research market is worth $4.71 billion and growing. This technology helps scientists understand diseases like cancer at a much deeper level.",
+        questions: [
+          "Why is it important to know where genes are active in the body, not just which ones are active?",
+          "How could this technology help doctors give better treatments?",
+          "Can you explain 'gene expression' in your own words?"
+        ],
+        url: "https://go.zageno.com/blog/whats-new-in-biotech-2026"
+      }
+    ]
+  },
+  {
+    category: "ev",
+    label: "EV & Energy",
+    icon: "fa-solid fa-bolt",
+    color: "#EC4899",
+    articles: [
+      {
+        title: "A Solid-State EV Battery Can Now Drive 800 Miles on One Charge",
+        source: "Electrek",
+        tag: "Global",
+        vocab: ["solid-state", "energy density (Wh/kg)", "lithium-ion", "gamechanger"],
+        summary: "Factorial Energy created a new solid-state battery with 450 Wh/kg — 80% more energy than regular batteries. It works even at high temperatures (90°C / 194°F). Mercedes drove a test car over 745 miles (1,200 km) on a single charge. Mercedes called it 'a true gamechanger' for electric vehicles.",
+        questions: [
+          "What are the main reasons people don't buy electric cars yet?",
+          "How would an 800-mile battery range change your daily life or commute?",
+          "What is the difference between 'solid-state' and 'lithium-ion' batteries?"
+        ],
+        url: "https://electrek.co/2026/03/17/solid-state-ev-batteries-with-800-miles-range-become-reality/"
+      },
+      {
+        title: "Chinese Scientists Create a Battery with Over 1,000 km Range",
+        source: "Electrek",
+        tag: "China",
+        vocab: ["electrolyte", "fluorine-based", "mass production", "energy density"],
+        summary: "Researchers at the Chinese Academy of Sciences developed a new battery using fluorine-based materials. It achieves over 700 Wh/kg — roughly double the energy of today's batteries. Electric cars using this technology could drive over 1,000 km on one charge. Mass production is expected by the end of 2026.",
+        questions: [
+          "Why is battery technology so important for the future of transportation?",
+          "China is leading in battery research. Why do you think that is?",
+          "What other devices besides cars could benefit from better batteries?"
+        ],
+        url: "https://electrek.co/2026/02/27/china-discovers-breakthrough-ev-battery-with-1000-km-range/"
+      },
+      {
+        title: "CATL Starts Making Batteries from Salt Instead of Lithium",
+        source: "MIT Technology Review",
+        tag: "China",
+        vocab: ["sodium-ion", "lithium", "grid storage", "abundant"],
+        summary: "CATL, the world's largest battery maker, has started making sodium-ion batteries. Sodium comes from salt, which is very cheap and easy to find — unlike lithium. These batteries are best for energy storage systems and affordable short-range electric cars. Several Chinese carmakers already have vehicles using sodium-ion batteries.",
+        questions: [
+          "What are the advantages of using salt (sodium) instead of lithium for batteries?",
+          "Why is it important to find alternatives to lithium?",
+          "Do you think sodium-ion batteries could replace lithium-ion batteries completely? Why or why not?"
+        ],
+        url: "https://www.technologyreview.com/2026/02/02/1132042/whats-next-for-ev-batteries-in-2026/"
+      },
+      {
+        title: "Changan's 'Golden Bell' Battery Promises 932-Mile Range",
+        source: "Electrek / Autoevolution",
+        tag: "China",
+        vocab: ["all-solid-state", "CLTC range", "trial installation", "national standard"],
+        summary: "Chinese automaker Changan will start testing its 'Golden Bell' solid-state battery before Q3 2026. It has 400 Wh/kg energy density and promises over 1,500 km (932 miles) of range. China is also creating its first national standard for solid-state EV batteries to ensure safety and quality.",
+        questions: [
+          "Why do countries need national standards for new battery technologies?",
+          "Would you trust a brand-new battery technology in your car? What would convince you?",
+          "How does competition between companies help improve technology?"
+        ],
+        url: "https://www.autoevolution.com/news/what-s-next-in-2026-battery-and-ev-tech-263882.html"
+      },
+      {
+        title: "EV Batteries Last Much Longer Than Expected — They Outlast the Cars",
+        source: "NPR",
+        tag: "USA",
+        vocab: ["lifespan", "LFP (lithium iron phosphate)", "consumer concern", "degradation"],
+        summary: "Good news for EV buyers! Data from the oldest electric cars shows that batteries last much longer than people expected. New LFP batteries last even longer. One expert said, 'These batteries are built to outlast the cars.' This finding helps ease a common worry that holds people back from buying electric vehicles.",
+        questions: [
+          "Were you worried about EV battery lifespan before reading this? Has your opinion changed?",
+          "What other concerns do people have about electric vehicles?",
+          "How could this news affect the used electric car market?"
+        ],
+        url: "https://www.npr.org/2026/03/02/nx-s1-5706658/electric-vehicle-battery-lifespan"
+      }
+    ]
+  },
+  {
+    category: "cyber",
+    label: "Cybersecurity",
+    icon: "fa-solid fa-shield-halved",
+    color: "#EF4444",
+    articles: [
+      {
+        title: "US Military Used AI (Claude) During Real Military Operations Against Iran",
+        source: "Cyber Security Review",
+        tag: "USA",
+        vocab: ["frontier AI", "intelligence analysis", "strike operation", "scenario"],
+        summary: "The U.S. military used Anthropic's Claude AI during attacks on Iran. The AI helped analyze intelligence, identify targets, and run 'what-if' battle scenarios (imagining different outcomes). This is a major step in using advanced AI for real military decisions, raising important questions about AI in warfare.",
+        questions: [
+          "Do you think AI should be used in military operations? Why or why not?",
+          "What are the risks of using AI to make decisions in war?",
+          "Should there be international rules about using AI in the military?"
+        ],
+        url: "https://www.cybersecurity-review.com/news-march-2026/"
+      },
+      {
+        title: "Google Chrome's AI Feature Had a Serious Security Bug",
+        source: "Cyber Security Review",
+        tag: "Global",
+        vocab: ["vulnerability", "code injection", "extension", "patch"],
+        summary: "A serious security bug was found in Google Chrome's Gemini AI feature. The bug allowed browser extensions (small add-on programs) to inject code and gain powerful abilities — including reading local files, taking screenshots, and controlling the camera and microphone. Google has fixed the problem with an update.",
+        questions: [
+          "Do you check if your browser extensions are safe? How can you protect yourself?",
+          "What should you do when you hear about a security bug in software you use?",
+          "Why is it important for companies to fix security bugs quickly?"
+        ],
+        url: "https://www.cybersecurity-review.com/news-march-2026/"
+      },
+      {
+        title: "Samsung Must Ask Permission Before Collecting Smart TV Viewing Data",
+        source: "Morgan Lewis / Multiple Sources",
+        tag: "USA",
+        vocab: ["data collection", "consent", "ACR (Automated Content Recognition)", "privacy"],
+        summary: "Samsung settled a legal case about how its smart TVs secretly collected information about what people watch. The technology, called ACR, tracked viewing habits and sold the data. Samsung must now ask for clear permission from users in Texas before collecting this data. This is a big win for consumer privacy.",
+        questions: [
+          "Did you know that smart TVs can track what you watch? How does this make you feel?",
+          "What does 'consent' mean in the context of data privacy?",
+          "Should companies be allowed to collect user data if they ask for permission first?"
+        ],
+        url: "https://www.morganlewis.com/pubs/2026/03/cybersecurity-privacy-2026-enforcement-regulatory-trends"
+      },
+      {
+        title: "20 US States Now Have Privacy Laws — More People Can Control Their Data",
+        source: "Wilson Sonsini / Multiple Sources",
+        tag: "USA",
+        vocab: ["privacy law", "opt-out", "consumer rights", "patchwork"],
+        summary: "Twenty U.S. states now have laws protecting consumer privacy, including new ones in Kentucky, Rhode Island, and Indiana. Some states, like Connecticut and Oregon, now require websites to respect 'Universal Opt-Out' signals — meaning your browser can automatically tell websites not to track you.",
+        questions: [
+          "Does your country have strong data privacy laws? What do you know about them?",
+          "What does 'opt-out' mean, and why is it important for internet users?",
+          "Should there be one global privacy law, or should each country have its own?"
+        ],
+        url: "https://www.wsgr.com/en/insights/2026-year-in-preview-us-data-privacy-and-cybersecurity-predictions.html"
+      },
+      {
+        title: "AI Assistants Are Vulnerable to Hidden Attacks Called 'Prompt Injection'",
+        source: "Baker McKenzie / Multiple Sources",
+        tag: "Global",
+        vocab: ["prompt injection", "autonomous", "attack surface", "adversary"],
+        summary: "As AI assistants become smarter and more independent, hackers have found a new way to trick them. They hide secret instructions in web content that AI reads. When the AI follows these hidden commands, it can be manipulated to do harmful things. Security experts warn this could become a major new type of cyber threat.",
+        questions: [
+          "How can we make AI assistants safer from hidden attacks?",
+          "Have you ever been tricked by a phishing email or fake website? What happened?",
+          "As AI becomes more autonomous, who should be responsible when things go wrong — the user, the company, or the AI?"
+        ],
+        url: "https://www.bakermckenzie.com/en/insight/publications/2026/01/whats-on-the-horizon-for-data-technology"
+      }
+    ]
+  }
+];
+
+const mainContent = document.getElementById('mainContent');
+const categoryNav = document.getElementById('categoryNav');
+const searchInput = document.getElementById('searchInput');
+const noResults = document.getElementById('noResults');
+let activeCategory = 'all';
+
+function renderNav() {
+  const allCount = DATA.reduce(function(sum, cat) { return sum + cat.articles.length; }, 0);
+  document.getElementById('totalCount').textContent = allCount;
+
+  let navHTML = '<button class="category-pill active flex-shrink-0 px-4 py-2 rounded-full border-2 border-gray-200 dark:border-gray-600 text-sm font-semibold cursor-pointer whitespace-nowrap" data-cat="all">All</button>';
+  DATA.forEach(function(cat) {
+    navHTML += '<button class="category-pill flex-shrink-0 px-4 py-2 rounded-full border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-[#1e1e1e] text-gray-600 dark:text-gray-300 text-sm font-medium cursor-pointer whitespace-nowrap" data-cat="' + cat.category + '">' + cat.label + ' <span class="opacity-60">(' + cat.articles.length + ')</span></button>';
+  });
+  categoryNav.innerHTML = navHTML;
+
+  categoryNav.querySelectorAll('.category-pill').forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      categoryNav.querySelectorAll('.category-pill').forEach(function(p) { p.classList.remove('active'); });
+      this.classList.add('active');
+      activeCategory = this.dataset.cat;
+      renderSections();
+    });
+  });
+}
+
+function escapeHTML(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function renderSections() {
+  var query = searchInput.value.toLowerCase().trim();
+  var html = '';
+  var totalVisible = 0;
+
+  DATA.forEach(function(cat, catIdx) {
+    if (activeCategory !== 'all' && activeCategory !== cat.category) return;
+
+    var filtered = cat.articles.filter(function(a) {
+      if (!query) return true;
+      return a.title.toLowerCase().indexOf(query) !== -1 ||
+             a.summary.toLowerCase().indexOf(query) !== -1 ||
+             a.source.toLowerCase().indexOf(query) !== -1 ||
+             a.tag.toLowerCase().indexOf(query) !== -1;
+    });
+
+    if (filtered.length === 0) return;
+    totalVisible += filtered.length;
+
+    html += '<section class="mb-8 fade-in" style="animation-delay: ' + (catIdx * 0.06) + 's">';
+
+    // Section header
+    html += '<div class="flex items-center gap-3 pb-3 mb-3 border-b-2 border-gray-200 dark:border-gray-700">';
+    html += '<div class="w-10 h-10 rounded-xl flex items-center justify-center text-white text-lg section-badge shadow-sm"><i class="' + cat.icon + '"></i></div>';
+    html += '<h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">' + cat.label + '</h2>';
+    html += '<span class="ml-auto text-xs font-mono font-semibold px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">' + filtered.length + ' insight' + (filtered.length !== 1 ? 's' : '') + '</span>';
+    html += '</div>';
+
+    // Articles
+    filtered.forEach(function(article) {
+      var vocabHTML = '';
+      if (article.vocab && article.vocab.length > 0) {
+        vocabHTML = '<div class="flex flex-wrap gap-2 mt-3 mb-3">';
+        article.vocab.forEach(function(v) {
+          vocabHTML += '<span class="vocab-tag text-xs font-semibold px-2.5 py-1 rounded-full">' + escapeHTML(v) + '</span>';
+        });
+        vocabHTML += '</div>';
+      }
+
+      var questionsHTML = '';
+      if (article.questions && article.questions.length > 0) {
+        questionsHTML = '<div class="discussion-box rounded-lg p-4 mt-4">';
+        questionsHTML += '<h4 class="font-bold text-sm mb-2 flex items-center gap-2 text-gray-800 dark:text-gray-100"><i class="fa-solid fa-comments" style="color: #1E90FF;"></i> Discussion Questions</h4>';
+        questionsHTML += '<ol class="list-decimal list-inside space-y-2 text-sm text-gray-700 dark:text-gray-300">';
+        article.questions.forEach(function(q) {
+          questionsHTML += '<li class="leading-relaxed">' + escapeHTML(q) + '</li>';
+        });
+        questionsHTML += '</ol>';
+        questionsHTML += '</div>';
+      }
+
+      html += '<div class="insight-card rounded-xl mb-3">';
+
+      // Header (clickable)
+      html += '<div class="flex items-start gap-3 p-4 cursor-pointer select-none" onclick="toggleInsight(this)" style="-webkit-tap-highlight-color: transparent;">';
+      html += '<div class="w-2 h-2 rounded-full flex-shrink-0 mt-2" style="background: ' + cat.color + ';"></div>';
+      html += '<div class="flex-1 min-w-0">';
+      html += '<h3 class="text-base md:text-lg font-bold leading-snug text-gray-800 dark:text-gray-100">' + escapeHTML(article.title) + '</h3>';
+      html += '<div class="flex items-center gap-2 mt-1.5 flex-wrap">';
+      html += '<span class="text-xs font-mono text-gray-400 dark:text-gray-500">' + escapeHTML(article.source) + '</span>';
+      html += '<span class="text-xs font-semibold px-2 py-0.5 rounded-md text-white" style="background: ' + cat.color + ';">' + escapeHTML(article.tag) + '</span>';
+      html += '</div></div>';
+      html += '<i class="fa-solid fa-chevron-down chevron-icon text-gray-400 dark:text-gray-500 text-sm flex-shrink-0 mt-1.5"></i>';
+      html += '</div>';
+
+      // Body (collapsible)
+      html += '<div class="article-body"><div class="px-4 pb-5 pl-9">';
+
+      // Key Vocabulary
+      html += vocabHTML;
+
+      // Summary
+      html += '<p class="text-sm md:text-base leading-relaxed text-gray-600 dark:text-gray-400">' + escapeHTML(article.summary) + '</p>';
+
+      // Discussion Questions
+      html += questionsHTML;
+
+      // Read more link
+      html += '<a href="' + escapeHTML(article.url) + '" target="_blank" rel="noopener" class="read-more-btn inline-flex items-center gap-2 text-xs font-bold px-4 py-2 rounded-lg mt-4 no-underline">';
+      html += '<i class="fa-solid fa-arrow-up-right-from-square"></i> Read Full Article</a>';
+
+      html += '</div></div>';
+      html += '</div>';
+    });
+
+    html += '</section>';
+  });
+
+  mainContent.innerHTML = html;
+  noResults.style.display = totalVisible === 0 ? 'block' : 'none';
+  if (totalVisible === 0) {
+    noResults.classList.remove('hidden');
+  } else {
+    noResults.classList.add('hidden');
+  }
+}
+
+function toggleInsight(header) {
+  var card = header.parentElement;
+  var wasOpen = card.classList.contains('open');
+
+  // Close all others in same section
+  card.parentElement.querySelectorAll('.insight-card.open').forEach(function(c) {
+    if (c !== card) c.classList.remove('open');
+  });
+
+  if (wasOpen) {
+    card.classList.remove('open');
+  } else {
+    card.classList.add('open');
+  }
+}
+
+// Search
+var searchTimeout;
+searchInput.addEventListener('input', function() {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(renderSections, 200);
+});
+
+// Dark mode detection
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.documentElement.classList.add('dark');
+}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(event) {
+  if (event.matches) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+});
+
+// Init
+renderNav();
+renderSections();
+</script>
+</body>
+</html>
