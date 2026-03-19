@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechPulse Live — Bot-Powered Insights</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          navy: '#0a1f7a',
+          gold: '#F9D423',
+          sky: '#1E90FF',
+        }
+      }
+    }
+  };
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  body { font-family: 'Source Sans 3', sans-serif; }
+
+  .bg-gradient-hero {
+    background: linear-gradient(135deg, #F9D423 0%, #1E90FF 100%);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #0a1f7a, #1E90FF);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .dark .text-gradient {
+    background: linear-gradient(135deg, #F9D423, #60b4ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .insight-card {
+    transition: all 0.3s ease;
+    background: #fffdf5;
+    border: 2px solid transparent;
+    background-image: linear-gradient(#fffdf5, #fffdf5), linear-gradient(135deg, #F9D423, #1E90FF);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+  .insight-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(30, 144, 255, 0.15);
+  }
+  .dark .insight-card {
+    background: #1e1e1e;
+    background-image: linear-gradient(#1e1e1e, #1e1e1e), linear-gradient(135deg, #F9D423, #1E90FF);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+
+  .discussion-box {
+    background: linear-gradient(135deg, rgba(249,212,35,0.08), rgba(30,144,255,0.08));
+    border-left: 4px solid #1E90FF;
+  }
+  .dark .discussion-box {
+    background: linear-gradient(135deg, rgba(249,212,35,0.06), rgba(30,144,255,0.06));
+    border-left: 4px solid #F9D423;
+  }
+
+  .vocab-tag {
+    background: rgba(249,212,35,0.15);
+    color: #0a1f7a;
+    border: 1px solid rgba(249,212,35,0.4);
+  }
+  .dark .vocab-tag {
+    background: rgba(249,212,35,0.1);
+    color: #F9D423;
+    border: 1px solid rgba(249,212,35,0.3);
+  }
+
+  .gen-btn {
+    background: linear-gradient(135deg, #F9D423, #1E90FF);
+    color: #0a1f7a;
+    transition: all 0.25s ease;
+  }
+  .gen-btn:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(30, 144, 255, 0.35);
+    transform: translateY(-1px);
+  }
+  .gen-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .topic-pill {
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  .topic-pill.active {
+    background: linear-gradient(135deg, #F9D423, #1E90FF);
+    color: #0a1f7a;
+    font-weight: 700;
+    border-color: transparent;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .skeleton {
+    background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+  }
+  .dark .skeleton {
+    background: linear-gradient(90deg, #2a2a2a 25%, #333 50%, #2a2a2a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.5s ease both; }
+
+  .search-input:focus {
+    border-color: #1E90FF;
+    box-shadow: 0 0 0 3px rgba(30,144,255,0.2);
+  }
+  .dark .search-input:focus {
+    border-color: #F9D423;
+    box-shadow: 0 0 0 3px rgba(249,212,35,0.15);
+  }
+
+  .pulse-dot {
+    animation: pulseDot 2s ease infinite;
+  }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+    50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+  }
+
+  .error-box {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.3);
+  }
+  .dark .error-box { background: rgba(239,68,68,0.1); }
+</style>
+</head>
+<body class="bg-gray-50 dark:bg-[#121212] text-gray-900 dark:text-gray-100 min-h-screen">
+
+<!-- HEADER -->
+<header class="bg-gradient-hero shadow-lg">
+  <div class="max-w-3xl mx-auto px-4 py-7 text-center">
+    <div class="inline-flex items-center gap-2 bg-white/20 backdrop-filter rounded-full px-4 py-1.5 mb-3">
+      <span class="w-2 h-2 bg-emerald-400 rounded-full pulse-dot"></span>
+      <span class="text-xs font-bold tracking-widest uppercase text-white/90" style="font-family:'JetBrains Mono',monospace;">LIVE — BOT-POWERED</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-black" style="font-family:'Merriweather',serif; color:#0a1f7a; text-shadow:0 2px 4px rgba(0,0,0,0.1);">
+      📡 TechPulse Live
+    </h1>
+    <p class="mt-2 text-white/90 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+      Fresh technology insights generated by AI — with <strong>vocabulary</strong> and <strong>discussion questions</strong> for ESL learners.
+    </p>
+  </div>
+</header>
+
+<div class="max-w-3xl mx-auto px-4 py-6">
+
+  <!-- HOW IT WORKS -->
+  <div class="bg-white dark:bg-[#1e1e1e] rounded-xl shadow-md p-4 mb-5 border border-gray-200 dark:border-gray-700 text-sm">
+    <p class="font-bold mb-1 flex items-center gap-2"><span class="text-lg">⚡</span> How It Works</p>
+    <p class="text-gray-500 dark:text-gray-400">Pick a topic, tap <strong>"Generate Insights"</strong>, and a bot will create 3 fresh news-style insights with key vocabulary and speaking questions — all in real time.</p>
+  </div>
+
+  <!-- TOPIC SELECTION -->
+  <div class="mb-4">
+    <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">Choose a topic:</label>
+    <div class="flex gap-2 flex-wrap" id="topicPills"></div>
+  </div>
+
+  <!-- CUSTOM TOPIC -->
+  <div class="mb-4">
+    <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">Or type your own topic:</label>
+    <input
+      type="text"
+      id="customTopic"
+      placeholder='e.g. "5G networks" or "electric planes"'
+      autocomplete="off"
+      class="search-input w-full px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-[#1e1e1e] text-gray-900 dark:text-gray-100 outline-none transition-all"
+      style="font-size:16px;"
+    >
+  </div>
+
+  <!-- GENERATE BUTTON -->
+  <button id="generateBtn" onclick="generateInsights()" class="gen-btn w-full py-3.5 rounded-xl font-bold text-base flex items-center justify-center gap-2 mb-6">
+    <i class="fa-solid fa-bolt"></i> Generate Insights
+  </button>
+
+  <!-- STATUS -->
+  <div id="statusArea" class="hidden mb-5 text-center">
+    <div class="inline-flex items-center gap-3 bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-gray-700 rounded-full px-5 py-2.5 shadow-sm">
+      <div class="w-4 h-4 border-2 border-sky border-t-transparent rounded-full animate-spin"></div>
+      <span id="statusText" class="text-sm font-semibold text-gray-600 dark:text-gray-300">Asking the bot for insights...</span>
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  <div id="errorArea" class="hidden error-box rounded-xl p-4 mb-5 text-center">
+    <p class="text-red-600 dark:text-red-400 font-semibold text-sm"><i class="fa-solid fa-triangle-exclamation mr-1"></i> <span id="errorText"></span></p>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results"></div>
+
+  <!-- FOOTER -->
+  <footer class="mt-10 pt-5 border-t border-gray-200 dark:border-gray-700 text-center pb-8">
+    <p class="text-xs text-gray-400 dark:text-gray-500">
+      💡 Powered by Poe Embed API &middot; Bot: <span id="botLabel" class="font-mono">Grok-4.1-Fast-Non-Reasoning</span>
+    </p>
+    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
+      Brought to you by <strong>English Training Hub!</strong> &copy; <span id="year"></span>
+    </p>
+  </footer>
+</div>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// ---------- CONFIG ----------
+var BOT_NAME = "Grok-4.1-Fast-Non-Reasoning";
+var TOPICS = [
+  { label: "AI & Robotics", icon: "🤖" },
+  { label: "Semiconductors", icon: "💾" },
+  { label: "Space Tech", icon: "🚀" },
+  { label: "EV & Batteries", icon: "🔋" },
+  { label: "Cybersecurity", icon: "🛡️" },
+  { label: "Biotech", icon: "🧬" },
+  { label: "Quantum Computing", icon: "⚛️" },
+  { label: "Green Energy", icon: "🌱" },
+];
+
+var selectedTopic = TOPICS[0].label;
+var isGenerating = false;
+
+// ---------- RENDER TOPIC PILLS ----------
+function renderTopicPills() {
+  var html = '';
+  TOPICS.forEach(function(t) {
+    var active = t.label === selectedTopic ? ' active' : '';
+    html += '<button class="topic-pill' + active + ' px-3 py-1.5 rounded-full border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-[#1e1e1e] text-gray-600 dark:text-gray-300 text-sm font-medium whitespace-nowrap" data-topic="' + escapeAttr(t.label) + '">' + t.icon + ' ' + escapeHTML(t.label) + '</button>';
+  });
+  document.getElementById('topicPills').innerHTML = html;
+
+  document.querySelectorAll('.topic-pill').forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      document.querySelectorAll('.topic-pill').forEach(function(p) { p.classList.remove('active'); });
+      this.classList.add('active');
+      selectedTopic = this.dataset.topic;
+      document.getElementById('customTopic').value = '';
+    });
+  });
+}
+
+function escapeHTML(str) {
+  var d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function escapeAttr(str) {
+  return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+// ---------- GENERATE ----------
+function generateInsights() {
+  if (isGenerating) return;
+
+  var custom = document.getElementById('customTopic').value.trim();
+  var topic = custom || selectedTopic;
+
+  if (!topic) return;
+
+  isGenerating = true;
+  var btn = document.getElementById('generateBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="w-4 h-4 border-2 border-navy border-t-transparent rounded-full animate-spin"></div> Generating...';
+
+  document.getElementById('statusArea').classList.remove('hidden');
+  document.getElementById('statusText').textContent = 'Asking ' + BOT_NAME + ' about "' + topic + '"...';
+  document.getElementById('errorArea').classList.add('hidden');
+  document.getElementById('results').innerHTML = renderSkeletons();
+
+  var prompt = buildPrompt(topic);
+
+  try {
+    window.Poe.sendUserMessage(
+      "@" + BOT_NAME + " " + prompt,
+      {
+        handler: "insight-handler",
+        stream: false,
+        openChat: false,
+        parameters: {}
+      }
+    ).catch(function(err) {
+      showError("Failed to send message: " + err.message);
+      resetButton();
+    });
+  } catch (e) {
+    showError("Poe API not available. Are you running this inside Poe?");
+    resetButton();
+  }
+}
+
+function buildPrompt(topic) {
+  return 'You are a tech news writer for ESL (English as a Second Language) students. Generate exactly 3 short technology news insights about "' + topic + '" from March 2026.\n\n' +
+    'RULES:\n' +
+    '- Write in SIMPLE English (B1-B2 level). Use short sentences.\n' +
+    '- Each insight must have: title, source (make a realistic one), region tag, a 3-4 sentence summary, exactly 4 key vocabulary words, and exactly 3 discussion questions.\n' +
+    '- Discussion questions should encourage speaking and opinions.\n\n' +
+    'Return ONLY valid JSON (no markdown, no code fences, no extra text). Use this exact structure:\n' +
+    '[\n' +
+    '  {\n' +
+    '    "title": "...",\n' +
+    '    "source": "...",\n' +
+    '    "tag": "...",\n' +
+    '    "summary": "...",\n' +
+    '    "vocab": ["word1", "word2", "word3", "word4"],\n' +
+    '    "questions": ["Q1?", "Q2?", "Q3?"]\n' +
+    '  }\n' +
+    ']\n\n' +
+    'Return ONLY the JSON array. No other text.';
+}
+
+// ---------- HANDLER ----------
+window.Poe.registerHandler("insight-handler", function(result) {
+  var msg = result.responses[0];
+
+  if (msg.status === "error") {
+    showError(msg.statusText || "The bot returned an error.");
+    resetButton();
+    return;
+  }
+
+  if (msg.status === "incomplete") {
+    document.getElementById('statusText').textContent = 'Bot is thinking...';
+    return;
+  }
+
+  if (msg.status === "complete") {
+    document.getElementById('statusArea').classList.add('hidden');
+    try {
+      var content = msg.content.trim();
+      // Strip markdown code fences if present
+      if (content.indexOf("```") !== -1) {
+        content = content.replace(/```json\s*/gi, '').replace(/```\s*/g, '');
+      }
+      var insights = JSON.parse(content);
+      renderInsights(insights);
+    } catch (e) {
+      showError("Could not parse the bot's response. The bot may have returned invalid JSON. Try again!");
+      console.log("Raw response: " + msg.content);
+    }
+    resetButton();
+  }
+});
+
+// ---------- RENDER INSIGHTS ----------
+function renderInsights(insights) {
+  var colors = ["#1E90FF", "#8B5CF6", "#10B981", "#F59E0B", "#EC4899", "#EF4444"];
+  var html = '';
+
+  insights.forEach(function(item, i) {
+    var c = colors[i % colors.length];
+
+    // Vocab tags
+    var vocabHTML = '';
+    if (item.vocab && item.vocab.length) {
+      vocabHTML = '<div class="flex flex-wrap gap-2 mb-3">';
+      item.vocab.forEach(function(v) {
+        vocabHTML += '<span class="vocab-tag text-xs font-semibold px-2.5 py-1 rounded-full">' + escapeHTML(v) + '</span>';
+      });
+      vocabHTML += '</div>';
+    }
+
+    // Questions
+    var qHTML = '';
+    if (item.questions && item.questions.length) {
+      qHTML = '<div class="discussion-box rounded-lg p-4 mt-3">';
+      qHTML += '<h4 class="font-bold text-sm mb-2 flex items-center gap-2 text-gray-800 dark:text-gray-100"><i class="fa-solid fa-comments" style="color:#1E90FF"></i> Discussion Questions</h4>';
+      qHTML += '<ol class="list-decimal list-inside space-y-1.5 text-sm text-gray-700 dark:text-gray-300">';
+      item.questions.forEach(function(q) {
+        qHTML += '<li class="leading-relaxed">' + escapeHTML(q) + '</li>';
+      });
+      qHTML += '</ol></div>';
+    }
+
+    html += '<div class="insight-card rounded-xl p-5 mb-4 fade-up" style="animation-delay:' + (i * 0.12) + 's">';
+    html += '<div class="flex items-start gap-3 mb-3">';
+    html += '<div class="w-2.5 h-2.5 rounded-full flex-shrink-0 mt-1.5" style="background:' + c + '"></div>';
+    html += '<div class="flex-1 min-w-0">';
+    html += '<h3 class="text-base md:text-lg font-bold leading-snug text-gray-800 dark:text-gray-100">' + escapeHTML(item.title) + '</h3>';
+    html += '<div class="flex items-center gap-2 mt-1 flex-wrap">';
+    html += '<span class="text-xs font-mono text-gray-400">' + escapeHTML(item.source) + '</span>';
+    html += '<span class="text-xs font-semibold px-2 py-0.5 rounded-md text-white" style="background:' + c + '">' + escapeHTML(item.tag) + '</span>';
+    html += '</div></div></div>';
+    html += vocabHTML;
+    html += '<p class="text-sm md:text-base leading-relaxed text-gray-600 dark:text-gray-400 mb-1">' + escapeHTML(item.summary) + '</p>';
+    html += qHTML;
+    html += '</div>';
+  });
+
+  document.getElementById('results').innerHTML = html;
+}
+
+// ---------- SKELETONS ----------
+function renderSkeletons() {
+  var html = '';
+  for (var i = 0; i < 3; i++) {
+    html += '<div class="insight-card rounded-xl p-5 mb-4">';
+    html += '<div class="skeleton h-5 w-3/4 mb-3"></div>';
+    html += '<div class="skeleton h-3 w-1/3 mb-4"></div>';
+    html += '<div class="flex gap-2 mb-3">';
+    html += '<div class="skeleton h-6 w-20 rounded-full"></div>';
+    html += '<div class="skeleton h-6 w-24 rounded-full"></div>';
+    html += '<div class="skeleton h-6 w-16 rounded-full"></div>';
+    html += '</div>';
+    html += '<div class="skeleton h-3 w-full mb-2"></div>';
+    html += '<div class="skeleton h-3 w-full mb-2"></div>';
+    html += '<div class="skeleton h-3 w-2/3 mb-4"></div>';
+    html += '<div class="skeleton h-24 w-full rounded-lg"></div>';
+    html += '</div>';
+  }
+  return html;
+}
+
+// ---------- HELPERS ----------
+function showError(msg) {
+  document.getElementById('statusArea').classList.add('hidden');
+  document.getElementById('errorArea').classList.remove('hidden');
+  document.getElementById('errorText').textContent = msg;
+  document.getElementById('results').innerHTML = '';
+}
+
+function resetButton() {
+  isGenerating = false;
+  var btn = document.getElementById('generateBtn');
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-bolt"></i> Generate Insights';
+}
+
+// ---------- DARK MODE ----------
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.documentElement.classList.add('dark');
+}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+  if (e.matches) { document.documentElement.classList.add('dark'); }
+  else { document.documentElement.classList.remove('dark'); }
+});
+
+// ---------- INIT ----------
+renderTopicPills();
+
+// Deselect pill when typing custom topic
+document.getElementById('customTopic').addEventListener('input', function() {
+  if (this.value.trim()) {
+    document.querySelectorAll('.topic-pill').forEach(function(p) { p.classList.remove('active'); });
+    selectedTopic = '';
+  } else {
+    // Re-select first pill
+    var first = document.querySelector('.topic-pill');
+    if (first) {
+      first.classList.add('active');
+      selectedTopic = first.dataset.topic;
+    }
+  }
+});
+</script>
+</body>
+</html>
