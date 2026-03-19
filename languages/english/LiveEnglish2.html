@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechPulse — Learn Tech English</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          navy: '#0a1f7a',
+          gold: '#F9D423',
+          sky: '#1E90FF',
+        }
+      }
+    }
+  };
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  body { font-family: 'Source Sans 3', sans-serif; }
+
+  .bg-gradient-hero {
+    background: linear-gradient(135deg, #F9D423 0%, #1E90FF 100%);
+  }
+
+  .insight-card {
+    transition: all 0.3s ease;
+    background: #fffdf5;
+    border: 2px solid transparent;
+    background-image: linear-gradient(#fffdf5, #fffdf5), linear-gradient(135deg, #F9D423, #1E90FF);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    position: relative;
+    overflow: hidden;
+  }
+  .insight-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--source-color, #1E90FF);
+  }
+  .insight-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(30, 144, 255, 0.15);
+  }
+  .dark .insight-card {
+    background: #1e1e1e;
+    background-image: linear-gradient(#1e1e1e, #1e1e1e), linear-gradient(135deg, #F9D423, #1E90FF);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+
+  .discussion-box {
+    background: linear-gradient(135deg, rgba(249,212,35,0.08), rgba(30,144,255,0.08));
+    border-left: 4px solid #1E90FF;
+  }
+  .dark .discussion-box {
+    background: linear-gradient(135deg, rgba(249,212,35,0.06), rgba(30,144,255,0.06));
+    border-left: 4px solid #F9D423;
+  }
+
+  .vocab-word {
+    background: rgba(249,212,35,0.15);
+    color: #0a1f7a;
+    border: 1px solid rgba(249,212,35,0.4);
+  }
+  .dark .vocab-word {
+    background: rgba(249,212,35,0.1);
+    color: #F9D423;
+    border: 1px solid rgba(249,212,35,0.3);
+  }
+
+  .vocab-def {
+    color: #4a5568;
+  }
+  .dark .vocab-def {
+    color: #a0aec0;
+  }
+
+  .gen-btn {
+    background: linear-gradient(135deg, #F9D423, #1E90FF);
+    color: #0a1f7a;
+    transition: all 0.25s ease;
+  }
+  .gen-btn:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(30, 144, 255, 0.35);
+    transform: translateY(-1px);
+  }
+  .gen-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+  .topic-pill { transition: all 0.2s ease; cursor: pointer; }
+  .topic-pill.active {
+    background: linear-gradient(135deg, #F9D423, #1E90FF);
+    color: #0a1f7a;
+    font-weight: 700;
+    border-color: transparent;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .skeleton {
+    background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+  }
+  .dark .skeleton {
+    background: linear-gradient(90deg, #2a2a2a 25%, #333 50%, #2a2a2a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.5s ease both; }
+
+  .search-input:focus {
+    border-color: #1E90FF;
+    box-shadow: 0 0 0 3px rgba(30,144,255,0.2);
+  }
+  .dark .search-input:focus {
+    border-color: #F9D423;
+    box-shadow: 0 0 0 3px rgba(249,212,35,0.15);
+  }
+
+  .pulse-dot { animation: pulseDot 2s ease infinite; }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(30,144,255,0.4); }
+    50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(30,144,255,0); }
+  }
+
+  .error-box {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.3);
+  }
+  .dark .error-box { background: rgba(239,68,68,0.1); }
+
+  .source-link {
+    background: linear-gradient(135deg, #F9D423, #1E90FF);
+    color: #0a1f7a;
+    transition: all 0.2s ease;
+  }
+  .source-link:hover {
+    box-shadow: 0 4px 12px rgba(30,144,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  .source-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.02em;
+  }
+
+  @keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+  .status-pulse { animation: statusPulse 2s ease infinite; }
+</style>
+</head>
+<body class="bg-gray-50 dark:bg-[#121212] text-gray-900 dark:text-gray-100 min-h-screen">
+
+<!-- HEADER -->
+<header class="bg-gradient-hero shadow-lg">
+  <div class="max-w-3xl mx-auto px-4 py-7 text-center">
+    <div class="inline-flex items-center gap-2 bg-white/20 rounded-full px-4 py-1.5 mb-3">
+      <span class="w-2 h-2 bg-white rounded-full pulse-dot"></span>
+      <span class="text-xs font-bold tracking-widest uppercase text-white/90" style="font-family:'JetBrains Mono',monospace;">AI-POWERED RESEARCH</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-black" style="font-family:'Merriweather',serif; color:#0a1f7a; text-shadow:0 2px 4px rgba(0,0,0,0.1);">
+      &#x1F4E1; TechPulse &mdash; Learn Tech English
+    </h1>
+    <p class="mt-2 text-white/90 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+      Real articles from <strong>Interesting Engineering</strong>, <strong>Science Daily</strong>, <strong>Ars Technica</strong> &amp; more &mdash; with key vocabulary &amp; discussion questions for ESL learners.
+    </p>
+  </div>
+</header>
+
+<div class="max-w-3xl mx-auto px-4 py-6">
+
+  <!-- HOW IT WORKS -->
+  <div class="bg-white dark:bg-[#1e1e1e] rounded-xl shadow-md p-4 mb-5 border border-gray-200 dark:border-gray-700 text-sm">
+    <p class="font-bold mb-1 flex items-center gap-2"><span class="text-lg">&#x1F4D6;</span> How It Works</p>
+    <p class="text-gray-500 dark:text-gray-400">Pick a tech topic or type your own, then tap <strong>&ldquo;Fetch &amp; Learn&rdquo;</strong>. AI searches popular science &amp; tech publications for real articles, highlights key vocabulary with simple definitions, and generates discussion questions so you can practice speaking.</p>
+  </div>
+
+  <!-- TOPIC SELECTION -->
+  <div class="mb-4">
+    <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">Choose a topic:</label>
+    <div class="flex gap-2 flex-wrap" id="topicPills"></div>
+  </div>
+
+  <!-- CUSTOM TOPIC -->
+  <div class="mb-4">
+    <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">Or type your own topic:</label>
+    <input
+      type="text"
+      id="customTopic"
+      placeholder="e.g. &quot;5G networks&quot; or &quot;electric aircraft&quot;"
+      autocomplete="off"
+      class="search-input w-full px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-[#1e1e1e] text-gray-900 dark:text-gray-100 outline-none transition-all"
+      style="font-size:16px;"
+    >
+  </div>
+
+  <!-- FETCH BUTTON -->
+  <button id="fetchBtn" class="gen-btn w-full py-3.5 rounded-xl font-bold text-base flex items-center justify-center gap-2 mb-6">
+    <i class="fa-solid fa-magnifying-glass"></i> Fetch &amp; Learn
+  </button>
+
+  <!-- STATUS -->
+  <div id="statusArea" class="hidden mb-5 text-center">
+    <div class="inline-flex items-center gap-3 bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-gray-700 rounded-full px-5 py-2.5 shadow-sm">
+      <div class="w-4 h-4 border-2 border-sky border-t-transparent rounded-full animate-spin"></div>
+      <span id="statusText" class="text-sm font-semibold text-gray-600 dark:text-gray-300 status-pulse">Searching articles...</span>
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  <div id="errorArea" class="hidden error-box rounded-xl p-4 mb-5 text-center">
+    <p class="text-red-600 dark:text-red-400 font-semibold text-sm">
+      <i class="fa-solid fa-triangle-exclamation mr-1"></i> <span id="errorText"></span>
+    </p>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results"></div>
+
+  <!-- FOOTER -->
+  <footer class="mt-10 pt-5 border-t border-gray-200 dark:border-gray-700 text-center pb-8">
+    <p class="text-xs text-gray-400 dark:text-gray-500">
+      &#x1F4DA; Articles sourced from popular science &amp; technology publications via AI-powered web search
+    </p>
+    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
+      &#x1F4A1; Brought to you by <strong>English Training Hub!</strong> &copy; <span id="year"></span>
+    </p>
+  </footer>
+</div>
+
+<script>
+/* ===== YEAR ===== */
+document.getElementById("year").textContent = new Date().getFullYear();
+
+/* ===== DARK MODE ===== */
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.documentElement.classList.add('dark');
+}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+  if (e.matches) { document.documentElement.classList.add('dark'); }
+  else { document.documentElement.classList.remove('dark'); }
+});
+
+/* ===== TOPIC CONFIG ===== */
+var TOPICS = [
+  { label: "Artificial Intelligence", icon: "\u{1F916}" },
+  { label: "Semiconductors", icon: "\u{1F4BE}" },
+  { label: "Space Exploration", icon: "\u{1F680}" },
+  { label: "Electric Vehicles", icon: "\u{1F50B}" },
+  { label: "Cybersecurity", icon: "\u{1F6E1}\uFE0F" },
+  { label: "Biotechnology", icon: "\u{1F9EC}" },
+  { label: "Quantum Computing", icon: "\u269B\uFE0F" },
+  { label: "Renewable Energy", icon: "\u{1F331}" }
+];
+
+var selectedIndex = 0;
+var isFetching = false;
+
+/* ===== SOURCE STYLING ===== */
+var SOURCE_STYLES = {
+  "interesting engineering": { color: "#FF6B35", icon: "fa-solid fa-gear" },
+  "science daily":          { color: "#2E86AB", icon: "fa-solid fa-flask" },
+  "sciencedaily":           { color: "#2E86AB", icon: "fa-solid fa-flask" },
+  "ars technica":           { color: "#FF4500", icon: "fa-solid fa-microchip" },
+  "mit technology review":  { color: "#E91E63", icon: "fa-solid fa-graduation-cap" },
+  "the verge":              { color: "#6200EA", icon: "fa-solid fa-bolt" },
+  "wired":                  { color: "#00BCD4", icon: "fa-solid fa-wifi" },
+  "new scientist":          { color: "#9C27B0", icon: "fa-solid fa-atom" },
+  "ieee spectrum":          { color: "#00629B", icon: "fa-solid fa-wave-square" },
+  "popular science":        { color: "#1976D2", icon: "fa-solid fa-rocket" },
+  "techcrunch":             { color: "#00A562", icon: "fa-solid fa-chart-line" },
+  "nature":                 { color: "#C62828", icon: "fa-solid fa-leaf" },
+  "phys.org":               { color: "#FF8F00", icon: "fa-solid fa-satellite" },
+  "engadget":               { color: "#2196F3", icon: "fa-solid fa-mobile-screen" },
+  "zdnet":                  { color: "#D32F2F", icon: "fa-solid fa-server" },
+  "cnet":                   { color: "#E64A19", icon: "fa-solid fa-display" },
+  "live science":           { color: "#43A047", icon: "fa-solid fa-microscope" },
+  "tech xplore":            { color: "#5E35B1", icon: "fa-solid fa-compass" },
+  "space.com":              { color: "#1565C0", icon: "fa-solid fa-shuttle-space" },
+  "the guardian":           { color: "#005689", icon: "fa-solid fa-newspaper" },
+  "bbc":                    { color: "#BB1919", icon: "fa-solid fa-tower-broadcast" },
+  "reuters":                { color: "#FF6600", icon: "fa-solid fa-globe" }
+};
+
+function getSourceStyle(name) {
+  var key = (name || "").toLowerCase().trim();
+  return SOURCE_STYLES[key] || { color: "#1E90FF", icon: "fa-solid fa-newspaper" };
+}
+
+/* ===== HELPERS ===== */
+function esc(str) {
+  var d = document.createElement("div");
+  d.textContent = str || "";
+  return d.innerHTML;
+}
+
+/* ===== RENDER TOPIC PILLS ===== */
+function renderTopicPills() {
+  var container = document.getElementById("topicPills");
+  var html = "";
+  TOPICS.forEach(function(t, i) {
+    var cls = i === selectedIndex ? " active" : "";
+    html += '<button class="topic-pill' + cls + ' px-3 py-1.5 rounded-full border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-[#1e1e1e] text-gray-600 dark:text-gray-300 text-sm font-medium whitespace-nowrap" data-idx="' + i + '">' + t.icon + " " + esc(t.label) + "</button>";
+  });
+  container.innerHTML = html;
+
+  container.querySelectorAll(".topic-pill").forEach(function(pill) {
+    pill.addEventListener("click", function() {
+      container.querySelectorAll(".topic-pill").forEach(function(p) { p.classList.remove("active"); });
+      this.classList.add("active");
+      selectedIndex = parseInt(this.dataset.idx, 10);
+      document.getElementById("customTopic").value = "";
+    });
+  });
+}
+
+/* ===== SKELETON LOADER ===== */
+function renderSkeletons() {
+  var html = "";
+  for (var i = 0; i < 3; i++) {
+    html += '<div class="insight-card rounded-xl p-5 mb-4">';
+    html += '<div class="skeleton h-4 w-24 mb-3"></div>';
+    html += '<div class="skeleton h-5 w-3/4 mb-2"></div>';
+    html += '<div class="skeleton h-3 w-1/2 mb-4"></div>';
+    html += '<div class="skeleton h-3 w-full mb-2"></div>';
+    html += '<div class="skeleton h-3 w-full mb-2"></div>';
+    html += '<div class="skeleton h-3 w-2/3 mb-4"></div>';
+    html += '<div class="space-y-2 mb-4"><div class="skeleton h-7 w-full rounded-lg"></div><div class="skeleton h-7 w-full rounded-lg"></div><div class="skeleton h-7 w-5/6 rounded-lg"></div></div>';
+    html += '<div class="skeleton h-24 w-full rounded-lg"></div>';
+    html += "</div>";
+  }
+  return html;
+}
+
+/* ===== RENDER ARTICLE CARDS ===== */
+function renderInsights(articles) {
+  var html = "";
+
+  articles.forEach(function(article, i) {
+    var style = getSourceStyle(article.source);
+    var color = style.color;
+    var icon = style.icon;
+    var url = article.url || "#";
+    var vocab = article.vocabulary || [];
+    var defs = article.definitions || {};
+    var questions = article.questions || [];
+
+    /* Build a lowercase lookup map for definitions */
+    var defMap = {};
+    Object.keys(defs).forEach(function(k) {
+      defMap[k.toLowerCase()] = defs[k];
+    });
+
+    /* Vocabulary section */
+    var vocabHTML = "";
+    if (vocab.length > 0) {
+      vocabHTML += '<div class="mb-4">';
+      vocabHTML += '<h4 class="font-bold text-sm mb-2.5 flex items-center gap-2 text-gray-800 dark:text-gray-100">';
+      vocabHTML += '<span>\u{1F524}</span> Key Vocabulary</h4>';
+      vocabHTML += '<div class="space-y-2">';
+      vocab.forEach(function(v) {
+        var def = defMap[v.toLowerCase()] || "";
+        vocabHTML += '<div class="flex items-start gap-2.5">';
+        vocabHTML += '<span class="vocab-word text-xs font-bold px-2.5 py-1 rounded-md flex-shrink-0 mt-0.5">' + esc(v) + "</span>";
+        if (def) {
+          vocabHTML += '<span class="vocab-def text-xs leading-relaxed pt-0.5">' + esc(def) + "</span>";
+        }
+        vocabHTML += "</div>";
+      });
+      vocabHTML += "</div></div>";
+    }
+
+    /* Discussion questions section */
+    var qHTML = "";
+    if (questions.length > 0) {
+      qHTML += '<div class="discussion-box rounded-lg p-4 mt-4">';
+      qHTML += '<h4 class="font-bold text-sm mb-2 flex items-center gap-2 text-gray-800 dark:text-gray-100">';
+      qHTML += '<i class="fa-solid fa-comments" style="color:' + color + '"></i> Discussion Questions</h4>';
+      qHTML += '<ol class="list-decimal list-inside space-y-2 text-sm text-gray-700 dark:text-gray-300">';
+      questions.forEach(function(q) {
+        qHTML += '<li class="leading-relaxed">' + esc(q) + "</li>";
+      });
+      qHTML += "</ol></div>";
+    }
+
+    /* Card */
+    html += '<div class="insight-card rounded-xl p-5 mb-4 fade-up" style="--source-color:' + color + "; animation-delay:" + (i * 0.12) + 's">';
+
+    /* Source badge + Title */
+    html += '<div class="mb-3">';
+    html += '<div class="source-badge mb-2" style="background:' + color + '15; color:' + color + '; border:1px solid ' + color + '40">';
+    html += '<i class="' + icon + '"></i> ' + esc(article.source);
+    html += "</div>";
+    html += '<h3 class="text-base md:text-lg font-bold leading-snug text-gray-800 dark:text-gray-100">' + esc(article.title) + "</h3>";
+    if (article.description) {
+      html += '<p class="text-xs text-gray-400 dark:text-gray-500 mt-1 italic">' + esc(article.description) + "</p>";
+    }
+    html += "</div>";
+
+    /* Summary */
+    html += '<p class="text-sm md:text-base leading-relaxed text-gray-600 dark:text-gray-400 mb-3">' + esc(article.summary) + "</p>";
+
+    /* Vocab */
+    html += vocabHTML;
+
+    /* Questions */
+    html += qHTML;
+
+    /* Source link */
+    html += '<a href="' + esc(url) + '" target="_blank" rel="noopener" class="source-link inline-flex items-center gap-2 text-xs font-bold px-4 py-2 rounded-lg mt-4 no-underline">';
+    html += '<i class="fa-solid fa-arrow-up-right-from-square"></i> Read Full Article on ' + esc(article.source) + "</a>";
+
+    html += "</div>";
+  });
+
+  document.getElementById("results").innerHTML = html;
+}
+
+/* ===== UI HELPERS ===== */
+function showStatus(text) {
+  document.getElementById("statusArea").classList.remove("hidden");
+  document.getElementById("statusText").textContent = text;
+}
+function hideStatus() {
+  document.getElementById("statusArea").classList.add("hidden");
+}
+function showError(text) {
+  document.getElementById("errorArea").classList.remove("hidden");
+  document.getElementById("errorText").textContent = text;
+  document.getElementById("results").innerHTML = "";
+}
+function hideError() {
+  document.getElementById("errorArea").classList.add("hidden");
+}
+function resetBtn() {
+  isFetching = false;
+  var btn = document.getElementById("fetchBtn");
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Fetch &amp; Learn';
+}
+
+/* ===== POE EMBED API HANDLER ===== */
+if (window.Poe && window.Poe.registerHandler) {
+  window.Poe.registerHandler("article-handler", function(result) {
+    var msg = result.responses[0];
+
+    if (msg.status === "error") {
+      hideStatus();
+      showError(msg.statusText || "Failed to fetch articles. Please try again.");
+      resetBtn();
+      return;
+    }
+
+    if (msg.status === "incomplete") {
+      showStatus("AI is searching publications for articles\u2026");
+      return;
+    }
+
+    if (msg.status === "complete") {
+      try {
+        var content = msg.content.trim();
+
+        /* Strip markdown code fences if present */
+        content = content.replace(/^```(?:json)?\s*\n?/gm, "").replace(/\n?```\s*$/gm, "").trim();
+
+        /* Extract JSON array from surrounding text */
+        var startIdx = content.indexOf("[");
+        var endIdx = content.lastIndexOf("]");
+        if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+          content = content.substring(startIdx, endIdx + 1);
+        }
+
+        var articles = JSON.parse(content);
+        if (!Array.isArray(articles) || articles.length === 0) {
+          throw new Error("No articles returned");
+        }
+
+        hideStatus();
+        hideError();
+        renderInsights(articles);
+        resetBtn();
+      } catch (e) {
+        hideStatus();
+        showError("Could not parse article data. Please try again.");
+        resetBtn();
+      }
+    }
+  });
+}
+
+/* ===== MAIN FETCH ===== */
+async function doFetch() {
+  if (isFetching) return;
+
+  if (!window.Poe || !window.Poe.sendUserMessage) {
+    showError("This app requires the Poe platform. Please open it on poe.com to use it.");
+    return;
+  }
+
+  isFetching = true;
+  var btn = document.getElementById("fetchBtn");
+  btn.disabled = true;
+  btn.innerHTML = '<div class="w-4 h-4 border-2 border-navy border-t-transparent rounded-full animate-spin"></div> Searching\u2026';
+
+  hideError();
+  showStatus("Searching popular science & tech publications\u2026");
+  document.getElementById("results").innerHTML = renderSkeletons();
+
+  var custom = document.getElementById("customTopic").value.trim();
+  var topicLabel;
+  if (custom) {
+    topicLabel = custom;
+  } else if (selectedIndex >= 0 && selectedIndex < TOPICS.length) {
+    topicLabel = TOPICS[selectedIndex].label;
+  } else {
+    topicLabel = "technology";
+  }
+
+  var prompt = 'Search the web and find exactly 3 recent, real articles about "' + topicLabel + '" from popular science and technology publications. Strongly prefer these sources: Interesting Engineering, Science Daily, Ars Technica, MIT Technology Review, The Verge, Wired, New Scientist, IEEE Spectrum, Popular Science, TechCrunch, Live Science, or Phys.org.\n\n' +
+    "For each article return:\n" +
+    "- title: the exact article title\n" +
+    "- source: the publication name (e.g. Science Daily)\n" +
+    "- url: the full URL to the real article\n" +
+    "- summary: a 2-3 sentence summary in clear, simple English for intermediate ESL learners (B1-B2 level)\n" +
+    "- vocabulary: an array of exactly 4 key technical or academic English words from the article content\n" +
+    "- definitions: an object mapping each vocabulary word to a simple 1-sentence definition that an ESL student can understand\n" +
+    "- questions: an array of 3 discussion questions that encourage speaking practice related to the article\n" +
+    "- description: one short sentence summarizing the article\n\n" +
+    "CRITICAL: Return ONLY a valid JSON array. No markdown, no code fences, no explanation text before or after. Just the raw JSON array.\n" +
+    'Example format: [{"title":"...","source":"...","url":"https://...","summary":"...","vocabulary":["word1","word2","word3","word4"],"definitions":{"word1":"...","word2":"...","word3":"...","word4":"..."},"questions":["Q1?","Q2?","Q3?"],"description":"..."}]';
+
+  try {
+    await window.Poe.sendUserMessage("@Gemini-3-Flash " + prompt, {
+      handler: "article-handler",
+      stream: true,
+      openChat: false,
+      parameters: { web_search: true }
+    });
+  } catch (err) {
+    hideStatus();
+    var errMsg = "Failed to send request.";
+    if (err && err.errorType === "USER_REJECTED_CONFIRMATION") {
+      errMsg = "Message sending was cancelled.";
+    } else if (err && err.message) {
+      errMsg = err.message;
+    }
+    showError(errMsg);
+    resetBtn();
+  }
+}
+
+/* ===== EVENT LISTENERS ===== */
+document.getElementById("fetchBtn").addEventListener("click", doFetch);
+
+document.getElementById("customTopic").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") { doFetch(); }
+});
+
+document.getElementById("customTopic").addEventListener("input", function() {
+  if (this.value.trim()) {
+    document.querySelectorAll(".topic-pill").forEach(function(p) { p.classList.remove("active"); });
+    selectedIndex = -1;
+  } else {
+    var first = document.querySelector(".topic-pill");
+    if (first) {
+      first.classList.add("active");
+      selectedIndex = 0;
+    }
+  }
+});
+
+/* ===== INIT ===== */
+renderTopicPills();
+</script>
+</body>
+</html>
