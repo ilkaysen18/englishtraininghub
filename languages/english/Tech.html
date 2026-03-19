@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechPulse — Global Insights</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root {
+    --bg-primary: #0a0c10;
+    --bg-secondary: #0d1117;
+    --bg-card: #161b22;
+    --bg-card-hover: #1c2129;
+    --bg-badge: rgba(56, 189, 248, 0.08);
+    --border: #21262d;
+    --border-active: #30363d;
+    --text-primary: #e6edf3;
+    --text-secondary: #8b949e;
+    --text-muted: #545d68;
+    --accent-blue: #58a6ff;
+    --accent-green: #3fb950;
+    --accent-purple: #bc8cff;
+    --accent-orange: #d29922;
+    --accent-red: #f85149;
+    --accent-pink: #f778ba;
+    --accent-cyan: #39d2c0;
+    --accent-teal: #2dd4bf;
+    --glow-blue: rgba(88, 166, 255, 0.15);
+    --glow-green: rgba(63, 185, 80, 0.15);
+    --glow-purple: rgba(188, 140, 255, 0.15);
+    --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
+    --radius: 10px;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-sans: 'DM Sans', sans-serif;
+    --font-display: 'Playfair Display', serif;
+  }
+
+  html.light {
+    --bg-primary: #f0f2f5;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f6f8fa;
+    --bg-badge: rgba(9, 105, 218, 0.06);
+    --border: #d0d7de;
+    --border-active: #afb8c1;
+    --text-primary: #1f2328;
+    --text-secondary: #57606a;
+    --text-muted: #8b949e;
+    --accent-blue: #0969da;
+    --accent-green: #1a7f37;
+    --accent-purple: #8250df;
+    --accent-orange: #bf8700;
+    --accent-red: #cf222e;
+    --accent-pink: #bf3989;
+    --accent-cyan: #0891b2;
+    --accent-teal: #0d9488;
+    --glow-blue: rgba(9, 105, 218, 0.08);
+    --glow-green: rgba(26, 127, 55, 0.08);
+    --glow-purple: rgba(130, 80, 223, 0.08);
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 30% 20%, rgba(88,166,255,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(188,140,255,0.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 48px 0 32px;
+    text-align: center;
+    position: relative;
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-green);
+    background: rgba(63,185,80,0.08);
+    border: 1px solid rgba(63,185,80,0.2);
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    animation: fadeSlideDown 0.6s ease;
+  }
+
+  .header-badge .pulse {
+    width: 7px;
+    height: 7px;
+    background: var(--accent-green);
+    border-radius: 50%;
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(63,185,80,0.4); }
+    50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(63,185,80,0); }
+  }
+
+  .header h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-blue) 50%, var(--accent-purple) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: fadeSlideDown 0.6s ease 0.1s both;
+  }
+
+  .header p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-top: 12px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    animation: fadeSlideDown 0.6s ease 0.2s both;
+  }
+
+  .header-stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    animation: fadeSlideDown 0.6s ease 0.3s both;
+  }
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .stat span { color: var(--text-secondary); font-weight: 600; }
+
+  /* CATEGORY NAV */
+  .category-nav {
+    display: flex;
+    gap: 8px;
+    padding: 16px 0 24px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    animation: fadeSlideDown 0.6s ease 0.35s both;
+  }
+  .category-nav::-webkit-scrollbar { display: none; }
+
+  .nav-pill {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .nav-pill:hover {
+    border-color: var(--border-active);
+    color: var(--text-primary);
+    background: var(--bg-card-hover);
+  }
+
+  .nav-pill.active {
+    background: var(--accent-blue);
+    border-color: var(--accent-blue);
+    color: #fff;
+  }
+
+  html.light .nav-pill.active { color: #fff; }
+
+  /* SECTIONS */
+  .section {
+    margin-bottom: 36px;
+    animation: fadeSlideUp 0.5s ease both;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: var(--font-sans);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .section-count {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--bg-badge);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: auto;
+  }
+
+  /* ARTICLE CARDS */
+  .article {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    background: var(--bg-card);
+    overflow: hidden;
+    transition: all 0.25s ease;
+  }
+
+  .article:hover {
+    border-color: var(--border-active);
+    background: var(--bg-card-hover);
+  }
+
+  .article-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .article-indicator {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 9px;
+    transition: transform 0.3s ease;
+  }
+
+  .article.open .article-indicator {
+    transform: scale(1.5);
+  }
+
+  .article-title-wrap { flex: 1; min-width: 0; }
+
+  .article-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: color 0.2s;
+  }
+
+  .article:hover .article-title { color: var(--accent-blue); }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+
+  .article-source {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .article-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 8px;
+    color: var(--accent-blue);
+    background: var(--bg-badge);
+  }
+
+  .article-chevron {
+    color: var(--text-muted);
+    font-size: 12px;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .article.open .article-chevron {
+    transform: rotate(180deg);
+  }
+
+  .article-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s ease;
+  }
+
+  .article.open .article-body {
+    max-height: 600px;
+  }
+
+  .article-body-inner {
+    padding: 0 16px 16px 32px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .article-body-inner p { margin-bottom: 10px; }
+  .article-body-inner p:last-child { margin-bottom: 0; }
+
+  .article-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent-blue);
+    text-decoration: none;
+    margin-top: 8px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--bg-badge);
+    transition: background 0.2s;
+  }
+
+  .article-link:hover {
+    background: rgba(88,166,255,0.15);
+  }
+
+  /* CATEGORY COLORS */
+  .cat-ai .section-icon { background: var(--glow-blue); color: var(--accent-blue); }
+  .cat-ai .article-indicator { background: var(--accent-blue); }
+  .cat-semi .section-icon { background: var(--glow-purple); color: var(--accent-purple); }
+  .cat-semi .article-indicator { background: var(--accent-purple); }
+  .cat-space .section-icon { background: rgba(210,153,34,0.12); color: var(--accent-orange); }
+  .cat-space .article-indicator { background: var(--accent-orange); }
+  .cat-quantum .section-icon { background: rgba(57,210,192,0.12); color: var(--accent-cyan); }
+  .cat-quantum .article-indicator { background: var(--accent-cyan); }
+  .cat-bio .section-icon { background: var(--glow-green); color: var(--accent-green); }
+  .cat-bio .article-indicator { background: var(--accent-green); }
+  .cat-ev .section-icon { background: rgba(247,120,186,0.12); color: var(--accent-pink); }
+  .cat-ev .article-indicator { background: var(--accent-pink); }
+  .cat-cyber .section-icon { background: rgba(248,81,73,0.12); color: var(--accent-red); }
+  .cat-cyber .article-indicator { background: var(--accent-red); }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 32px 0 48px;
+    border-top: 1px solid var(--border);
+    margin-top: 16px;
+  }
+
+  .footer p {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--accent-blue); }
+
+  /* ANIMATIONS */
+  @keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .container { padding: 0 14px; }
+    .header { padding: 32px 0 24px; }
+    .header h1 { font-size: 2rem; }
+    .header-stats { gap: 16px; }
+    .article-header { padding: 12px 14px; }
+    .article-body-inner { padding: 0 14px 14px 28px; }
+    .section-header { gap: 10px; }
+    .section-icon { width: 32px; height: 32px; font-size: 14px; }
+  }
+
+  /* No results */
+  .no-results {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    display: none;
+  }
+
+  /* Search */
+  .search-bar {
+    position: relative;
+    margin-bottom: 8px;
+    animation: fadeSlideDown 0.6s ease 0.4s both;
+  }
+
+  .search-bar input {
+    width: 100%;
+    padding: 12px 16px 12px 42px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .search-bar input:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px var(--glow-blue);
+  }
+
+  .search-bar input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .search-bar .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 14px;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header class="header">
+    <div class="header-badge"><span class="pulse"></span> FEED</div>
+    <h1>TechPulse — Global Insights</h1>
+    <p>// short insights on the latest industry &amp; tech advancements</p>
+    <div class="header-stats">
+      <div class="stat"><i class="fa-solid fa-newspaper"></i> <span id="totalCount">0</span> insights</div>
+      <div class="stat"><i class="fa-solid fa-layer-group"></i> <span>7</span> categories</div>
+      <div class="stat"><i class="fa-solid fa-globe"></i> <span>25+</span> sources</div>
+      <div class="stat"><i class="fa-solid fa-calendar"></i> Mar 2026</div>
+    </div>
+  </header>
+
+  <div class="search-bar">
+    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    <input type="text" id="searchInput" placeholder="Search insights..." autocomplete="off">
+  </div>
+
+  <nav class="category-nav" id="categoryNav"></nav>
+
+  <main id="mainContent"></main>
+
+  <div class="no-results" id="noResults">
+    <i class="fa-solid fa-satellite-dish" style="font-size: 28px; margin-bottom: 12px; display: block;"></i>
+    No insights found matching your search.
+  </div>
+
+  <footer class="footer">
+    <p>Curated from global sources &middot; March 2026</p>
+    <div class="footer-links">
+      <a href="https://www.technologyreview.com" target="_blank" rel="noopener">MIT Tech Review</a>
+      <a href="https://www.deloitte.com" target="_blank" rel="noopener">Deloitte</a>
+      <a href="https://electrek.co" target="_blank" rel="noopener">Electrek</a>
+      <a href="https://www.sciencedaily.com" target="_blank" rel="noopener">ScienceDaily</a>
+      <a href="https://interestingengineering.com" target="_blank" rel="noopener">Interesting Eng.</a>
+    </div>
+    <p>💡 Brought to you by English Training Hub! © <span id="year"></span> — All Rights Reserved.</p>
+  </footer>
+
+</div>
+
+<script>
+// Auto-update year
+        document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+<script>
+const DATA = [
+  {
+    category: "ai",
+    label: "AI & Robotics",
+    icon: "fa-solid fa-robot",
+    articles: [
+      {
+        title: "China Launches \"Robot Schools\" to Train Humanoids for Industrial Work",
+        source: "Interesting Engineering",
+        tag: "China",
+        summary: "China has established dedicated training facilities for humanoid robots, teaching them industrial tasks through AI-driven simulation and real-world practice. These schools aim to mass-produce work-ready robots for factories, warehouses, and logistics, accelerating the country's push toward an automated industrial workforce.",
+        url: "https://interestingengineering.com/ai-robotics/china-robot-schools-to-train-humanoids"
+      },
+      {
+        title: "Boston Dynamics' Electric Atlas Ships to Hyundai & Google DeepMind",
+        source: "CES 2026 / Global X ETFs",
+        tag: "USA",
+        summary: "Boston Dynamics' electric Atlas humanoid — capable of lifting 110 lbs and adapting to dynamic environments — has entered production with all 2026 deployments fully committed. Fleets are shipping to Hyundai factories and Google DeepMind for AI foundation model research via their landmark collaboration on Gemini Robotics.",
+        url: "https://www.globalxetfs.com/articles/ces-2026-ai-and-robotics-shift-from-hype-to-deployment"
+      },
+      {
+        title: "NVIDIA Declares 'The ChatGPT Moment for Physical AI Is Here'",
+        source: "NVIDIA Newsroom",
+        tag: "Global",
+        summary: "NVIDIA released open physical AI models and expanded its Jetson robotics stack, enabling partners like Caterpillar, Franka Robotics, and LG to build next-gen robots. Jensen Huang proclaimed the era when \"machines begin to understand, reason, and act in the real world\" has officially arrived.",
+        url: "https://nvidianews.nvidia.com/news/nvidia-releases-new-physical-ai-models-as-global-partners-unveil-next-generation-robots"
+      },
+      {
+        title: "ABB × NVIDIA Close the Sim-to-Real Gap with 'RobotStudio HyperReality'",
+        source: "ABB / NVIDIA",
+        tag: "Europe",
+        summary: "ABB Robotics integrated NVIDIA's Omniverse simulation libraries into its platform, creating 'RobotStudio HyperReality' with claimed 99% correlation between simulated and real-world robot behavior. This dramatically reduces the time and cost of programming industrial robots.",
+        url: "https://www.deloitte.com/us/en/insights/topics/technology-management/tech-trends/2026/physical-ai-humanoid-robots.html"
+      },
+      {
+        title: "1X Opens Pre-Orders for NEO — A Consumer Humanoid Robot for the Home",
+        source: "Sidecar AI / CES 2026",
+        tag: "Norway",
+        summary: "Norwegian robotics startup 1X began accepting pre-orders for NEO, a general-purpose humanoid designed for safe home use. First customer deliveries are planned for 2026, marking a significant milestone in bringing humanoid robots from factory floors into everyday households.",
+        url: "https://sidecar.ai/blog/the-chatgpt-moment-for-physical-ai-is-here-robotics-takes-center-stage-at-ces-2026"
+      },
+      {
+        title: "Apple's AI-Powered Siri Overhaul Launches with Gemini Integration",
+        source: "IBM / Multiple Sources",
+        tag: "USA",
+        summary: "Apple officially debuted a completely reimagined Siri alongside iOS 26.4 — now powered by Google's 1.2 trillion parameter Gemini model running on Apple's Private Cloud Compute. The new Siri features on-screen awareness, seamless cross-app integration, and context-aware conversations.",
+        url: "https://www.ibm.com/think/news/ai-tech-trends-predictions-2026"
+      },
+      {
+        title: "AMI Labs Raises $1.03B in Largest European Seed Round for 'World Models'",
+        source: "Multiple Sources",
+        tag: "Europe",
+        summary: "Founded by Turing Award winner Yann LeCun, AMI Labs secured the largest seed round in European history to build 'world models' — an alternative AI architecture for robotics, healthcare, and manufacturing that aims to give machines a deeper understanding of the physical world.",
+        url: "https://medium.com/technologai/the-rise-of-ai-powered-robotics-how-2026-is-reshaping-manufacturing-and-automation-638d3122212d"
+      }
+    ]
+  },
+  {
+    category: "semi",
+    label: "Semiconductors",
+    icon: "fa-solid fa-microchip",
+    articles: [
+      {
+        title: "Semiconductor Industry on Track to Surpass $1 Trillion in 2026",
+        source: "Tom's Hardware / SIA",
+        tag: "Global",
+        summary: "After record 2025 revenues of $791.7B (+25.6% YoY), the global semiconductor industry is set to break $1 trillion in 2026. January 2026 sales hit $82.5B — up 46.1% from January 2025 — driven by insatiable AI chip demand and a memory supercycle. SEMI projects $2 trillion by 2035.",
+        url: "https://www.tomshardware.com/tech-industry/semiconductors/semiconductor-industry-on-track-to-hit-usd1-trillion-in-sales-in-2026-sia-predicts-bumper-forecast-follows-usd791-7-billion-haul-for-2025"
+      },
+      {
+        title: "Iran War Threatens Global Chip Supply Chains — $200B Wiped from Memory Giants",
+        source: "Bloomberg / CNBC",
+        tag: "Middle East",
+        summary: "As the U.S.-Israel-Iran conflict stretches into its third week, the semiconductor industry faces mounting supply chain threats. Over $200B has been wiped from SK Hynix and Samsung's combined value. Key risks include helium supply disruption (25%+ of global supply at risk) and surging energy costs impacting AI datacenters.",
+        url: "https://www.cnbc.com/2026/03/10/iran-war-semiconductor-memory-chip-impact.html"
+      },
+      {
+        title: "Memory Chip Supercycle: DDR5 Prices 4× Higher, HBM Market to Hit $54.6B",
+        source: "Bank of America / SK Hynix",
+        tag: "South Korea",
+        summary: "Bank of America calls 2026 a 'supercycle similar to the 1990s boom,' forecasting DRAM revenue surging 51% and NAND 45% YoY. Consumer DDR5 prices have quadrupled since late 2025, with a popular config reaching $700. The HBM market is expected to hit $54.6B (+58% YoY), led by HBM3E.",
+        url: "https://news.skhynix.com/2026-market-outlook-focus-on-the-hbm-led-memory-supercycle/"
+      },
+      {
+        title: "Rapidus Secures $1.7B from Japan for 2nm Chip Production",
+        source: "Deloitte / Multiple Sources",
+        tag: "Japan",
+        summary: "Japanese chipmaker Rapidus secured $1.7 billion in government funding to advance 2nm semiconductor production, part of Japan's strategic push to reclaim its position in cutting-edge chipmaking. Meanwhile, AMD and Meta struck a $100B AI deal including a 10% stock arrangement.",
+        url: "https://www.deloitte.com/us/en/insights/industry/technology/technology-media-telecom-outlooks/semiconductor-industry-outlook.html"
+      },
+      {
+        title: "NVIDIA Posts $130.5B Revenue — 114% Growth in a Single Fiscal Year",
+        source: "NVIDIA / Multiple Sources",
+        tag: "USA",
+        summary: "NVIDIA reported $130.5 billion in revenue for fiscal year 2025 (ending January 2026), reflecting staggering 114% year-over-year growth. The AI accelerator giant continues to dominate the data center GPU market as demand for AI training and inference infrastructure shows no signs of slowing.",
+        url: "https://www.deloitte.com/us/en/insights/industry/technology/technology-media-telecom-outlooks/semiconductor-industry-outlook.html"
+      }
+    ]
+  },
+  {
+    category: "quantum",
+    label: "Quantum Computing",
+    icon: "fa-solid fa-atom",
+    articles: [
+      {
+        title: "D-Wave Achieves Industry-First Scalable Cryogenic Qubit Control",
+        source: "Fast Company",
+        tag: "Canada",
+        summary: "D-Wave demonstrated scalable, on-chip cryogenic control for gate-model qubits — an industry first. This breakthrough overcomes a major bottleneck where adding qubits previously required proportional increases in control lines, space, and complexity, opening the door for commercially viable quantum computers.",
+        url: "https://www.fastcompany.com/91469364/d-wave-quantum-computing-first-major-breakthrough-of-2026-scalable-technology"
+      },
+      {
+        title: "Scientists Discover Potential 'Holy Grail' Triplet Superconductor",
+        source: "ScienceDaily",
+        tag: "Norway",
+        summary: "Norwegian researchers may have spotted a long-sought triplet superconductor in the alloy NbRe — a material that can transmit both electricity and electron spin with zero resistance. If verified, this could dramatically stabilize quantum computers while slashing their energy consumption, becoming a cornerstone of next-gen quantum tech.",
+        url: "https://www.sciencedaily.com/releases/2026/02/260221000252.htm"
+      },
+      {
+        title: "Majorana Qubits Successfully Read for the First Time",
+        source: "ScienceDaily / CSIC",
+        tag: "Spain",
+        summary: "Scientists achieved a crucial advance by reading information stored in Majorana qubits — particles prized for their built-in noise resistance. Using quantum capacitance, they confirmed millisecond-scale coherence in these protected qubits, bringing robust, error-resistant quantum computers significantly closer to reality.",
+        url: "https://www.sciencedaily.com/releases/2026/02/260216084525.htm"
+      },
+      {
+        title: "DOE Labs Achieve Ion-Trap Breakthrough with Cryoelectronics",
+        source: "Fermilab / MIT Lincoln Lab",
+        tag: "USA",
+        summary: "A Fermilab and MIT Lincoln Laboratory partnership used cryoelectronics to control ion traps in-vacuum, reducing thermal noise and improving sensitivity. This is a key step toward building large-scale ion-trap quantum computers under the DOE's national quantum research initiative.",
+        url: "https://news.fnal.gov/2026/02/doe-national-quantum-research-centers-reach-milestone-breakthrough-towards-building-scalable-quantum-computers"
+      },
+      {
+        title: "Turing Award Goes to Quantum Cryptography Pioneers Bennett & Brassard",
+        source: "CNN",
+        tag: "Global",
+        summary: "Charles Bennett and Gilles Brassard received the 2026 A.M. Turing Award for their BB84 quantum key distribution protocol. The ACM called their work 'a transformative moment in the history of computer science,' laying the foundation for quantum-secure communications used worldwide.",
+        url: "https://www.cnn.com/2026/03/18/science/quantum-key-cryptography-turing-award-winners"
+      },
+      {
+        title: "Quantum Tech Reaches Its 'Transistor Moment' — But Scaling Challenges Remain",
+        source: "ScienceDaily / University of Chicago",
+        tag: "USA",
+        summary: "Researchers say quantum technology has hit a turning point echoing the early days of modern computing. Functional quantum systems now exist, but scaling them into powerful machines requires major advances in engineering and manufacturing — much like the journey from the first transistor to the integrated circuit.",
+        url: "https://www.sciencedaily.com/releases/2026/01/260127010136.htm"
+      }
+    ]
+  },
+  {
+    category: "space",
+    label: "Space & Aerospace",
+    icon: "fa-solid fa-shuttle-space",
+    articles: [
+      {
+        title: "NASA's Artemis II Prepares for First Crewed Lunar Mission Since Apollo",
+        source: "Scientific American / NASA",
+        tag: "USA",
+        summary: "Artemis II — NASA's first crewed lunar mission in over 50 years — is targeting launch as early as 2026. The mission is part of a broader plan for sustained human presence on the Moon, involving commercial lunar landers, habitats, and scientific instruments from multiple private partners.",
+        url: "https://www.scientificamerican.com/article/these-are-the-most-exciting-space-science-events-for-2026/"
+      },
+      {
+        title: "Commercial Space Stations Race to Replace the Aging ISS",
+        source: "MIT Technology Review",
+        tag: "USA",
+        summary: "With the ISS expected to deorbit in 2031, NASA has awarded $500M+ to companies developing private stations. Vast Space plans to launch Haven-1 in early 2027, initially supporting 4-person crews for 10-day stays. The era of private orbital outposts promises much greater access to space.",
+        url: "https://www.technologyreview.com/2026/01/12/1130030/commercial-space-stations-2026-breakthrough-technology/"
+      },
+      {
+        title: "China's Chang'e 7 Targets the Lunar South Pole",
+        source: "Universe Magazine",
+        tag: "China",
+        summary: "China's Chang'e 7 mission will head to the lunar south pole in H2 2026, searching for water ice and establishing groundwork for a future permanent base. This ambitious mission represents a major step in China's independent lunar exploration program.",
+        url: "https://universemagazine.com/en/top-7-space-technologies-of-2026-that-could-change-the-future/"
+      },
+      {
+        title: "Japan's MMX Mission Launches to Collect Samples from Mars Moon Phobos",
+        source: "Scientific American",
+        tag: "Japan",
+        summary: "Japan's Martian Moons eXploration (MMX) mission is set to launch in 2026 for an unprecedented sample-return from Phobos. The mission could reveal whether Mars' moons formed from debris or were captured asteroids, offering insights into the early solar system.",
+        url: "https://www.scientificamerican.com/article/these-are-the-most-exciting-space-science-events-for-2026/"
+      },
+      {
+        title: "Orbital Refueling Technology Enters Final Testing Phase",
+        source: "Universe Magazine",
+        tag: "Global",
+        summary: "Spacecraft refueling in orbit — allowing lighter launches and longer missions — is entering final testing in 2026. The technology is critical for future deep-space missions and lunar infrastructure, and multiple companies are competing to demonstrate it first.",
+        url: "https://universemagazine.com/en/top-7-space-technologies-of-2026-that-could-change-the-future/"
+      },
+      {
+        title: "Venus Life Finder Mission Set to Seek Signs of Biology in Venus' Clouds",
+        source: "Scientific American",
+        tag: "USA",
+        summary: "A private collaboration between Rocket Lab and MIT will launch the Venus Life Finder in summer 2026, sending a probe to search for biosignatures in Venus' cloud layers. This ambitious mission could answer one of astrobiology's most tantalizing questions about habitability beyond Earth.",
+        url: "https://www.scientificamerican.com/article/these-are-the-most-exciting-space-science-events-for-2026/"
+      }
+    ]
+  },
+  {
+    category: "bio",
+    label: "Biotech & Health",
+    icon: "fa-solid fa-dna",
+    articles: [
+      {
+        title: "First-Ever Personalized Gene-Editing Treatment Given to a Baby",
+        source: "MIT Technology Review",
+        tag: "USA",
+        summary: "A baby named KJ became the first person to receive a personalized gene-editing treatment at seven months old. A clinical trial is now planned, and bespoke gene-editing drugs could be FDA-approved within years — ushering in a new era of truly individualized genetic medicine.",
+        url: "https://www.technologyreview.com/2026/01/16/1131363/three-technologies-shape-biotech-in-2026-gene-editing-embryo-scoring/"
+      },
+      {
+        title: "Beam Therapeutics Achieves First-Ever Clinical Genetic Correction of AATD",
+        source: "GlobeNewsWire / Beam",
+        tag: "USA",
+        summary: "Beam Therapeutics' BEAM-302 candidate demonstrated the first clinical genetic correction of a disease-causing mutation in alpha-1 antitrypsin deficiency (AATD), a disorder affecting the lungs and liver. This marks a pivotal proof-of-concept for precision base-editing therapies.",
+        url: "https://www.globenewswire.com/news-release/2026/03/18/3258381/0/en/Biotech-Breakthroughs-and-Strategic-Pivots-Fuel-Market-Momentum.html"
+      },
+      {
+        title: "In Vivo CAR-T Therapy Eliminates Need for Complex Cell Engineering",
+        source: "Atlantis Bioscience",
+        tag: "Global",
+        summary: "In vivo CAR-T therapy is emerging as a paradigm shift in cancer treatment, eliminating the costly ex vivo engineering steps of traditional CAR-T. By reprogramming a patient's T-cells inside the body, this approach could make life-saving cancer immunotherapy far more accessible and affordable.",
+        url: "https://www.atlantisbioscience.com/blog/2026-biotech-outlook-10-breakthrough-trends-scientists-need-to-watch/"
+      },
+      {
+        title: "MindMed's Optimized LSD Candidate Advances for Depression & Anxiety",
+        source: "GlobeNewsWire",
+        tag: "USA",
+        summary: "MindMed is progressing MM120 — an optimized form of LSD — through late-stage trials for generalized anxiety disorder and major depression after receiving FDA breakthrough therapy designation. The psychedelic medicine sector continues its push toward mainstream psychiatric treatment.",
+        url: "https://goinvest.com/2026/03/18/biotech-breakthroughs-and-strategic-pivots-fuel-market-momentum/"
+      },
+      {
+        title: "Illumina Launches Commercial Whole-Transcriptome Spatial Biology Platform",
+        source: "ZAGENO / Multiple Sources",
+        tag: "USA",
+        summary: "Illumina's 2026 launch of whole-transcriptome spatial technology with 'Connected Multiomics' software makes spatial biology accessible to the broader market. Researchers can now map gene expression directly onto tissue architecture at commercial scale — the single-cell omics market is estimated at $4.71B.",
+        url: "https://go.zageno.com/blog/whats-new-in-biotech-2026"
+      }
+    ]
+  },
+  {
+    category: "ev",
+    label: "EV & Energy",
+    icon: "fa-solid fa-bolt",
+    articles: [
+      {
+        title: "Solid-State EV Battery with 800-Mile Range Becomes Reality",
+        source: "Electrek",
+        tag: "Global",
+        summary: "Factorial Energy's Solstice platform achieves 450 Wh/kg — 80% higher energy density than traditional lithium-ion — and remains stable at 194°F. Mercedes drove a modified EQS over 745 miles on a single charge using Factorial's cells, calling them 'a true gamechanger.'",
+        url: "https://electrek.co/2026/03/17/solid-state-ev-batteries-with-800-miles-range-become-reality/"
+      },
+      {
+        title: "Chinese Scientists Develop Battery with 700+ Wh/kg and 1,000+ km Range",
+        source: "Electrek",
+        tag: "China",
+        summary: "Chinese Academy of Sciences researchers created a fluorine-based electrolyte system achieving over 700 Wh/kg energy density — roughly double current lithium-ion. EVs using this technology could deliver 1,000+ km range and are expected in mass production by end of 2026.",
+        url: "https://electrek.co/2026/02/27/china-discovers-breakthrough-ev-battery-with-1000-km-range/"
+      },
+      {
+        title: "CATL Begins Commercial Sodium-Ion Battery Production at Scale",
+        source: "MIT Technology Review",
+        tag: "China",
+        summary: "Battery giant CATL has started commercial production of sodium-ion batteries — made from abundant salt rather than scarce lithium. While not replacing Li-ion entirely, sodium batteries offer a cheaper, safer alternative for grid storage and affordable short-range EVs, with several Chinese manufacturers already producing vehicles equipped with them.",
+        url: "https://www.technologyreview.com/2026/02/02/1132042/whats-next-for-ev-batteries-in-2026/"
+      },
+      {
+        title: "Changan's 'Golden Bell' All-Solid-State Battery Promises 932-Mile Range",
+        source: "Electrek / Autoevolution",
+        tag: "China",
+        summary: "Changan Automobile will begin trial installations of its 'Golden Bell' all-solid-state battery before Q3 2026, boasting 400 Wh/kg energy density and over 1,500 km (932 miles) CLTC range. China is simultaneously preparing its first national standard for solid-state EV batteries.",
+        url: "https://www.autoevolution.com/news/what-s-next-in-2026-battery-and-ev-tech-263882.html"
+      },
+      {
+        title: "EV Batteries Built to Outlast the Cars — Longevity Data Surprises Industry",
+        source: "NPR",
+        tag: "USA",
+        summary: "Evidence from the oldest generation of EVs shows batteries lasting longer than expected. New LFP (lithium iron phosphate) chemistry lasts even longer. 'These batteries are built to outlast the cars,' says one analyst — easing a key consumer concern holding back EV adoption.",
+        url: "https://www.npr.org/2026/03/02/nx-s1-5706658/electric-vehicle-battery-lifespan"
+      }
+    ]
+  },
+  {
+    category: "cyber",
+    label: "Cybersecurity",
+    icon: "fa-solid fa-shield-halved",
+    articles: [
+      {
+        title: "US Military Used Anthropic's Claude AI During Iran Strike Operations",
+        source: "Cyber Security Review",
+        tag: "USA",
+        summary: "The US military reportedly employed Anthropic's Claude AI during a major strike against Iran for intelligence analysis, target identification, and running 'what-if' battle scenarios. This marks a significant escalation in the use of frontier AI systems for active military operations.",
+        url: "https://www.cybersecurity-review.com/news-march-2026/"
+      },
+      {
+        title: "Chrome's Gemini Panel Had High-Severity Vulnerability Allowing Code Injection",
+        source: "Cyber Security Review",
+        tag: "Global",
+        summary: "A high-severity vulnerability (CVE-2026-0628) in Chrome's Gemini 'Live in Chrome' panel allowed low-privilege extensions to inject code and inherit powerful capabilities including local file access, screenshots, and camera/microphone control. Google has issued a patch.",
+        url: "https://www.cybersecurity-review.com/news-march-2026/"
+      },
+      {
+        title: "Samsung Settles Over Smart TV Data Collection — ACR Consent Now Required",
+        source: "Morgan Lewis / Multiple Sources",
+        tag: "USA",
+        summary: "Samsung settled with the Texas AG over how its smart TVs collected and monetized viewing data via Automated Content Recognition. Samsung must now stop collecting ACR data from Texans without explicit consent and rewrite its privacy prompts — a landmark win for consumer privacy.",
+        url: "https://www.morganlewis.com/pubs/2026/03/cybersecurity-privacy-2026-enforcement-regulatory-trends"
+      },
+      {
+        title: "20 US States Now Enforce Consumer Privacy Laws — Universal Opt-Out Spreading",
+        source: "Wilson Sonsini / Multiple Sources",
+        tag: "USA",
+        summary: "Kentucky, Rhode Island, and Indiana joined the growing patchwork of state privacy laws, bringing the total to 20 states with consumer privacy statutes. Connecticut and Oregon now require websites to recognize Universal Opt-Out mechanisms for automated privacy preferences.",
+        url: "https://www.wsgr.com/en/insights/2026-year-in-preview-us-data-privacy-and-cybersecurity-predictions.html"
+      },
+      {
+        title: "AI Agents Face Growing Threat from Indirect Prompt Injection Attacks",
+        source: "Baker McKenzie / Multiple Sources",
+        tag: "Global",
+        summary: "As AI agents become more autonomous, they're increasingly vulnerable to indirect prompt injection (IDPI) attacks — where adversaries embed hidden instructions in web content that agents process. Security researchers warn this underexplored attack surface could be the next major cyber threat vector.",
+        url: "https://www.bakermckenzie.com/en/insight/publications/2026/01/whats-on-the-horizon-for-data-technology"
+      }
+    ]
+  }
+];
+
+// Render
+const mainContent = document.getElementById('mainContent');
+const categoryNav = document.getElementById('categoryNav');
+const searchInput = document.getElementById('searchInput');
+const noResults = document.getElementById('noResults');
+
+let activeCategory = 'all';
+
+function renderNav() {
+  const allCount = DATA.reduce((sum, cat) => sum + cat.articles.length, 0);
+  document.getElementById('totalCount').textContent = allCount;
+
+  let navHTML = '<button class="nav-pill active" data-cat="all">All</button>';
+  DATA.forEach(cat => {
+    navHTML += '<button class="nav-pill" data-cat="' + cat.category + '">' + cat.label + ' <span style="opacity:0.6">(' + cat.articles.length + ')</span></button>';
+  });
+  categoryNav.innerHTML = navHTML;
+
+  categoryNav.querySelectorAll('.nav-pill').forEach(pill => {
+    pill.addEventListener('click', function() {
+      categoryNav.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+      this.classList.add('active');
+      activeCategory = this.dataset.cat;
+      renderSections();
+    });
+  });
+}
+
+function renderSections() {
+  const query = searchInput.value.toLowerCase().trim();
+  let html = '';
+  let totalVisible = 0;
+
+  DATA.forEach((cat, catIdx) => {
+    if (activeCategory !== 'all' && activeCategory !== cat.category) return;
+
+    const filtered = cat.articles.filter(a => {
+      if (!query) return true;
+      return a.title.toLowerCase().includes(query) ||
+             a.summary.toLowerCase().includes(query) ||
+             a.source.toLowerCase().includes(query) ||
+             a.tag.toLowerCase().includes(query);
+    });
+
+    if (filtered.length === 0) return;
+    totalVisible += filtered.length;
+
+    html += '<section class="section cat-' + cat.category + '" style="animation-delay:' + (catIdx * 0.05) + 's">';
+    html += '<div class="section-header">';
+    html += '<div class="section-icon"><i class="' + cat.icon + '"></i></div>';
+    html += '<h2 class="section-title">' + cat.label + '</h2>';
+    html += '<span class="section-count">' + filtered.length + ' insight' + (filtered.length !== 1 ? 's' : '') + '</span>';
+    html += '</div>';
+
+    filtered.forEach((article, idx) => {
+      html += '<div class="article" data-idx="' + idx + '">';
+      html += '<div class="article-header" onclick="toggleArticle(this)">';
+      html += '<div class="article-indicator"></div>';
+      html += '<div class="article-title-wrap">';
+      html += '<div class="article-title">' + escapeHTML(article.title) + '</div>';
+      html += '<div class="article-meta">';
+      html += '<span class="article-source">' + escapeHTML(article.source) + '</span>';
+      html += '<span class="article-tag">' + escapeHTML(article.tag) + '</span>';
+      html += '</div></div>';
+      html += '<i class="fa-solid fa-chevron-down article-chevron"></i>';
+      html += '</div>';
+      html += '<div class="article-body"><div class="article-body-inner">';
+      html += '<p>' + escapeHTML(article.summary) + '</p>';
+      html += '<a class="article-link" href="' + escapeHTML(article.url) + '" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Read full article</a>';
+      html += '</div></div>';
+      html += '</div>';
+    });
+
+    html += '</section>';
+  });
+
+  mainContent.innerHTML = html;
+  noResults.style.display = totalVisible === 0 ? 'block' : 'none';
+}
+
+function toggleArticle(header) {
+  const article = header.parentElement;
+  const wasOpen = article.classList.contains('open');
+
+  // Close all others in same section
+  article.parentElement.querySelectorAll('.article.open').forEach(a => {
+    if (a !== article) a.classList.remove('open');
+  });
+
+  if (wasOpen) {
+    article.classList.remove('open');
+  } else {
+    article.classList.add('open');
+  }
+}
+
+function escapeHTML(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// Search
+let searchTimeout;
+searchInput.addEventListener('input', function() {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(renderSections, 200);
+});
+
+// Theme detection
+function applyTheme() {
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+    document.documentElement.classList.add('light');
+  } else {
+    document.documentElement.classList.remove('light');
+  }
+}
+applyTheme();
+window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', applyTheme);
+
+// Init
+renderNav();
+renderSections();
+</script>
+
+</body>
+</html>
