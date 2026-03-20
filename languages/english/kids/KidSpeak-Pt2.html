@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KidSpeak English - Part 2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F0EDFF;
+            --bg2: #FFFFFF;
+            --bg3: #E4DFFF;
+            --text: #1E1B4B;
+            --text2: #6B6999;
+            --text3: #9794C4;
+            --coral: #F472B6;
+            --teal: #14B8A6;
+            --gold: #F59E0B;
+            --purple: #8B5CF6;
+            --mint: #10B981;
+            --sky: #06B6D4;
+            --peach: #FB923C;
+            --rose: #E11D48;
+            --indigo: #6366F1;
+            --lime: #84CC16;
+            --shadow: 0 4px 18px rgba(30,27,75,0.10);
+            --shadow-lg: 0 8px 36px rgba(30,27,75,0.16);
+        }
+        .dark {
+            --bg: #0C0A1D;
+            --bg2: #1A1735;
+            --bg3: #252147;
+            --text: #EDE9FE;
+            --text2: #A5A2D0;
+            --text3: #6D6A9E;
+            --shadow: 0 4px 18px rgba(0,0,0,0.35);
+            --shadow-lg: 0 8px 36px rgba(0,0,0,0.45);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; overflow: hidden; }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        #app {
+            height: 100%; display: flex; flex-direction: column;
+            overflow: hidden; position: relative;
+        }
+        .bg-decor {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+            background:
+                radial-gradient(ellipse at 10% 15%, rgba(139,92,246,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 40%, rgba(6,182,212,0.07) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 90%, rgba(245,158,11,0.06) 0%, transparent 50%),
+                var(--bg);
+        }
+        .dark .bg-decor {
+            background:
+                radial-gradient(ellipse at 10% 15%, rgba(139,92,246,0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 40%, rgba(6,182,212,0.04) 0%, transparent 50%),
+                var(--bg);
+        }
+        .screen { display: none; flex-direction: column; height: 100%; position: relative; z-index: 1; }
+        .screen.active { display: flex; }
+
+        /* ===== HEADER ===== */
+        .app-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 18px; flex-shrink: 0;
+            background: var(--bg); border-bottom: 2.5px solid var(--bg3);
+            position: relative; z-index: 10;
+        }
+        .header-left { display: flex; align-items: center; gap: 10px; }
+        .mascot {
+            font-size: 34px;
+            animation: frogHop 2.4s ease-in-out infinite;
+        }
+        @keyframes frogHop {
+            0%,100% { transform: translateY(0) rotate(0deg); }
+            30% { transform: translateY(-6px) rotate(-3deg); }
+            60% { transform: translateY(0) rotate(2deg); }
+        }
+        .app-title-group { display: flex; flex-direction: column; line-height: 1.1; }
+        .app-title {
+            font-family: 'Chewy', cursive; font-size: 22px;
+            background: linear-gradient(135deg, var(--indigo), var(--sky));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .app-subtitle {
+            font-size: 11px; font-weight: 800; color: var(--purple);
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+        .header-stats { display: flex; align-items: center; gap: 10px; }
+        .stat-pill {
+            display: flex; align-items: center; gap: 4px;
+            background: var(--bg3); padding: 5px 11px; border-radius: 20px;
+            font-weight: 900; font-size: 13px; color: var(--text);
+        }
+        .stat-pill .icon { font-size: 16px; }
+
+        /* ===== HOME SCREEN ===== */
+        .home-scroll { flex: 1; overflow-y: auto; padding: 16px 0 40px; }
+        .progress-section { padding: 0 20px; margin-bottom: 20px; }
+        .progress-label {
+            font-weight: 900; font-size: 12px; color: var(--text3);
+            text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;
+        }
+        .progress-track {
+            height: 18px; background: var(--bg3); border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill-bar {
+            height: 100%; border-radius: 10px;
+            background: linear-gradient(90deg, var(--indigo), var(--sky));
+            transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+            display: flex; align-items: center; justify-content: flex-end;
+            padding-right: 8px; min-width: 34px;
+        }
+        .progress-fill-bar span { font-size: 10px; font-weight: 900; color: #fff; }
+
+        /* Lesson Path */
+        .lesson-path {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 10px; padding: 0 20px; position: relative;
+        }
+        .lesson-path::before {
+            content: ''; position: absolute; top: 44px; bottom: 44px;
+            left: 50%; width: 4px; transform: translateX(-50%);
+            background: repeating-linear-gradient(to bottom, var(--bg3) 0, var(--bg3) 8px, transparent 8px, transparent 16px);
+            border-radius: 2px; z-index: 0;
+        }
+        .path-node {
+            display: flex; flex-direction: column; align-items: center;
+            position: relative; z-index: 1; width: 100%;
+            animation: nodeIn 0.45s ease-out both;
+        }
+        .path-node:nth-child(1) { animation-delay:0.05s; }
+        .path-node:nth-child(2) { animation-delay:0.1s; align-self:flex-end; padding-right:14%; }
+        .path-node:nth-child(3) { animation-delay:0.15s; align-self:flex-start; padding-left:14%; }
+        .path-node:nth-child(4) { animation-delay:0.2s; }
+        .path-node:nth-child(5) { animation-delay:0.25s; align-self:flex-end; padding-right:14%; }
+        .path-node:nth-child(6) { animation-delay:0.3s; align-self:flex-start; padding-left:14%; }
+        .path-node:nth-child(7) { animation-delay:0.35s; }
+        .path-node:nth-child(8) { animation-delay:0.4s; align-self:flex-end; padding-right:14%; }
+        @keyframes nodeIn {
+            from { opacity:0; transform: translateY(18px) scale(0.8); }
+            to { opacity:1; transform: translateY(0) scale(1); }
+        }
+        .node-btn {
+            width: 96px; height: 96px; border-radius: 50%;
+            border: 5px solid #fff; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 42px; position: relative;
+            box-shadow: var(--shadow), inset 0 -4px 0 rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .dark .node-btn { border-color: var(--bg2); }
+        .node-btn:hover { transform: scale(1.09); box-shadow: var(--shadow-lg); }
+        .node-btn:active { transform: scale(0.94); }
+        .node-btn.locked {
+            filter: grayscale(1) brightness(0.65); opacity: 0.45; cursor: not-allowed;
+        }
+        .node-btn.locked:hover { transform: scale(1); box-shadow: var(--shadow); }
+        .node-lock {
+            position: absolute; font-size: 26px;
+            top: 50%; left: 50%; transform: translate(-50%,-50%);
+            filter: none; z-index: 2;
+        }
+        .node-btn.locked .node-emoji { opacity: 0.25; }
+        .node-check {
+            position: absolute; bottom: -3px; right: -3px;
+            width: 30px; height: 30px; border-radius: 50%;
+            background: var(--mint); border: 3px solid #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 15px; color: #fff; font-weight: 900;
+            box-shadow: 0 2px 8px rgba(16,185,129,0.4);
+        }
+        .dark .node-check { border-color: var(--bg2); }
+        .node-stars { display: flex; gap: 1px; margin-top: 3px; font-size: 14px; }
+        .node-label {
+            font-weight: 800; font-size: 13px; color: var(--text);
+            margin-top: 5px; text-align: center;
+        }
+        .path-footer { text-align: center; padding: 28px 20px 16px; }
+        .path-footer-text {
+            font-family: 'Chewy', cursive; font-size: 26px;
+            background: linear-gradient(135deg, var(--purple), var(--sky));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .path-footer-sub { color: var(--text3); font-weight: 700; font-size: 13px; margin-top: 3px; }
+
+        /* ===== LEARN SCREEN ===== */
+        .learn-header {
+            display: flex; align-items: center; gap: 12px;
+            padding: 14px 18px; flex-shrink: 0;
+            background: var(--bg); border-bottom: 2.5px solid var(--bg3);
+        }
+        .btn-back {
+            width: 38px; height: 38px; border-radius: 50%;
+            background: var(--bg2); border: 2px solid var(--bg3);
+            cursor: pointer; display: flex; align-items: center;
+            justify-content: center; font-size: 18px; color: var(--text);
+            transition: all 0.2s;
+        }
+        .btn-back:hover { background: var(--bg3); }
+        .learn-title {
+            font-family: 'Chewy', cursive; font-size: 18px; color: var(--text); flex: 1;
+        }
+        .learn-body {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 20px; overflow-y: auto;
+        }
+        .flashcard {
+            width: 100%; max-width: 330px;
+            background: var(--bg2); border-radius: 26px;
+            padding: 32px 24px; text-align: center;
+            box-shadow: var(--shadow-lg);
+            animation: cardSlide 0.35s ease-out;
+            position: relative; overflow: hidden;
+        }
+        .flashcard::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+            border-radius: 26px 26px 0 0;
+        }
+        @keyframes cardSlide {
+            from { opacity: 0; transform: translateX(40px) scale(0.95); }
+            to { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        .flashcard-emoji { font-size: 88px; margin-bottom: 12px; line-height: 1.2; }
+        .flashcard-word {
+            font-family: 'Chewy', cursive; font-size: 34px;
+            color: var(--text); margin-bottom: 10px;
+        }
+        .flashcard-sentence {
+            font-size: 17px; font-weight: 700; color: var(--text2);
+            background: var(--bg3); padding: 10px 18px; border-radius: 14px;
+            display: inline-block;
+        }
+        .flashcard-counter {
+            font-size: 12px; font-weight: 800; color: var(--text3);
+            text-transform: uppercase; letter-spacing: 1.5px; margin-top: 14px;
+        }
+        .learn-actions {
+            padding: 16px 20px; flex-shrink: 0; display: flex; gap: 10px;
+        }
+        .btn-primary {
+            flex: 1; padding: 15px; border: none; border-radius: 16px;
+            font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 800;
+            color: #fff; cursor: pointer; transition: all 0.2s;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.08); }
+        .btn-primary:active { transform: translateY(0); }
+        .btn-start { background: linear-gradient(135deg, var(--mint), var(--teal)); box-shadow: 0 4px 14px rgba(16,185,129,0.3); }
+        .btn-next-card { background: linear-gradient(135deg, var(--indigo), var(--purple)); box-shadow: 0 4px 14px rgba(99,102,241,0.3); }
+
+        /* ===== EXERCISE SCREEN ===== */
+        .exercise-header {
+            display: flex; align-items: center; gap: 12px;
+            padding: 14px 18px; flex-shrink: 0;
+            background: var(--bg); border-bottom: 2.5px solid var(--bg3);
+        }
+        .exercise-progress { flex: 1; display: flex; gap: 5px; align-items: center; }
+        .ex-dot {
+            flex: 1; height: 7px; border-radius: 4px;
+            background: var(--bg3); transition: background 0.3s;
+        }
+        .ex-dot.done { background: var(--mint); }
+        .ex-dot.current { background: var(--gold); }
+        .exercise-body {
+            flex: 1; display: flex; flex-direction: column;
+            padding: 20px; overflow-y: auto; gap: 16px;
+            align-items: center;
+        }
+        .exercise-instruction { text-align: center; width: 100%; }
+        .exercise-type-badge {
+            display: inline-block; font-size: 11px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            color: var(--purple); margin-bottom: 4px;
+        }
+        .exercise-prompt {
+            font-family: 'Chewy', cursive; font-size: 24px;
+            color: var(--text); line-height: 1.3; text-align: center;
+        }
+        .exercise-picture {
+            font-size: 76px; text-align: center; margin: 4px 0;
+            animation: picBounce 0.4s ease-out;
+        }
+        @keyframes picBounce {
+            0% { transform: scale(0) rotate(-15deg); }
+            60% { transform: scale(1.1) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        /* Options Grid */
+        .options-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 12px; max-width: 350px; width: 100%;
+        }
+        .option-card {
+            background: var(--bg2); border: 3px solid var(--bg3);
+            border-radius: 18px; padding: 18px 10px; text-align: center;
+            cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow);
+        }
+        .option-card:hover { border-color: var(--indigo); transform: translateY(-2px); }
+        .option-card:active { transform: scale(0.96); }
+        .option-card .opt-emoji { font-size: 48px; margin-bottom: 2px; }
+        .option-card .opt-label { font-size: 14px; font-weight: 800; color: var(--text2); }
+        .option-card.correct {
+            border-color: var(--mint); background: rgba(16,185,129,0.1);
+            animation: correctPop 0.4s ease-out;
+        }
+        .option-card.wrong {
+            border-color: var(--rose); background: rgba(225,29,72,0.08);
+            animation: wrongShake 0.4s ease-out;
+        }
+        @keyframes correctPop {
+            0% { transform: scale(1); } 40% { transform: scale(1.08); } 100% { transform: scale(1); }
+        }
+        @keyframes wrongShake {
+            0%,100% { transform: translateX(0); }
+            20%,60% { transform: translateX(-5px); }
+            40%,80% { transform: translateX(5px); }
+        }
+
+        /* Fill Blank */
+        .sentence-display {
+            text-align: center; padding: 14px 18px;
+            background: var(--bg2); border-radius: 18px;
+            box-shadow: var(--shadow); width: 100%; max-width: 380px;
+        }
+        .sentence-text {
+            font-size: 22px; font-weight: 800; color: var(--text); line-height: 1.6;
+        }
+        .blank-slot {
+            display: inline-block; min-width: 70px;
+            border-bottom: 3px dashed var(--gold);
+            color: var(--gold); margin: 0 3px; padding: 1px 6px;
+            font-family: 'Chewy', cursive; font-size: 22px;
+        }
+        .blank-slot.filled {
+            border-bottom-style: solid; border-color: var(--indigo); color: var(--indigo);
+        }
+        .word-options {
+            display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+        }
+        .word-opt {
+            padding: 12px 24px; border-radius: 14px;
+            background: var(--bg2); border: 3px solid var(--bg3);
+            font-size: 17px; font-weight: 800; color: var(--text);
+            cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow);
+        }
+        .word-opt:hover { border-color: var(--indigo); transform: translateY(-2px); }
+        .word-opt:active { transform: scale(0.96); }
+        .word-opt.correct { border-color: var(--mint); background: rgba(16,185,129,0.1); color: var(--mint); }
+        .word-opt.wrong { border-color: var(--rose); background: rgba(225,29,72,0.08); color: var(--rose); animation: wrongShake 0.4s; }
+        .word-opt.disabled { pointer-events: none; opacity: 0.45; }
+
+        /* Build Sentence */
+        .build-area {
+            background: var(--bg2); border-radius: 18px;
+            padding: 14px; min-height: 58px; width: 100%; max-width: 380px;
+            display: flex; flex-wrap: wrap; gap: 7px;
+            align-items: center; justify-content: center;
+            box-shadow: var(--shadow); border: 3px dashed var(--bg3);
+            transition: border-color 0.3s;
+        }
+        .build-area.has-words { border-style: solid; border-color: var(--indigo); }
+        .build-area.correct-build { border-color: var(--mint); background: rgba(16,185,129,0.06); }
+        .build-area.wrong-build { border-color: var(--rose); animation: wrongShake 0.4s; }
+        .build-word {
+            padding: 8px 16px; border-radius: 12px;
+            font-size: 17px; font-weight: 800; color: var(--text); cursor: pointer;
+            transition: all 0.15s;
+        }
+        .build-word.placed {
+            background: var(--indigo); color: #fff;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.3);
+        }
+        .tile-bank {
+            display: flex; flex-wrap: wrap; gap: 9px; justify-content: center;
+        }
+        .tile-word {
+            padding: 11px 20px; border-radius: 14px;
+            background: var(--bg2); border: 3px solid var(--bg3);
+            font-size: 17px; font-weight: 800; color: var(--text);
+            cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow);
+        }
+        .tile-word:hover { border-color: var(--gold); transform: translateY(-2px); }
+        .tile-word:active { transform: scale(0.95); }
+        .tile-word.used { opacity: 0.25; pointer-events: none; transform: scale(0.9); }
+        .tile-word.wrong-tile { animation: wrongShake 0.3s; border-color: var(--rose); }
+
+        /* Pick Sentence */
+        .sentence-options {
+            display: flex; flex-direction: column; gap: 9px;
+            max-width: 380px; width: 100%;
+        }
+        .sentence-opt {
+            padding: 14px 18px; border-radius: 14px;
+            background: var(--bg2); border: 3px solid var(--bg3);
+            font-size: 17px; font-weight: 700; color: var(--text);
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: var(--shadow); text-align: left;
+        }
+        .sentence-opt:hover { border-color: var(--indigo); transform: translateY(-2px); }
+        .sentence-opt:active { transform: scale(0.98); }
+        .sentence-opt.correct { border-color: var(--mint); background: rgba(16,185,129,0.1); animation: correctPop 0.4s; }
+        .sentence-opt.wrong { border-color: var(--rose); background: rgba(225,29,72,0.08); animation: wrongShake 0.4s; }
+
+        /* Toast */
+        .feedback-toast {
+            position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+            padding: 10px 24px; border-radius: 18px;
+            font-weight: 800; font-size: 15px; color: #fff;
+            z-index: 100; animation: toastIn 0.25s ease-out, toastOut 0.25s ease-in 0.7s forwards;
+            white-space: nowrap;
+        }
+        .feedback-toast.good { background: var(--mint); box-shadow: 0 4px 18px rgba(16,185,129,0.4); }
+        .feedback-toast.bad { background: var(--rose); box-shadow: 0 4px 18px rgba(225,29,72,0.35); }
+        @keyframes toastIn { from { opacity:0; transform: translateX(-50%) translateY(16px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
+        @keyframes toastOut { to { opacity:0; transform: translateX(-50%) translateY(-8px); } }
+
+        /* ===== COMPLETE SCREEN ===== */
+        .complete-body {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 20px; text-align: center; overflow-y: auto;
+        }
+        .complete-mascot {
+            font-size: 76px; animation: celebBounce 0.6s ease-out; margin-bottom: 6px;
+        }
+        @keyframes celebBounce {
+            0% { transform: scale(0) rotate(-25deg); }
+            55% { transform: scale(1.2) rotate(8deg); }
+            100% { transform: scale(1) rotate(0); }
+        }
+        .complete-title {
+            font-family: 'Chewy', cursive; font-size: 34px; margin-bottom: 6px;
+        }
+        .complete-sub {
+            font-size: 15px; font-weight: 700; color: var(--text2); margin-bottom: 22px;
+        }
+        .stars-display { font-size: 44px; margin-bottom: 28px; letter-spacing: 6px; }
+        .star-earned { animation: starPop 0.5s ease-out both; display: inline-block; }
+        .star-earned:nth-child(1) { animation-delay: 0.3s; }
+        .star-earned:nth-child(2) { animation-delay: 0.5s; }
+        .star-earned:nth-child(3) { animation-delay: 0.7s; }
+        @keyframes starPop {
+            0% { transform: scale(0) rotate(-90deg); opacity: 0; }
+            60% { transform: scale(1.3) rotate(12deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0); opacity: 1; }
+        }
+        .complete-actions { display: flex; gap: 10px; width: 100%; max-width: 350px; }
+        .btn-home {
+            flex: 1; padding: 14px; border: 3px solid var(--bg3);
+            border-radius: 16px; background: var(--bg2);
+            font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800;
+            color: var(--text); cursor: pointer; transition: all 0.2s;
+        }
+        .btn-home:hover { border-color: var(--indigo); }
+        .btn-continue {
+            flex: 1; padding: 14px; border: none; border-radius: 16px;
+            background: linear-gradient(135deg, var(--indigo), var(--purple));
+            font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800;
+            color: #fff; cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+        }
+        .btn-continue:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+        /* Confetti */
+        .confetti-piece {
+            position: fixed; top: -14px; width: 10px; height: 14px;
+            border-radius: 2px; z-index: 200; pointer-events: none;
+            animation: confFall 2.6s linear forwards;
+        }
+        @keyframes confFall {
+            0% { transform: translateY(0) rotate(0); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(680deg); opacity: 0; }
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 300; backdrop-filter: blur(4px); animation: fadeIn 0.2s;
+        }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+        .modal-box {
+            background: var(--bg2); border-radius: 26px;
+            padding: 32px 24px; max-width: 320px; width: 88%;
+            text-align: center; box-shadow: var(--shadow-lg);
+            animation: modalPop 0.3s ease-out;
+        }
+        @keyframes modalPop {
+            from { transform: scale(0.85); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-icon { font-size: 52px; margin-bottom: 10px; }
+        .modal-title { font-family: 'Chewy', cursive; font-size: 22px; color: var(--text); margin-bottom: 6px; }
+        .modal-msg { font-size: 14px; font-weight: 600; color: var(--text2); margin-bottom: 18px; line-height: 1.5; }
+        .modal-btn {
+            padding: 12px 32px; border: none; border-radius: 14px;
+            background: linear-gradient(135deg, var(--indigo), var(--purple));
+            color: #fff; font-family: 'Nunito', sans-serif; font-size: 15px;
+            font-weight: 800; cursor: pointer; transition: all 0.2s;
+        }
+        .modal-btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
+
+        /* Responsive */
+        @media (max-width: 380px) {
+            .app-title { font-size: 19px; }
+            .node-btn { width: 80px; height: 80px; font-size: 34px; }
+            .exercise-prompt { font-size: 20px; }
+            .flashcard-emoji { font-size: 68px; }
+            .flashcard-word { font-size: 28px; }
+            .option-card .opt-emoji { font-size: 38px; }
+            .path-node:nth-child(2),
+            .path-node:nth-child(5),
+            .path-node:nth-child(8) { padding-right: 8%; }
+            .path-node:nth-child(3),
+            .path-node:nth-child(6) { padding-left: 8%; }
+        }
+        input, button, select, textarea { font-size: 16px; }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="bg-decor"></div>
+
+    <!-- HOME -->
+    <div id="home-screen" class="screen active">
+        <div class="app-header">
+            <div class="header-left">
+                <div class="mascot">🐸</div>
+                <div class="app-title-group">
+                    <div class="app-title">KidSpeak</div>
+                    <div class="app-subtitle">Part Two</div>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="stat-pill"><span class="icon">⭐</span><span id="total-stars">0</span></div>
+                <div class="stat-pill"><span class="icon">🔥</span><span id="streak">0</span></div>
+            </div>
+        </div>
+        <div class="home-scroll">
+            <div class="progress-section">
+                <div class="progress-label">Part 2 Progress</div>
+                <div class="progress-track">
+                    <div class="progress-fill-bar" id="home-progress" style="width:0%"><span>0%</span></div>
+                </div>
+            </div>
+            <div class="lesson-path" id="lesson-path"></div>
+            <div class="path-footer">
+                <div class="path-footer-text">You're Amazing!</div>
+                <div class="path-footer-sub">more adventures coming soon 🐸</div>
+                <div class="path-footer-sub">💡 Brought to you by English Training Hub! © <span id="year"></span> — All Rights Reserved.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEARN -->
+    <div id="learn-screen" class="screen">
+        <div class="learn-header">
+            <button class="btn-back" id="learn-back">←</button>
+            <div class="learn-title" id="learn-title">New Words</div>
+        </div>
+        <div class="learn-body" id="learn-body"></div>
+        <div class="learn-actions" id="learn-actions"></div>
+    </div>
+
+    <!-- EXERCISE -->
+    <div id="exercise-screen" class="screen">
+        <div class="exercise-header">
+            <button class="btn-back" id="exercise-back">✕</button>
+            <div class="exercise-progress" id="exercise-dots"></div>
+        </div>
+        <div class="exercise-body" id="exercise-body"></div>
+    </div>
+
+    <!-- COMPLETE -->
+    <div id="complete-screen" class="screen">
+        <div class="complete-body" id="complete-body"></div>
+    </div>
+</div>
+
+<script>
+/* Dark Mode */
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add('dark');
+}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    document.documentElement.classList.toggle('dark', e.matches);
+});
+
+/* ===== LESSON DATA — 8 ALL-NEW TOPICS ===== */
+var LESSONS = [
+    {
+        id: 1, theme: 'house', title: 'My House', emoji: '🏠',
+        colors: ['#FB923C','#FDBA74'],
+        vocab: [
+            { emoji: '🛏️', word: 'bed', sentence: 'This is my bed.' },
+            { emoji: '🪑', word: 'chair', sentence: 'I sit on a chair.' },
+            { emoji: '🚪', word: 'door', sentence: 'I open the door.' },
+            { emoji: '🛋️', word: 'sofa', sentence: 'I like my sofa.' },
+            { emoji: '📺', word: 'TV', sentence: 'I watch TV.' },
+            { emoji: '💡', word: 'lamp', sentence: 'I have a lamp.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'This is my bed.', correct: 2, options: [
+                { emoji: '🪑', label: 'chair' }, { emoji: '🚪', label: 'door' }, { emoji: '🛏️', label: 'bed' }, { emoji: '📺', label: 'TV' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '🚪', template: ['I','_','the door.'], correct: 'open', options: ['open','sit','like'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '📺', words: ['I','watch','TV.'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '🛋️', correct: 'I like my sofa.', options: ['I like my sofa.','I open the door.','I watch TV.'] },
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I have a lamp.', correct: 1, options: [
+                { emoji: '🛏️', label: 'bed' }, { emoji: '💡', label: 'lamp' }, { emoji: '🪑', label: 'chair' }, { emoji: '🛋️', label: 'sofa' }
+            ]}
+        ]
+    },
+    {
+        id: 2, theme: 'garden', title: 'In the Garden', emoji: '🌿',
+        colors: ['#10B981','#6EE7B7'],
+        vocab: [
+            { emoji: '🌸', word: 'flower', sentence: 'I see a flower.' },
+            { emoji: '🌳', word: 'tree', sentence: 'It is a big tree.' },
+            { emoji: '🐛', word: 'bug', sentence: 'I see a bug.' },
+            { emoji: '🦋', word: 'butterfly', sentence: 'I like butterflies.' },
+            { emoji: '🐝', word: 'bee', sentence: 'It is a bee.' },
+            { emoji: '🌻', word: 'sunflower', sentence: 'I like sunflowers.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I see a flower.', correct: 0, options: [
+                { emoji: '🌸', label: 'flower' }, { emoji: '🌳', label: 'tree' }, { emoji: '🐝', label: 'bee' }, { emoji: '🐛', label: 'bug' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '🌳', template: ['It','_','a big tree.'], correct: 'is', options: ['is','am','see'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '🦋', words: ['I','like','butterflies.'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '🐝', correct: 'It is a bee.', options: ['It is a bee.','I see a flower.','I like sunflowers.'] },
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I like sunflowers.', correct: 3, options: [
+                { emoji: '🐛', label: 'bug' }, { emoji: '🌸', label: 'flower' }, { emoji: '🌳', label: 'tree' }, { emoji: '🌻', label: 'sunflower' }
+            ]}
+        ]
+    },
+    {
+        id: 3, theme: 'clothes', title: 'Getting Dressed', emoji: '👕',
+        colors: ['#06B6D4','#67E8F9'],
+        vocab: [
+            { emoji: '👕', word: 'shirt', sentence: 'I wear a shirt.' },
+            { emoji: '👖', word: 'pants', sentence: 'I put on pants.' },
+            { emoji: '👟', word: 'shoes', sentence: 'These are my shoes.' },
+            { emoji: '🧢', word: 'hat', sentence: 'I have a hat.' },
+            { emoji: '🧤', word: 'gloves', sentence: 'I wear gloves.' },
+            { emoji: '🧣', word: 'scarf', sentence: 'I have a scarf.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I wear a shirt.', correct: 1, options: [
+                { emoji: '👖', label: 'pants' }, { emoji: '👕', label: 'shirt' }, { emoji: '🧢', label: 'hat' }, { emoji: '🧤', label: 'gloves' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '👖', template: ['I','put','_','pants.'], correct: 'on', options: ['on','in','at'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '🧢', words: ['I','have','a','hat.'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '👟', correct: 'These are my shoes.', options: ['These are my shoes.','I wear a shirt.','I have a scarf.'] },
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I have a scarf.', correct: 2, options: [
+                { emoji: '👟', label: 'shoes' }, { emoji: '🧢', label: 'hat' }, { emoji: '🧣', label: 'scarf' }, { emoji: '👕', label: 'shirt' }
+            ]}
+        ]
+    },
+    {
+        id: 4, theme: 'vehicles', title: 'On the Go', emoji: '🚌',
+        colors: ['#EF4444','#FCA5A5'],
+        vocab: [
+            { emoji: '🚗', word: 'car', sentence: 'I ride in a car.' },
+            { emoji: '🚌', word: 'bus', sentence: 'I take the bus.' },
+            { emoji: '🚲', word: 'bike', sentence: 'I ride a bike.' },
+            { emoji: '✈️', word: 'plane', sentence: 'I see a plane.' },
+            { emoji: '🚂', word: 'train', sentence: 'I like trains.' },
+            { emoji: '🛴', word: 'scooter', sentence: 'I have a scooter.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I ride a bike.', correct: 3, options: [
+                { emoji: '🚗', label: 'car' }, { emoji: '🚌', label: 'bus' }, { emoji: '✈️', label: 'plane' }, { emoji: '🚲', label: 'bike' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '🚌', template: ['I','_','the bus.'], correct: 'take', options: ['take','ride','see'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '✈️', words: ['I','see','a','plane.'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '🚂', correct: 'I like trains.', options: ['I like trains.','I ride a bike.','I take the bus.'] },
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I have a scooter.', correct: 0, options: [
+                { emoji: '🛴', label: 'scooter' }, { emoji: '🚗', label: 'car' }, { emoji: '🚂', label: 'train' }, { emoji: '🚲', label: 'bike' }
+            ]}
+        ]
+    },
+    {
+        id: 5, theme: 'meals', title: 'Meal Time', emoji: '🍽️',
+        colors: ['#F59E0B','#FDE68A'],
+        vocab: [
+            { emoji: '🥣', word: 'cereal', sentence: 'I eat cereal.' },
+            { emoji: '🥤', word: 'juice', sentence: 'I drink juice.' },
+            { emoji: '🥪', word: 'sandwich', sentence: 'I like sandwiches.' },
+            { emoji: '🥛', word: 'milk', sentence: 'I drink milk.' },
+            { emoji: '🍓', word: 'strawberry', sentence: 'I like strawberries.' },
+            { emoji: '🧁', word: 'cupcake', sentence: 'I want a cupcake.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I eat cereal.', correct: 2, options: [
+                { emoji: '🥪', label: 'sandwich' }, { emoji: '🧁', label: 'cupcake' }, { emoji: '🥣', label: 'cereal' }, { emoji: '🍓', label: 'strawberry' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '🥤', template: ['I','_','juice.'], correct: 'drink', options: ['drink','eat','want'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '🥪', words: ['I','like','sandwiches.'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '🧁', correct: 'I want a cupcake.', options: ['I want a cupcake.','I eat cereal.','I drink milk.'] },
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I like strawberries.', correct: 1, options: [
+                { emoji: '🥛', label: 'milk' }, { emoji: '🍓', label: 'strawberry' }, { emoji: '🥣', label: 'cereal' }, { emoji: '🥤', label: 'juice' }
+            ]}
+        ]
+    },
+    {
+        id: 6, theme: 'feelings', title: 'How I Feel', emoji: '😊',
+        colors: ['#F472B6','#FBCFE8'],
+        vocab: [
+            { emoji: '😊', word: 'happy', sentence: 'I am happy.' },
+            { emoji: '😢', word: 'sad', sentence: 'I feel sad.' },
+            { emoji: '😴', word: 'sleepy', sentence: 'I am sleepy.' },
+            { emoji: '😋', word: 'hungry', sentence: 'I am hungry.' },
+            { emoji: '🥶', word: 'cold', sentence: 'I feel cold.' },
+            { emoji: '😤', word: 'angry', sentence: 'I am angry.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the face!', sentence: 'I am happy.', correct: 0, options: [
+                { emoji: '😊', label: 'happy' }, { emoji: '😢', label: 'sad' }, { emoji: '😴', label: 'sleepy' }, { emoji: '😤', label: 'angry' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '😢', template: ['I','_','sad.'], correct: 'feel', options: ['feel','am','see'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '😴', words: ['I','am','sleepy.'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '😋', correct: 'I am hungry.', options: ['I am hungry.','I am happy.','I feel cold.'] },
+            { type: 'tap-picture', prompt: 'Tap the face!', sentence: 'I feel cold.', correct: 3, options: [
+                { emoji: '😤', label: 'angry' }, { emoji: '😊', label: 'happy' }, { emoji: '😴', label: 'sleepy' }, { emoji: '🥶', label: 'cold' }
+            ]}
+        ]
+    },
+    {
+        id: 7, theme: 'shop', title: 'At the Shop', emoji: '🛒',
+        colors: ['#8B5CF6','#C4B5FD'],
+        vocab: [
+            { emoji: '🍬', word: 'candy', sentence: 'I want candy.' },
+            { emoji: '🧃', word: 'juice box', sentence: 'I need a juice box.' },
+            { emoji: '🎈', word: 'balloon', sentence: 'I see a balloon.' },
+            { emoji: '🪀', word: 'toy', sentence: 'I want a toy.' },
+            { emoji: '🍩', word: 'donut', sentence: 'I like donuts.' },
+            { emoji: '🧸', word: 'bear', sentence: 'I want a bear.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I want candy.', correct: 1, options: [
+                { emoji: '🎈', label: 'balloon' }, { emoji: '🍬', label: 'candy' }, { emoji: '🍩', label: 'donut' }, { emoji: '🪀', label: 'toy' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '🧃', template: ['I','_','a juice box.'], correct: 'need', options: ['need','want','see'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '🎈', words: ['I','see','a','balloon.'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '🪀', correct: 'I want a toy.', options: ['I want a toy.','I want candy.','I like donuts.'] },
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I like donuts.', correct: 2, options: [
+                { emoji: '🧸', label: 'bear' }, { emoji: '🍬', label: 'candy' }, { emoji: '🍩', label: 'donut' }, { emoji: '🧃', label: 'juice box' }
+            ]}
+        ]
+    },
+    {
+        id: 8, theme: 'bedtime', title: 'Bedtime', emoji: '🌙',
+        colors: ['#6366F1','#A5B4FC'],
+        vocab: [
+            { emoji: '🌙', word: 'moon', sentence: 'I see the moon.' },
+            { emoji: '⭐', word: 'stars', sentence: 'I see stars.' },
+            { emoji: '🧸', word: 'teddy', sentence: 'I hug my teddy.' },
+            { emoji: '📖', word: 'story', sentence: 'I read a story.' },
+            { emoji: '😴', word: 'sleep', sentence: 'I go to sleep.' },
+            { emoji: '🛏️', word: 'bed', sentence: 'I am in bed.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I see the moon.', correct: 3, options: [
+                { emoji: '⭐', label: 'stars' }, { emoji: '📖', label: 'story' }, { emoji: '🧸', label: 'teddy' }, { emoji: '🌙', label: 'moon' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '🧸', template: ['I','_','my teddy.'], correct: 'hug', options: ['hug','see','read'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '📖', words: ['I','read','a','story.'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '😴', correct: 'I go to sleep.', options: ['I go to sleep.','I see the moon.','I am in bed.'] },
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I am in bed.', correct: 0, options: [
+                { emoji: '🛏️', label: 'bed' }, { emoji: '🌙', label: 'moon' }, { emoji: '⭐', label: 'stars' }, { emoji: '😴', label: 'sleep' }
+            ]}
+        ]
+    }
+];
+
+/* ===== STATE ===== */
+var state = {
+    lessonProgress: {},
+    totalStars: 0,
+    streak: 0,
+    currentLessonId: null,
+    vocabIndex: 0,
+    exerciseIndex: 0,
+    correctCount: 0,
+    answered: false
+};
+LESSONS.forEach(function(l) {
+    state.lessonProgress[l.id] = { completed: false, stars: 0, unlocked: l.id === 1 };
+});
+
+/* ===== HELPERS ===== */
+function shuffleArray(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+}
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+}
+function showToast(msg, type) {
+    var old = document.querySelector('.feedback-toast');
+    if (old) old.remove();
+    var t = document.createElement('div');
+    t.className = 'feedback-toast ' + type;
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { if (t.parentNode) t.remove(); }, 1100);
+}
+function showModal(icon, title, msg, btn, cb) {
+    var o = document.createElement('div');
+    o.className = 'modal-overlay';
+    o.innerHTML =
+        '<div class="modal-box">' +
+        '<div class="modal-icon">' + icon + '</div>' +
+        '<div class="modal-title">' + title + '</div>' +
+        '<div class="modal-msg">' + msg + '</div>' +
+        '<button class="modal-btn">' + (btn || 'OK') + '</button></div>';
+    document.body.appendChild(o);
+    o.querySelector('.modal-btn').addEventListener('click', function() { o.remove(); if (cb) cb(); });
+}
+function createConfetti() {
+    var cols = ['#8B5CF6','#06B6D4','#F59E0B','#10B981','#F472B6','#6366F1','#EF4444'];
+    for (var i = 0; i < 45; i++) {
+        (function(d) {
+            setTimeout(function() {
+                var c = document.createElement('div');
+                c.className = 'confetti-piece';
+                c.style.left = Math.random() * 100 + '%';
+                c.style.background = cols[Math.floor(Math.random() * cols.length)];
+                c.style.animationDuration = (2.2 + Math.random() * 1.4) + 's';
+                c.style.width = (5 + Math.random() * 9) + 'px';
+                c.style.height = (7 + Math.random() * 10) + 'px';
+                c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                document.body.appendChild(c);
+                setTimeout(function() { if (c.parentNode) c.remove(); }, 4000);
+            }, d);
+        })(i * 35);
+    }
+}
+var CHEERS = ['Awesome! 🎉','Great job! 🌟','Super! ⭐','Amazing! 🐸','Perfect! ✨','You did it! 🥳','Wow! 🎊'];
+var OOPS = ['Try again! 💪','Almost! 🤔','Not quite! 🐸','Oops! Try again!'];
+function cheer() { return CHEERS[Math.floor(Math.random() * CHEERS.length)]; }
+function oops() { return OOPS[Math.floor(Math.random() * OOPS.length)]; }
+
+/* ===== HOME ===== */
+function renderHome() {
+    var path = document.getElementById('lesson-path');
+    path.innerHTML = '';
+    var done = 0;
+    LESSONS.forEach(function(lesson) {
+        var p = state.lessonProgress[lesson.id];
+        if (p.completed) done++;
+        var node = document.createElement('div');
+        node.className = 'path-node';
+        var btn = document.createElement('button');
+        btn.className = 'node-btn';
+        if (p.completed) btn.classList.add('completed');
+        if (!p.unlocked) btn.classList.add('locked');
+        btn.style.background = 'linear-gradient(135deg,' + lesson.colors[0] + ',' + lesson.colors[1] + ')';
+        var em = document.createElement('span');
+        em.className = 'node-emoji';
+        em.textContent = lesson.emoji;
+        btn.appendChild(em);
+        if (!p.unlocked) {
+            var lk = document.createElement('span');
+            lk.className = 'node-lock'; lk.textContent = '🔒';
+            btn.appendChild(lk);
+        }
+        if (p.completed) {
+            var ck = document.createElement('div');
+            ck.className = 'node-check'; ck.textContent = '✓';
+            btn.appendChild(ck);
+        }
+        btn.addEventListener('click', function() { startLesson(lesson.id); });
+        node.appendChild(btn);
+        if (p.completed && p.stars > 0) {
+            var sd = document.createElement('div');
+            sd.className = 'node-stars';
+            for (var s = 0; s < 3; s++) sd.textContent += s < p.stars ? '⭐' : '☆';
+            node.appendChild(sd);
+        }
+        var lb = document.createElement('div');
+        lb.className = 'node-label'; lb.textContent = lesson.title;
+        node.appendChild(lb);
+        path.appendChild(node);
+    });
+    document.getElementById('total-stars').textContent = state.totalStars;
+    document.getElementById('streak').textContent = state.streak;
+    var pct = Math.round((done / LESSONS.length) * 100);
+    var bar = document.getElementById('home-progress');
+    bar.style.width = pct + '%';
+    bar.querySelector('span').textContent = pct + '%';
+}
+
+/* ===== START LESSON ===== */
+function startLesson(id) {
+    var p = state.lessonProgress[id];
+    if (!p.unlocked) { showModal('🔒','Locked!','Finish the lesson before this one first.','OK'); return; }
+    state.currentLessonId = id;
+    state.vocabIndex = 0;
+    state.exerciseIndex = 0;
+    state.correctCount = 0;
+    state.answered = false;
+    showScreen('learn-screen');
+    var lesson = LESSONS.find(function(l) { return l.id === id; });
+    document.getElementById('learn-title').textContent = lesson.emoji + ' ' + lesson.title;
+    renderVocab();
+}
+
+/* ===== LEARN ===== */
+function renderVocab() {
+    var lesson = LESSONS.find(function(l) { return l.id === state.currentLessonId; });
+    var v = lesson.vocab, idx = state.vocabIndex;
+    var body = document.getElementById('learn-body');
+    var actions = document.getElementById('learn-actions');
+    if (idx >= v.length) {
+        showScreen('exercise-screen');
+        renderExercise();
+        return;
+    }
+    var item = v[idx];
+    body.innerHTML =
+        '<div class="flashcard" style="--card-color:' + lesson.colors[0] + '">' +
+        '<div class="flashcard-emoji">' + item.emoji + '</div>' +
+        '<div class="flashcard-word">' + item.word + '</div>' +
+        '<div class="flashcard-sentence">' + item.sentence + '</div>' +
+        '<div class="flashcard-counter">' + (idx + 1) + ' / ' + v.length + '</div></div>';
+    actions.innerHTML = '';
+    var btn = document.createElement('button');
+    btn.className = 'btn-primary ' + (idx === v.length - 1 ? 'btn-start' : 'btn-next-card');
+    btn.textContent = idx === v.length - 1 ? "Let's Practice!" : 'Next →';
+    btn.addEventListener('click', function() { state.vocabIndex++; renderVocab(); });
+    actions.appendChild(btn);
+}
+document.getElementById('learn-back').addEventListener('click', function() {
+    showScreen('home-screen'); renderHome();
+});
+
+/* ===== EXERCISES ===== */
+function renderExercise() {
+    var lesson = LESSONS.find(function(l) { return l.id === state.currentLessonId; });
+    var exs = lesson.exercises, idx = state.exerciseIndex;
+    state.answered = false;
+    var dots = document.getElementById('exercise-dots');
+    dots.innerHTML = '';
+    for (var d = 0; d < exs.length; d++) {
+        var dot = document.createElement('div');
+        dot.className = 'ex-dot';
+        if (d < idx) dot.classList.add('done');
+        if (d === idx) dot.classList.add('current');
+        dots.appendChild(dot);
+    }
+    if (idx >= exs.length) { completeLesson(); return; }
+    var ex = exs[idx];
+    var body = document.getElementById('exercise-body');
+    body.innerHTML = '';
+    var inst = document.createElement('div');
+    inst.className = 'exercise-instruction';
+    var badge = document.createElement('div');
+    badge.className = 'exercise-type-badge';
+    var labels = { 'tap-picture':'🖼️ Tap the Picture', 'fill-blank':'✍️ Fill the Blank', 'build-sentence':'🧱 Build It', 'pick-sentence':'💬 Pick the Sentence' };
+    badge.textContent = labels[ex.type] || '';
+    inst.appendChild(badge);
+    body.appendChild(inst);
+    switch (ex.type) {
+        case 'tap-picture': renderTapPicture(ex, body); break;
+        case 'fill-blank': renderFillBlank(ex, body); break;
+        case 'build-sentence': renderBuildSentence(ex, body); break;
+        case 'pick-sentence': renderPickSentence(ex, body); break;
+    }
+}
+
+function renderTapPicture(ex, body) {
+    var pr = document.createElement('div');
+    pr.className = 'exercise-prompt'; pr.textContent = ex.sentence;
+    body.appendChild(pr);
+    var grid = document.createElement('div');
+    grid.className = 'options-grid';
+    ex.options.forEach(function(opt, i) {
+        var card = document.createElement('div');
+        card.className = 'option-card';
+        card.innerHTML = '<div class="opt-emoji">' + opt.emoji + '</div><div class="opt-label">' + opt.label + '</div>';
+        card.addEventListener('click', function() {
+            if (state.answered) return;
+            if (i === ex.correct) {
+                state.answered = true; card.classList.add('correct');
+                state.correctCount++; showToast(cheer(), 'good');
+                setTimeout(nextEx, 950);
+            } else {
+                card.classList.add('wrong'); showToast(oops(), 'bad');
+                setTimeout(function() { card.classList.remove('wrong'); }, 550);
+            }
+        });
+        grid.appendChild(card);
+    });
+    body.appendChild(grid);
+}
+
+function renderFillBlank(ex, body) {
+    var pic = document.createElement('div');
+    pic.className = 'exercise-picture'; pic.textContent = ex.picture;
+    body.appendChild(pic);
+    var disp = document.createElement('div');
+    disp.className = 'sentence-display';
+    var st = document.createElement('div');
+    st.className = 'sentence-text';
+    var bid = 'bl-' + Date.now();
+    var h = '';
+    ex.template.forEach(function(p) {
+        if (p === '_') h += '<span class="blank-slot" id="' + bid + '">___</span>';
+        else h += ' ' + p + ' ';
+    });
+    st.innerHTML = h.trim(); disp.appendChild(st); body.appendChild(disp);
+    var opts = document.createElement('div');
+    opts.className = 'word-options';
+    shuffleArray(ex.options).forEach(function(w) {
+        var b = document.createElement('button');
+        b.className = 'word-opt'; b.textContent = w;
+        b.addEventListener('click', function() {
+            if (state.answered) return;
+            var blank = document.getElementById(bid);
+            if (w === ex.correct) {
+                state.answered = true; blank.textContent = w; blank.classList.add('filled');
+                b.classList.add('correct'); state.correctCount++;
+                opts.querySelectorAll('.word-opt').forEach(function(x) { x.classList.add('disabled'); });
+                showToast(cheer(), 'good'); setTimeout(nextEx, 950);
+            } else {
+                b.classList.add('wrong'); showToast(oops(), 'bad');
+                setTimeout(function() { b.classList.remove('wrong'); }, 550);
+            }
+        });
+        opts.appendChild(b);
+    });
+    body.appendChild(opts);
+}
+
+function renderBuildSentence(ex, body) {
+    var pic = document.createElement('div');
+    pic.className = 'exercise-picture'; pic.textContent = ex.picture;
+    body.appendChild(pic);
+    var area = document.createElement('div');
+    area.className = 'build-area'; area.id = 'build-area';
+    body.appendChild(area);
+    var bank = document.createElement('div');
+    bank.className = 'tile-bank'; bank.id = 'tile-bank';
+    var correct = ex.words;
+    var shuffled = shuffleArray(correct.map(function(w, i) { return { word: w, idx: i }; }));
+    var placed = [];
+    function drawArea() {
+        area.innerHTML = '';
+        area.classList.toggle('has-words', placed.length > 0);
+        if (placed.length === 0) {
+            var hint = document.createElement('span');
+            hint.style.cssText = 'color:var(--text3);font-weight:700;font-size:15px;';
+            hint.textContent = 'Tap words in order...';
+            area.appendChild(hint);
+        }
+        placed.forEach(function(oi, pi) {
+            var sp = document.createElement('span');
+            sp.className = 'build-word placed'; sp.textContent = correct[oi];
+            sp.addEventListener('click', function() {
+                if (state.answered) return;
+                placed.splice(pi, 1); drawArea(); drawTiles();
+            });
+            area.appendChild(sp);
+        });
+    }
+    function drawTiles() {
+        bank.innerHTML = '';
+        shuffled.forEach(function(it) {
+            var tile = document.createElement('button');
+            tile.className = 'tile-word'; tile.textContent = it.word;
+            if (placed.indexOf(it.idx) !== -1) tile.classList.add('used');
+            tile.addEventListener('click', function() {
+                if (state.answered || placed.indexOf(it.idx) !== -1) return;
+                if (it.idx === placed.length) {
+                    placed.push(it.idx); drawArea(); drawTiles();
+                    if (placed.length === correct.length) {
+                        state.answered = true; state.correctCount++;
+                        area.classList.add('correct-build');
+                        showToast(cheer(), 'good'); setTimeout(nextEx, 950);
+                    }
+                } else {
+                    tile.classList.add('wrong-tile'); showToast(oops(), 'bad');
+                    setTimeout(function() { tile.classList.remove('wrong-tile'); }, 400);
+                }
+            });
+            bank.appendChild(tile);
+        });
+    }
+    drawArea(); drawTiles();
+    body.appendChild(bank);
+}
+
+function renderPickSentence(ex, body) {
+    var pic = document.createElement('div');
+    pic.className = 'exercise-picture'; pic.textContent = ex.picture;
+    body.appendChild(pic);
+    var opts = document.createElement('div');
+    opts.className = 'sentence-options';
+    shuffleArray(ex.options).forEach(function(s) {
+        var btn = document.createElement('button');
+        btn.className = 'sentence-opt'; btn.textContent = s;
+        btn.addEventListener('click', function() {
+            if (state.answered) return;
+            if (s === ex.correct) {
+                state.answered = true; btn.classList.add('correct'); state.correctCount++;
+                opts.querySelectorAll('.sentence-opt').forEach(function(b) {
+                    if (b !== btn) b.style.opacity = '0.35';
+                });
+                showToast(cheer(), 'good'); setTimeout(nextEx, 950);
+            } else {
+                btn.classList.add('wrong'); showToast(oops(), 'bad');
+                setTimeout(function() { btn.classList.remove('wrong'); }, 550);
+            }
+        });
+        opts.appendChild(btn);
+    });
+    body.appendChild(opts);
+}
+
+function nextEx() { state.exerciseIndex++; renderExercise(); }
+document.getElementById('exercise-back').addEventListener('click', function() {
+    showScreen('home-screen'); renderHome();
+});
+
+/* ===== COMPLETE ===== */
+function completeLesson() {
+    showScreen('complete-screen'); createConfetti();
+    var lesson = LESSONS.find(function(l) { return l.id === state.currentLessonId; });
+    var total = lesson.exercises.length, got = state.correctCount;
+    var stars = got >= total ? 3 : got >= Math.ceil(total * 0.6) ? 2 : 1;
+    var prog = state.lessonProgress[lesson.id];
+    var wasCompleted = prog.completed;
+    prog.completed = true;
+    if (stars > prog.stars) { state.totalStars += (stars - prog.stars); prog.stars = stars; }
+    if (!wasCompleted) {
+        state.streak++;
+        var nxt = LESSONS.find(function(l) { return l.id === lesson.id + 1; });
+        if (nxt) state.lessonProgress[nxt.id].unlocked = true;
+    }
+    var body = document.getElementById('complete-body');
+    body.innerHTML = '';
+    var m = document.createElement('div');
+    m.className = 'complete-mascot'; m.textContent = '🐸';
+    body.appendChild(m);
+    var t = document.createElement('div');
+    t.className = 'complete-title'; t.style.color = 'var(--text)';
+    t.textContent = got === total ? 'Perfect!' : got >= Math.ceil(total * 0.6) ? 'Great Job!' : 'Good Try!';
+    body.appendChild(t);
+    var sub = document.createElement('div');
+    sub.className = 'complete-sub';
+    sub.textContent = got + ' out of ' + total + ' correct!';
+    body.appendChild(sub);
+    var sd = document.createElement('div');
+    sd.className = 'stars-display';
+    for (var s = 0; s < 3; s++) {
+        var sp = document.createElement('span');
+        sp.className = s < stars ? 'star-earned' : '';
+        sp.textContent = s < stars ? '⭐' : '☆';
+        sp.style.opacity = s < stars ? '0' : '1';
+        sd.appendChild(sp);
+    }
+    body.appendChild(sd);
+    var acts = document.createElement('div');
+    acts.className = 'complete-actions';
+    var hb = document.createElement('button');
+    hb.className = 'btn-home'; hb.textContent = '🏠 Home';
+    hb.addEventListener('click', function() { showScreen('home-screen'); renderHome(); });
+    acts.appendChild(hb);
+    var nextL = LESSONS.find(function(l) { return l.id === lesson.id + 1; });
+    if (nextL) {
+        var cb = document.createElement('button');
+        cb.className = 'btn-continue'; cb.textContent = 'Next Lesson →';
+        cb.addEventListener('click', function() { startLesson(nextL.id); });
+        acts.appendChild(cb);
+    } else {
+        var rb = document.createElement('button');
+        rb.className = 'btn-continue'; rb.textContent = '🔄 Play Again';
+        rb.addEventListener('click', function() { startLesson(lesson.id); });
+        acts.appendChild(rb);
+    }
+    body.appendChild(acts);
+}
+
+/* ===== INIT ===== */
+renderHome();
+</script>
+    <script>
+          // Auto-update year
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
