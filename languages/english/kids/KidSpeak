@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KidSpeak English</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FFF5E4;
+            --bg2: #FFFFFF;
+            --bg3: #FFF0D4;
+            --text: #2D3047;
+            --text2: #7B7F9E;
+            --text3: #A0A4C1;
+            --coral: #FF6B6B;
+            --teal: #2EC4B6;
+            --gold: #FFD166;
+            --purple: #A855F7;
+            --mint: #06D6A0;
+            --sky: #38BDF8;
+            --peach: #FFBE98;
+            --rose: #FF6B9D;
+            --shadow: 0 4px 16px rgba(45,48,71,0.10);
+            --shadow-lg: 0 8px 32px rgba(45,48,71,0.15);
+        }
+        .dark {
+            --bg: #0F172A;
+            --bg2: #1E293B;
+            --bg3: #162033;
+            --text: #F1F5F9;
+            --text2: #94A3B8;
+            --text3: #64748B;
+            --shadow: 0 4px 16px rgba(0,0,0,0.3);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; overflow: hidden; }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        #app {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        .bg-decor {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(255,107,107,0.07) 0%, transparent 45%),
+                radial-gradient(circle at 85% 50%, rgba(46,196,182,0.07) 0%, transparent 45%),
+                radial-gradient(circle at 40% 85%, rgba(255,209,102,0.07) 0%, transparent 45%),
+                var(--bg);
+        }
+        .dark .bg-decor {
+            background:
+                radial-gradient(circle at 15% 20%, rgba(255,107,107,0.04) 0%, transparent 45%),
+                radial-gradient(circle at 85% 50%, rgba(46,196,182,0.04) 0%, transparent 45%),
+                radial-gradient(circle at 40% 85%, rgba(255,209,102,0.04) 0%, transparent 45%),
+                var(--bg);
+        }
+        .screen { display: none; flex-direction: column; height: 100%; position: relative; z-index: 1; }
+        .screen.active { display: flex; }
+
+        /* ===== HEADER ===== */
+        .app-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 20px; flex-shrink: 0;
+            background: var(--bg); border-bottom: 2px solid var(--bg3);
+            position: relative; z-index: 10;
+        }
+        .header-left { display: flex; align-items: center; gap: 10px; }
+        .mascot { font-size: 32px; animation: mascotBounce 2s ease-in-out infinite; }
+        @keyframes mascotBounce {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        .app-title {
+            font-family: 'Lilita One', cursive; font-size: 22px;
+            background: linear-gradient(135deg, var(--coral), var(--gold));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header-stats { display: flex; align-items: center; gap: 12px; }
+        .stat-badge {
+            display: flex; align-items: center; gap: 5px;
+            background: var(--bg3); padding: 6px 12px; border-radius: 20px;
+            font-weight: 800; font-size: 14px; color: var(--text);
+        }
+        .stat-badge .icon { font-size: 18px; }
+
+        /* ===== HOME SCREEN ===== */
+        .home-scroll { flex: 1; overflow-y: auto; padding: 20px 0 40px; }
+        .progress-section { padding: 0 24px; margin-bottom: 24px; }
+        .progress-label {
+            font-weight: 800; font-size: 14px; color: var(--text2);
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+        }
+        .progress-track {
+            height: 20px; background: var(--bg3); border-radius: 12px;
+            overflow: hidden; position: relative;
+        }
+        .progress-fill-bar {
+            height: 100%; border-radius: 12px;
+            background: linear-gradient(90deg, var(--mint), var(--teal));
+            transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+            display: flex; align-items: center; justify-content: flex-end;
+            padding-right: 8px; min-width: 36px;
+        }
+        .progress-fill-bar span {
+            font-size: 11px; font-weight: 900; color: #fff;
+        }
+
+        /* Path */
+        .lesson-path {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 12px; padding: 0 24px; position: relative;
+        }
+        .lesson-path::before {
+            content: ''; position: absolute; top: 48px; bottom: 48px;
+            left: 50%; width: 4px; transform: translateX(-50%);
+            background: repeating-linear-gradient(to bottom, var(--bg3) 0, var(--bg3) 10px, transparent 10px, transparent 20px);
+            border-radius: 2px; z-index: 0;
+        }
+        .path-node {
+            display: flex; flex-direction: column; align-items: center;
+            position: relative; z-index: 1; width: 100%;
+            animation: nodeAppear 0.5s ease-out both;
+        }
+        .path-node:nth-child(1) { animation-delay: 0.05s; }
+        .path-node:nth-child(2) { animation-delay: 0.1s; align-self: flex-end; padding-right: 15%; }
+        .path-node:nth-child(3) { animation-delay: 0.15s; align-self: flex-start; padding-left: 15%; }
+        .path-node:nth-child(4) { animation-delay: 0.2s; }
+        .path-node:nth-child(5) { animation-delay: 0.25s; align-self: flex-end; padding-right: 15%; }
+        .path-node:nth-child(6) { animation-delay: 0.3s; align-self: flex-start; padding-left: 15%; }
+        .path-node:nth-child(7) { animation-delay: 0.35s; }
+        .path-node:nth-child(8) { animation-delay: 0.4s; align-self: flex-end; padding-right: 15%; }
+        @keyframes nodeAppear {
+            from { opacity: 0; transform: translateY(20px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .node-btn {
+            width: 100px; height: 100px; border-radius: 50%;
+            border: 5px solid #fff; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 44px; position: relative;
+            box-shadow: var(--shadow), inset 0 -4px 0 rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .dark .node-btn { border-color: var(--bg2); }
+        .node-btn:hover { transform: scale(1.08); box-shadow: var(--shadow-lg); }
+        .node-btn:active { transform: scale(0.95); }
+        .node-btn.locked {
+            filter: grayscale(1) brightness(0.7); opacity: 0.5; cursor: not-allowed;
+        }
+        .node-btn.locked:hover { transform: scale(1); box-shadow: var(--shadow); }
+        .node-lock {
+            position: absolute; font-size: 28px;
+            top: 50%; left: 50%; transform: translate(-50%,-50%);
+            filter: none; z-index: 2;
+        }
+        .node-btn.locked .node-emoji { opacity: 0.3; }
+        .node-check {
+            position: absolute; bottom: -4px; right: -4px;
+            width: 32px; height: 32px; border-radius: 50%;
+            background: var(--mint); border: 3px solid #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; color: #fff; font-weight: 900;
+            box-shadow: 0 2px 8px rgba(6,214,160,0.4);
+        }
+        .dark .node-check { border-color: var(--bg2); }
+        .node-stars {
+            display: flex; gap: 2px; margin-top: 4px;
+            font-size: 16px; letter-spacing: 1px;
+        }
+        .node-label {
+            font-weight: 800; font-size: 14px; color: var(--text);
+            margin-top: 6px; text-align: center;
+        }
+        .path-footer {
+            text-align: center; padding: 32px 24px 20px;
+        }
+        .path-footer-text {
+            font-family: 'Lilita One', cursive; font-size: 28px;
+            background: linear-gradient(135deg, var(--teal), var(--sky));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .path-footer-sub { color: var(--text2); font-weight: 700; font-size: 14px; margin-top: 4px; }
+
+        /* ===== LEARN SCREEN ===== */
+        .learn-header {
+            display: flex; align-items: center; gap: 12px;
+            padding: 16px 20px; flex-shrink: 0;
+            background: var(--bg); border-bottom: 2px solid var(--bg3);
+        }
+        .btn-back {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--bg2); border: 2px solid var(--bg3);
+            cursor: pointer; display: flex; align-items: center;
+            justify-content: center; font-size: 20px; color: var(--text);
+            transition: all 0.2s;
+        }
+        .btn-back:hover { background: var(--bg3); }
+        .learn-title {
+            font-family: 'Lilita One', cursive; font-size: 18px; color: var(--text);
+            flex: 1;
+        }
+        .learn-body {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 24px; overflow-y: auto;
+        }
+        .flashcard {
+            width: 100%; max-width: 340px;
+            background: var(--bg2); border-radius: 28px;
+            padding: 36px 28px; text-align: center;
+            box-shadow: var(--shadow-lg);
+            animation: cardIn 0.4s ease-out;
+        }
+        @keyframes cardIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .flashcard-emoji { font-size: 96px; margin-bottom: 16px; line-height: 1.2; }
+        .flashcard-word {
+            font-family: 'Lilita One', cursive; font-size: 36px;
+            color: var(--text); margin-bottom: 12px;
+        }
+        .flashcard-sentence {
+            font-size: 18px; font-weight: 700; color: var(--text2);
+            background: var(--bg3); padding: 12px 20px; border-radius: 16px;
+            display: inline-block;
+        }
+        .flashcard-counter {
+            font-size: 13px; font-weight: 800; color: var(--text3);
+            text-transform: uppercase; letter-spacing: 1px; margin-top: 16px;
+        }
+        .learn-actions {
+            padding: 20px 24px; flex-shrink: 0;
+            display: flex; gap: 12px;
+        }
+        .btn-primary {
+            flex: 1; padding: 16px; border: none; border-radius: 18px;
+            font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 800;
+            color: #fff; cursor: pointer; transition: all 0.2s;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-primary:active { transform: translateY(0); }
+        .btn-start { background: linear-gradient(135deg, var(--mint), var(--teal)); box-shadow: 0 4px 16px rgba(6,214,160,0.3); }
+        .btn-next { background: linear-gradient(135deg, var(--sky), var(--teal)); box-shadow: 0 4px 16px rgba(56,189,248,0.3); }
+
+        /* ===== EXERCISE SCREEN ===== */
+        .exercise-header {
+            display: flex; align-items: center; gap: 12px;
+            padding: 16px 20px; flex-shrink: 0;
+            background: var(--bg); border-bottom: 2px solid var(--bg3);
+        }
+        .exercise-progress {
+            flex: 1; display: flex; gap: 6px; align-items: center;
+        }
+        .ex-dot {
+            flex: 1; height: 8px; border-radius: 4px;
+            background: var(--bg3); transition: background 0.3s;
+        }
+        .ex-dot.done { background: var(--mint); }
+        .ex-dot.current { background: var(--gold); }
+        .exercise-body {
+            flex: 1; display: flex; flex-direction: column;
+            padding: 24px; overflow-y: auto; gap: 20px;
+        }
+        .exercise-instruction {
+            text-align: center;
+        }
+        .exercise-type-badge {
+            display: inline-block; font-size: 12px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            color: var(--teal); margin-bottom: 6px;
+        }
+        .exercise-prompt {
+            font-family: 'Lilita One', cursive; font-size: 26px;
+            color: var(--text); line-height: 1.3;
+        }
+        .exercise-picture {
+            font-size: 80px; text-align: center; margin: 8px 0;
+            animation: pictureIn 0.4s ease-out;
+        }
+        @keyframes pictureIn {
+            from { transform: scale(0) rotate(-20deg); }
+            to { transform: scale(1) rotate(0deg); }
+        }
+
+        /* Tap Picture Options */
+        .options-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 14px; max-width: 360px; margin: 0 auto; width: 100%;
+        }
+        .option-card {
+            background: var(--bg2); border: 3px solid var(--bg3);
+            border-radius: 20px; padding: 20px; text-align: center;
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: var(--shadow);
+        }
+        .option-card:hover { border-color: var(--sky); transform: translateY(-2px); }
+        .option-card:active { transform: scale(0.96); }
+        .option-card .opt-emoji { font-size: 52px; margin-bottom: 4px; }
+        .option-card .opt-label {
+            font-size: 15px; font-weight: 800; color: var(--text2);
+        }
+        .option-card.correct {
+            border-color: var(--mint); background: rgba(6,214,160,0.12);
+            animation: correctPop 0.4s ease-out;
+        }
+        .option-card.wrong {
+            border-color: var(--coral); background: rgba(255,107,107,0.12);
+            animation: wrongShake 0.4s ease-out;
+        }
+        @keyframes correctPop {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        @keyframes wrongShake {
+            0%,100% { transform: translateX(0); }
+            20%,60% { transform: translateX(-6px); }
+            40%,80% { transform: translateX(6px); }
+        }
+
+        /* Fill Blank */
+        .sentence-display {
+            text-align: center; padding: 16px 20px;
+            background: var(--bg2); border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+        .sentence-text {
+            font-size: 24px; font-weight: 800; color: var(--text);
+            line-height: 1.5;
+        }
+        .blank-slot {
+            display: inline-block; min-width: 80px; border-bottom: 3px dashed var(--gold);
+            color: var(--gold); margin: 0 4px; padding: 2px 8px;
+            font-family: 'Lilita One', cursive;
+        }
+        .blank-slot.filled {
+            border-bottom-style: solid; border-color: var(--teal); color: var(--teal);
+        }
+        .word-options {
+            display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+        }
+        .word-opt {
+            padding: 14px 28px; border-radius: 16px;
+            background: var(--bg2); border: 3px solid var(--bg3);
+            font-size: 18px; font-weight: 800; color: var(--text);
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: var(--shadow);
+        }
+        .word-opt:hover { border-color: var(--sky); transform: translateY(-2px); }
+        .word-opt:active { transform: scale(0.96); }
+        .word-opt.correct { border-color: var(--mint); background: rgba(6,214,160,0.12); color: var(--mint); }
+        .word-opt.wrong { border-color: var(--coral); background: rgba(255,107,107,0.12); color: var(--coral); animation: wrongShake 0.4s; }
+        .word-opt.disabled { pointer-events: none; opacity: 0.5; }
+
+        /* Build Sentence */
+        .build-area {
+            background: var(--bg2); border-radius: 20px;
+            padding: 16px; min-height: 64px;
+            display: flex; flex-wrap: wrap; gap: 8px;
+            align-items: center; justify-content: center;
+            box-shadow: var(--shadow); border: 3px dashed var(--bg3);
+            transition: border-color 0.3s;
+        }
+        .build-area.has-words { border-style: solid; border-color: var(--teal); }
+        .build-area.correct-build { border-color: var(--mint); background: rgba(6,214,160,0.08); }
+        .build-area.wrong-build { border-color: var(--coral); animation: wrongShake 0.4s; }
+        .build-word {
+            padding: 10px 18px; border-radius: 14px;
+            font-size: 18px; font-weight: 800; color: var(--text);
+            cursor: pointer; transition: all 0.2s;
+        }
+        .build-word.placed {
+            background: var(--teal); color: #fff;
+            box-shadow: 0 2px 8px rgba(46,196,182,0.3);
+        }
+        .tile-bank {
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+        }
+        .tile-word {
+            padding: 12px 22px; border-radius: 14px;
+            background: var(--bg2); border: 3px solid var(--bg3);
+            font-size: 18px; font-weight: 800; color: var(--text);
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: var(--shadow);
+        }
+        .tile-word:hover { border-color: var(--gold); transform: translateY(-2px); }
+        .tile-word:active { transform: scale(0.95); }
+        .tile-word.used { opacity: 0.3; pointer-events: none; transform: scale(0.9); }
+        .tile-word.wrong-tile { animation: wrongShake 0.3s; border-color: var(--coral); }
+
+        /* Pick Sentence */
+        .sentence-options {
+            display: flex; flex-direction: column; gap: 10px;
+            max-width: 400px; margin: 0 auto; width: 100%;
+        }
+        .sentence-opt {
+            padding: 16px 20px; border-radius: 16px;
+            background: var(--bg2); border: 3px solid var(--bg3);
+            font-size: 18px; font-weight: 700; color: var(--text);
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: var(--shadow); text-align: left;
+        }
+        .sentence-opt:hover { border-color: var(--sky); transform: translateY(-2px); }
+        .sentence-opt:active { transform: scale(0.98); }
+        .sentence-opt.correct { border-color: var(--mint); background: rgba(6,214,160,0.12); animation: correctPop 0.4s; }
+        .sentence-opt.wrong { border-color: var(--coral); background: rgba(255,107,107,0.12); animation: wrongShake 0.4s; }
+
+        /* Feedback overlay */
+        .feedback-toast {
+            position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+            padding: 12px 28px; border-radius: 20px;
+            font-weight: 800; font-size: 16px; color: #fff;
+            z-index: 100; animation: toastIn 0.3s ease-out, toastOut 0.3s ease-in 0.8s forwards;
+            white-space: nowrap;
+        }
+        .feedback-toast.good { background: var(--mint); box-shadow: 0 4px 20px rgba(6,214,160,0.4); }
+        .feedback-toast.bad { background: var(--coral); box-shadow: 0 4px 20px rgba(255,107,107,0.4); }
+        @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+        @keyframes toastOut { to { opacity: 0; transform: translateX(-50%) translateY(-10px); } }
+
+        /* ===== COMPLETE SCREEN ===== */
+        .complete-body {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 24px; text-align: center; overflow-y: auto;
+        }
+        .complete-mascot { font-size: 80px; animation: completeBounce 0.6s ease-out; margin-bottom: 8px; }
+        @keyframes completeBounce {
+            0% { transform: scale(0) rotate(-30deg); }
+            60% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0); }
+        }
+        .complete-title {
+            font-family: 'Lilita One', cursive; font-size: 36px;
+            margin-bottom: 8px;
+        }
+        .complete-sub { font-size: 16px; font-weight: 700; color: var(--text2); margin-bottom: 24px; }
+        .stars-display { font-size: 48px; margin-bottom: 32px; letter-spacing: 8px; }
+        .star-earned { animation: starPop 0.5s ease-out both; display: inline-block; }
+        .star-earned:nth-child(1) { animation-delay: 0.3s; }
+        .star-earned:nth-child(2) { animation-delay: 0.5s; }
+        .star-earned:nth-child(3) { animation-delay: 0.7s; }
+        @keyframes starPop {
+            0% { transform: scale(0) rotate(-90deg); opacity: 0; }
+            60% { transform: scale(1.3) rotate(15deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0); opacity: 1; }
+        }
+        .complete-actions { display: flex; gap: 12px; width: 100%; max-width: 360px; }
+        .btn-home {
+            flex: 1; padding: 16px; border: 3px solid var(--bg3);
+            border-radius: 18px; background: var(--bg2);
+            font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 800;
+            color: var(--text); cursor: pointer; transition: all 0.2s;
+        }
+        .btn-home:hover { border-color: var(--teal); }
+        .btn-continue {
+            flex: 1; padding: 16px; border: none; border-radius: 18px;
+            background: linear-gradient(135deg, var(--gold), var(--peach));
+            font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 800;
+            color: #fff; cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 16px rgba(255,209,102,0.3);
+        }
+        .btn-continue:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+        /* Confetti */
+        .confetti-piece {
+            position: fixed; top: -12px; width: 10px; height: 14px;
+            border-radius: 2px; z-index: 200; pointer-events: none;
+            animation: confettiFall 2.5s linear forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Custom modal */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 300; backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-box {
+            background: var(--bg2); border-radius: 28px;
+            padding: 36px 28px; max-width: 340px; width: 90%;
+            text-align: center; box-shadow: var(--shadow-lg);
+            animation: modalPop 0.3s ease-out;
+        }
+        @keyframes modalPop {
+            from { transform: scale(0.85); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-icon { font-size: 56px; margin-bottom: 12px; }
+        .modal-title { font-family: 'Lilita One', cursive; font-size: 24px; color: var(--text); margin-bottom: 8px; }
+        .modal-msg { font-size: 15px; font-weight: 600; color: var(--text2); margin-bottom: 20px; line-height: 1.5; }
+        .modal-btn {
+            padding: 14px 36px; border: none; border-radius: 16px;
+            background: linear-gradient(135deg, var(--mint), var(--teal));
+            color: #fff; font-family: 'Nunito', sans-serif; font-size: 16px;
+            font-weight: 800; cursor: pointer; transition: all 0.2s;
+        }
+        .modal-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        /* Responsive */
+        @media (max-width: 380px) {
+            .app-title { font-size: 18px; }
+            .node-btn { width: 84px; height: 84px; font-size: 36px; }
+            .exercise-prompt { font-size: 22px; }
+            .flashcard-emoji { font-size: 72px; }
+            .flashcard-word { font-size: 28px; }
+            .option-card .opt-emoji { font-size: 40px; }
+            .path-node:nth-child(odd) { padding-left: 10%; padding-right: 0; }
+            .path-node:nth-child(even) { padding-right: 10%; padding-left: 0; }
+        }
+        input, button, select, textarea { font-size: 16px; }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="bg-decor"></div>
+
+    <!-- HOME SCREEN -->
+    <div id="home-screen" class="screen active">
+        <div class="app-header">
+            <div class="header-left">
+                <div class="mascot">🦊</div>
+                <div class="app-title">KidSpeak</div>
+            </div>
+            <div class="header-stats">
+                <div class="stat-badge"><span class="icon">⭐</span><span id="total-stars">0</span></div>
+                <div class="stat-badge"><span class="icon">🔥</span><span id="streak">0</span></div>
+            </div>
+        </div>
+        <div class="home-scroll">
+            <div class="progress-section">
+                <div class="progress-label">Your Journey</div>
+                <div class="progress-track">
+                    <div class="progress-fill-bar" id="home-progress" style="width:0%"><span>0%</span></div>
+                </div>
+            </div>
+            <div class="lesson-path" id="lesson-path"></div>
+            <div class="path-footer">
+                <div class="path-footer-text">Keep Going!</div>
+                <div class="path-footer-sub">more lessons coming soon ✨</div>
+                <div class="path-footer-sub">💡 Brought to you by English Training Hub! © <span id="year"></span> — All Rights Reserved.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEARN SCREEN -->
+    <div id="learn-screen" class="screen">
+        <div class="learn-header">
+            <button class="btn-back" id="learn-back">←</button>
+            <div class="learn-title" id="learn-title">Words to Learn</div>
+        </div>
+        <div class="learn-body" id="learn-body"></div>
+        <div class="learn-actions" id="learn-actions"></div>
+    </div>
+
+    <!-- EXERCISE SCREEN -->
+    <div id="exercise-screen" class="screen">
+        <div class="exercise-header">
+            <button class="btn-back" id="exercise-back">✕</button>
+            <div class="exercise-progress" id="exercise-dots"></div>
+        </div>
+        <div class="exercise-body" id="exercise-body"></div>
+    </div>
+
+    <!-- COMPLETE SCREEN -->
+    <div id="complete-screen" class="screen">
+        <div class="complete-body" id="complete-body"></div>
+    </div>
+</div>
+
+<script>
+/* ===== DARK MODE ===== */
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add('dark');
+}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (e.matches) { document.documentElement.classList.add('dark'); }
+    else { document.documentElement.classList.remove('dark'); }
+});
+
+/* ===== LESSON DATA ===== */
+var LESSONS = [
+    {
+        id: 1, theme: 'pets', title: 'My Pets', emoji: '🐾',
+        colors: ['#FF6B6B','#FF8E8E'],
+        vocab: [
+            { emoji: '🐱', word: 'cat', sentence: 'I have a cat.' },
+            { emoji: '🐶', word: 'dog', sentence: 'I like dogs.' },
+            { emoji: '🐟', word: 'fish', sentence: 'I have a fish.' },
+            { emoji: '🐦', word: 'bird', sentence: 'I like birds.' },
+            { emoji: '🐰', word: 'rabbit', sentence: 'I have a rabbit.' },
+            { emoji: '🐹', word: 'hamster', sentence: 'I like hamsters.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I have a cat.', correct: 0, options: [
+                { emoji: '🐱', label: 'cat' }, { emoji: '🐶', label: 'dog' }, { emoji: '🐟', label: 'fish' }, { emoji: '🐰', label: 'rabbit' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '🐶', template: ['I', '_', 'dogs.'], correct: 'like', options: ['like','have','see'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '🐟', words: ['I','have','a','fish.'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '🐰', correct: 'I have a rabbit.', options: ['I have a rabbit.','I have a cat.','I like dogs.'] },
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I like birds.', correct: 2, options: [
+                { emoji: '🐹', label: 'hamster' }, { emoji: '🐱', label: 'cat' }, { emoji: '🐦', label: 'bird' }, { emoji: '🐶', label: 'dog' }
+            ]}
+        ]
+    },
+    {
+        id: 2, theme: 'food', title: 'Yummy Food', emoji: '🍎',
+        colors: ['#FFD166','#FFBE98'],
+        vocab: [
+            { emoji: '🍕', word: 'pizza', sentence: 'I like pizza.' },
+            { emoji: '🍦', word: 'ice cream', sentence: 'I want ice cream.' },
+            { emoji: '🍌', word: 'banana', sentence: 'I like bananas.' },
+            { emoji: '🍪', word: 'cookie', sentence: 'I want a cookie.' },
+            { emoji: '🎂', word: 'cake', sentence: 'I like cake.' },
+            { emoji: '🍎', word: 'apple', sentence: 'I have an apple.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I like pizza.', correct: 1, options: [
+                { emoji: '🍌', label: 'banana' }, { emoji: '🍕', label: 'pizza' }, { emoji: '🍪', label: 'cookie' }, { emoji: '🎂', label: 'cake' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '🍦', template: ['I', '_', 'ice cream.'], correct: 'want', options: ['want','like','have'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '🍌', words: ['I','like','bananas.'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '🍪', correct: 'I want a cookie.', options: ['I want a cookie.','I like pizza.','I have an apple.'] },
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I like cake.', correct: 0, options: [
+                { emoji: '🎂', label: 'cake' }, { emoji: '🍎', label: 'apple' }, { emoji: '🍦', label: 'ice cream' }, { emoji: '🍕', label: 'pizza' }
+            ]}
+        ]
+    },
+    {
+        id: 3, theme: 'colors', title: 'Pretty Colors', emoji: '🎨',
+        colors: ['#A855F7','#C084FC'],
+        vocab: [
+            { emoji: '🔴', word: 'red', sentence: 'I see red.' },
+            { emoji: '🔵', word: 'blue', sentence: 'It is blue.' },
+            { emoji: '🟢', word: 'green', sentence: 'I see green.' },
+            { emoji: '🟡', word: 'yellow', sentence: 'It is yellow.' },
+            { emoji: '🩷', word: 'pink', sentence: 'I like pink.' },
+            { emoji: '🟠', word: 'orange', sentence: 'I see orange.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the color!', sentence: 'I see red.', correct: 0, options: [
+                { emoji: '🔴', label: 'red' }, { emoji: '🔵', label: 'blue' }, { emoji: '🟡', label: 'yellow' }, { emoji: '🟢', label: 'green' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '🔵', template: ['It', '_', 'blue.'], correct: 'is', options: ['is','am','see'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '🟢', words: ['I','see','green.'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '🟡', correct: 'It is yellow.', options: ['It is yellow.','I see red.','I like pink.'] },
+            { type: 'tap-picture', prompt: 'Tap the color!', sentence: 'I like pink.', correct: 3, options: [
+                { emoji: '🟠', label: 'orange' }, { emoji: '🔴', label: 'red' }, { emoji: '🔵', label: 'blue' }, { emoji: '🩷', label: 'pink' }
+            ]}
+        ]
+    },
+    {
+        id: 4, theme: 'toys', title: 'My Toys', emoji: '🧸',
+        colors: ['#38BDF8','#7DD3FC'],
+        vocab: [
+            { emoji: '⚽', word: 'ball', sentence: 'This is my ball.' },
+            { emoji: '🧸', word: 'teddy', sentence: 'I have a teddy.' },
+            { emoji: '🚗', word: 'car', sentence: 'This is my car.' },
+            { emoji: '🪁', word: 'kite', sentence: 'I have a kite.' },
+            { emoji: '🧩', word: 'puzzle', sentence: 'I like puzzles.' },
+            { emoji: '📚', word: 'book', sentence: 'I have a book.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'This is my ball.', correct: 2, options: [
+                { emoji: '🧸', label: 'teddy' }, { emoji: '🚗', label: 'car' }, { emoji: '⚽', label: 'ball' }, { emoji: '🪁', label: 'kite' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '🧸', template: ['I', '_', 'a teddy.'], correct: 'have', options: ['have','like','see'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '🚗', words: ['This','is','my','car.'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '🪁', correct: 'I have a kite.', options: ['I have a kite.','This is my ball.','I like puzzles.'] },
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I like puzzles.', correct: 1, options: [
+                { emoji: '📚', label: 'book' }, { emoji: '🧩', label: 'puzzle' }, { emoji: '⚽', label: 'ball' }, { emoji: '🧸', label: 'teddy' }
+            ]}
+        ]
+    },
+    {
+        id: 5, theme: 'family', title: 'My Family', emoji: '👨‍👩‍👧',
+        colors: ['#FF6B9D','#FFB6C1'],
+        vocab: [
+            { emoji: '👩', word: 'mom', sentence: 'This is my mom.' },
+            { emoji: '👨', word: 'dad', sentence: 'I love my dad.' },
+            { emoji: '👧', word: 'sister', sentence: 'I have a sister.' },
+            { emoji: '👦', word: 'brother', sentence: 'This is my brother.' },
+            { emoji: '👶', word: 'baby', sentence: 'I love the baby.' },
+            { emoji: '👵', word: 'grandma', sentence: 'I love my grandma.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'This is my mom.', correct: 1, options: [
+                { emoji: '👧', label: 'sister' }, { emoji: '👩', label: 'mom' }, { emoji: '👵', label: 'grandma' }, { emoji: '👶', label: 'baby' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '👨', template: ['I', '_', 'my dad.'], correct: 'love', options: ['love','have','see'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '👧', words: ['I','have','a','sister.'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '👶', correct: 'I love the baby.', options: ['I love the baby.','This is my mom.','I have a sister.'] },
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I love my grandma.', correct: 3, options: [
+                { emoji: '👨', label: 'dad' }, { emoji: '👦', label: 'brother' }, { emoji: '👩', label: 'mom' }, { emoji: '👵', label: 'grandma' }
+            ]}
+        ]
+    },
+    {
+        id: 6, theme: 'actions', title: 'I Can Do It!', emoji: '🏃',
+        colors: ['#06D6A0','#34D399'],
+        vocab: [
+            { emoji: '🏃', word: 'run', sentence: 'I can run.' },
+            { emoji: '🤸', word: 'jump', sentence: 'I can jump.' },
+            { emoji: '🏊', word: 'swim', sentence: 'I can swim.' },
+            { emoji: '🎤', word: 'sing', sentence: 'I like to sing.' },
+            { emoji: '💃', word: 'dance', sentence: 'I can dance.' },
+            { emoji: '🎨', word: 'draw', sentence: 'I like to draw.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I can run.', correct: 0, options: [
+                { emoji: '🏃', label: 'run' }, { emoji: '🏊', label: 'swim' }, { emoji: '💃', label: 'dance' }, { emoji: '🎤', label: 'sing' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '🤸', template: ['I', '_', 'jump.'], correct: 'can', options: ['can','is','am'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '🎤', words: ['I','like','to','sing.'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '💃', correct: 'I can dance.', options: ['I can dance.','I can run.','I can swim.'] },
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I like to draw.', correct: 2, options: [
+                { emoji: '🏃', label: 'run' }, { emoji: '🤸', label: 'jump' }, { emoji: '🎨', label: 'draw' }, { emoji: '🏊', label: 'swim' }
+            ]}
+        ]
+    },
+    {
+        id: 7, theme: 'weather', title: 'Weather Fun', emoji: '☀️',
+        colors: ['#FBBF24','#FDE68A'],
+        vocab: [
+            { emoji: '☀️', word: 'sunny', sentence: 'It is sunny.' },
+            { emoji: '🌧️', word: 'rainy', sentence: 'It is rainy.' },
+            { emoji: '❄️', word: 'snowy', sentence: 'It is snowy.' },
+            { emoji: '☁️', word: 'cloudy', sentence: 'It is cloudy.' },
+            { emoji: '🌈', word: 'rainbow', sentence: 'I see a rainbow!' },
+            { emoji: '💨', word: 'windy', sentence: 'It is windy.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'It is sunny.', correct: 1, options: [
+                { emoji: '🌧️', label: 'rainy' }, { emoji: '☀️', label: 'sunny' }, { emoji: '❄️', label: 'snowy' }, { emoji: '☁️', label: 'cloudy' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '🌧️', template: ['It', '_', 'rainy.'], correct: 'is', options: ['is','am','are'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '🌈', words: ['I','see','a','rainbow!'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '❄️', correct: 'It is snowy.', options: ['It is snowy.','It is sunny.','It is windy.'] },
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'It is windy.', correct: 2, options: [
+                { emoji: '☁️', label: 'cloudy' }, { emoji: '🌧️', label: 'rainy' }, { emoji: '💨', label: 'windy' }, { emoji: '☀️', label: 'sunny' }
+            ]}
+        ]
+    },
+    {
+        id: 8, theme: 'school', title: 'At School', emoji: '🏫',
+        colors: ['#2EC4B6','#5EEAD4'],
+        vocab: [
+            { emoji: '✏️', word: 'pencil', sentence: 'I have a pencil.' },
+            { emoji: '📖', word: 'book', sentence: 'I can read.' },
+            { emoji: '🎒', word: 'bag', sentence: 'This is my bag.' },
+            { emoji: '👩‍🏫', word: 'teacher', sentence: 'I like my teacher.' },
+            { emoji: '✂️', word: 'scissors', sentence: 'I have scissors.' },
+            { emoji: '🖍️', word: 'crayon', sentence: 'I like crayons.' }
+        ],
+        exercises: [
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I have a pencil.', correct: 3, options: [
+                { emoji: '📖', label: 'book' }, { emoji: '🎒', label: 'bag' }, { emoji: '✂️', label: 'scissors' }, { emoji: '✏️', label: 'pencil' }
+            ]},
+            { type: 'fill-blank', prompt: 'Pick the missing word!', picture: '📖', template: ['I', '_', 'read.'], correct: 'can', options: ['can','is','like'] },
+            { type: 'build-sentence', prompt: 'Build the sentence!', picture: '🎒', words: ['This','is','my','bag.'] },
+            { type: 'pick-sentence', prompt: 'Which sentence matches?', picture: '👩‍🏫', correct: 'I like my teacher.', options: ['I like my teacher.','I have a pencil.','I can read.'] },
+            { type: 'tap-picture', prompt: 'Tap the picture!', sentence: 'I like crayons.', correct: 0, options: [
+                { emoji: '🖍️', label: 'crayon' }, { emoji: '✏️', label: 'pencil' }, { emoji: '📖', label: 'book' }, { emoji: '🎒', label: 'bag' }
+            ]}
+        ]
+    }
+];
+
+/* ===== STATE ===== */
+var state = {
+    lessonProgress: {},
+    totalStars: 0,
+    streak: 0,
+    currentLessonId: null,
+    vocabIndex: 0,
+    exerciseIndex: 0,
+    correctCount: 0,
+    answered: false
+};
+
+// Initialize lesson progress
+LESSONS.forEach(function(l) {
+    state.lessonProgress[l.id] = { completed: false, stars: 0, unlocked: l.id === 1 };
+});
+
+/* ===== UTILITY ===== */
+function shuffleArray(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+}
+
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+}
+
+function showToast(msg, type) {
+    var existing = document.querySelector('.feedback-toast');
+    if (existing) existing.remove();
+    var t = document.createElement('div');
+    t.className = 'feedback-toast ' + type;
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { if (t.parentNode) t.remove(); }, 1200);
+}
+
+function showModal(icon, title, msg, btnText, onClose) {
+    var overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML =
+        '<div class="modal-box">' +
+            '<div class="modal-icon">' + icon + '</div>' +
+            '<div class="modal-title">' + title + '</div>' +
+            '<div class="modal-msg">' + msg + '</div>' +
+            '<button class="modal-btn">' + (btnText || 'OK') + '</button>' +
+        '</div>';
+    document.body.appendChild(overlay);
+    overlay.querySelector('.modal-btn').addEventListener('click', function() {
+        overlay.remove();
+        if (onClose) onClose();
+    });
+}
+
+function createConfetti() {
+    var colors = ['#FF6B6B','#FFD166','#06D6A0','#38BDF8','#A855F7','#FF6B9D','#2EC4B6'];
+    for (var i = 0; i < 40; i++) {
+        (function(delay) {
+            setTimeout(function() {
+                var c = document.createElement('div');
+                c.className = 'confetti-piece';
+                c.style.left = Math.random() * 100 + '%';
+                c.style.background = colors[Math.floor(Math.random() * colors.length)];
+                c.style.animationDuration = (2 + Math.random() * 1.5) + 's';
+                c.style.width = (6 + Math.random() * 8) + 'px';
+                c.style.height = (8 + Math.random() * 10) + 'px';
+                c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                document.body.appendChild(c);
+                setTimeout(function() { if (c.parentNode) c.remove(); }, 4000);
+            }, delay);
+        })(i * 40);
+    }
+}
+
+/* ===== ENCOURAGEMENTS ===== */
+var CHEERS = ['Awesome! 🎉','Great job! ⭐','Super! 🌟','Wow! 🦊','Perfect! ✨','You rock! 🎸','Yay! 🥳'];
+var OOPS = ['Try again! 💪','Almost! 🤔','Not quite! 🦊','Oops! Try again!'];
+
+function randomCheer() { return CHEERS[Math.floor(Math.random() * CHEERS.length)]; }
+function randomOops() { return OOPS[Math.floor(Math.random() * OOPS.length)]; }
+
+/* ===== HOME SCREEN ===== */
+function renderHome() {
+    var path = document.getElementById('lesson-path');
+    path.innerHTML = '';
+    var completedCount = 0;
+
+    LESSONS.forEach(function(lesson) {
+        var prog = state.lessonProgress[lesson.id];
+        if (prog.completed) completedCount++;
+
+        var node = document.createElement('div');
+        node.className = 'path-node';
+
+        var btn = document.createElement('button');
+        btn.className = 'node-btn';
+        if (prog.completed) btn.classList.add('completed');
+        if (!prog.unlocked) btn.classList.add('locked');
+        btn.style.background = 'linear-gradient(135deg, ' + lesson.colors[0] + ', ' + lesson.colors[1] + ')';
+
+        var emojiSpan = document.createElement('span');
+        emojiSpan.className = 'node-emoji';
+        emojiSpan.textContent = lesson.emoji;
+        btn.appendChild(emojiSpan);
+
+        if (!prog.unlocked) {
+            var lock = document.createElement('span');
+            lock.className = 'node-lock';
+            lock.textContent = '🔒';
+            btn.appendChild(lock);
+        }
+
+        if (prog.completed) {
+            var check = document.createElement('div');
+            check.className = 'node-check';
+            check.textContent = '✓';
+            btn.appendChild(check);
+        }
+
+        btn.addEventListener('click', function() { startLesson(lesson.id); });
+        node.appendChild(btn);
+
+        if (prog.completed && prog.stars > 0) {
+            var starsDiv = document.createElement('div');
+            starsDiv.className = 'node-stars';
+            for (var s = 0; s < 3; s++) {
+                starsDiv.textContent += s < prog.stars ? '⭐' : '☆';
+            }
+            node.appendChild(starsDiv);
+        }
+
+        var label = document.createElement('div');
+        label.className = 'node-label';
+        label.textContent = lesson.title;
+        node.appendChild(label);
+
+        path.appendChild(node);
+    });
+
+    // Update stats
+    document.getElementById('total-stars').textContent = state.totalStars;
+    document.getElementById('streak').textContent = state.streak;
+
+    var pct = Math.round((completedCount / LESSONS.length) * 100);
+    var bar = document.getElementById('home-progress');
+    bar.style.width = pct + '%';
+    bar.querySelector('span').textContent = pct + '%';
+}
+
+/* ===== START LESSON ===== */
+function startLesson(lessonId) {
+    var prog = state.lessonProgress[lessonId];
+    if (!prog.unlocked) {
+        showModal('🔒', 'Locked!', 'Complete the lesson before this one to unlock it.', 'OK');
+        return;
+    }
+    state.currentLessonId = lessonId;
+    state.vocabIndex = 0;
+    state.exerciseIndex = 0;
+    state.correctCount = 0;
+    state.answered = false;
+
+    showScreen('learn-screen');
+    var lesson = LESSONS.find(function(l) { return l.id === lessonId; });
+    document.getElementById('learn-title').textContent = lesson.emoji + ' ' + lesson.title;
+    renderVocabCard();
+}
+
+/* ===== LEARN PHASE ===== */
+function renderVocabCard() {
+    var lesson = LESSONS.find(function(l) { return l.id === state.currentLessonId; });
+    var vocab = lesson.vocab;
+    var idx = state.vocabIndex;
+    var body = document.getElementById('learn-body');
+    var actions = document.getElementById('learn-actions');
+
+    if (idx >= vocab.length) {
+        // Done learning, start exercises
+        showScreen('exercise-screen');
+        renderExercise();
+        return;
+    }
+
+    var item = vocab[idx];
+    body.innerHTML =
+        '<div class="flashcard">' +
+            '<div class="flashcard-emoji">' + item.emoji + '</div>' +
+            '<div class="flashcard-word">' + item.word + '</div>' +
+            '<div class="flashcard-sentence">' + item.sentence + '</div>' +
+            '<div class="flashcard-counter">' + (idx + 1) + ' / ' + vocab.length + '</div>' +
+        '</div>';
+
+    var isLast = idx === vocab.length - 1;
+    actions.innerHTML = '';
+    var btn = document.createElement('button');
+    btn.className = 'btn-primary ' + (isLast ? 'btn-start' : 'btn-next');
+    btn.textContent = isLast ? "Let's Practice!" : 'Next →';
+    btn.addEventListener('click', function() {
+        state.vocabIndex++;
+        renderVocabCard();
+    });
+    actions.appendChild(btn);
+}
+
+document.getElementById('learn-back').addEventListener('click', function() {
+    showScreen('home-screen');
+    renderHome();
+});
+
+/* ===== EXERCISE PHASE ===== */
+function renderExercise() {
+    var lesson = LESSONS.find(function(l) { return l.id === state.currentLessonId; });
+    var exercises = lesson.exercises;
+    var idx = state.exerciseIndex;
+    state.answered = false;
+
+    // Update dots
+    var dotsContainer = document.getElementById('exercise-dots');
+    dotsContainer.innerHTML = '';
+    for (var d = 0; d < exercises.length; d++) {
+        var dot = document.createElement('div');
+        dot.className = 'ex-dot';
+        if (d < idx) dot.classList.add('done');
+        if (d === idx) dot.classList.add('current');
+        dotsContainer.appendChild(dot);
+    }
+
+    if (idx >= exercises.length) {
+        completeLesson();
+        return;
+    }
+
+    var ex = exercises[idx];
+    var body = document.getElementById('exercise-body');
+    body.innerHTML = '';
+
+    // Instruction
+    var instruction = document.createElement('div');
+    instruction.className = 'exercise-instruction';
+    var badge = document.createElement('div');
+    badge.className = 'exercise-type-badge';
+    var typeLabels = {
+        'tap-picture': '🖼️ TAP THE PICTURE',
+        'fill-blank': '✍️ FILL THE BLANK',
+        'build-sentence': '🔨 BUILD IT',
+        'pick-sentence': '💬 PICK THE SENTENCE'
+    };
+    badge.textContent = typeLabels[ex.type] || ex.type;
+    instruction.appendChild(badge);
+    body.appendChild(instruction);
+
+    switch (ex.type) {
+        case 'tap-picture': renderTapPicture(ex, body); break;
+        case 'fill-blank': renderFillBlank(ex, body); break;
+        case 'build-sentence': renderBuildSentence(ex, body); break;
+        case 'pick-sentence': renderPickSentence(ex, body); break;
+    }
+}
+
+/* --- Tap Picture --- */
+function renderTapPicture(ex, body) {
+    var prompt = document.createElement('div');
+    prompt.className = 'exercise-prompt';
+    prompt.textContent = ex.sentence;
+    prompt.style.textAlign = 'center';
+    body.appendChild(prompt);
+
+    var grid = document.createElement('div');
+    grid.className = 'options-grid';
+
+    ex.options.forEach(function(opt, i) {
+        var card = document.createElement('div');
+        card.className = 'option-card';
+        card.innerHTML = '<div class="opt-emoji">' + opt.emoji + '</div><div class="opt-label">' + opt.label + '</div>';
+        card.addEventListener('click', function() {
+            if (state.answered) return;
+            if (i === ex.correct) {
+                state.answered = true;
+                card.classList.add('correct');
+                state.correctCount++;
+                showToast(randomCheer(), 'good');
+                setTimeout(nextExercise, 1000);
+            } else {
+                card.classList.add('wrong');
+                showToast(randomOops(), 'bad');
+                setTimeout(function() { card.classList.remove('wrong'); }, 600);
+            }
+        });
+        grid.appendChild(card);
+    });
+
+    body.appendChild(grid);
+}
+
+/* --- Fill Blank --- */
+function renderFillBlank(ex, body) {
+    var picDiv = document.createElement('div');
+    picDiv.className = 'exercise-picture';
+    picDiv.textContent = ex.picture;
+    body.appendChild(picDiv);
+
+    var display = document.createElement('div');
+    display.className = 'sentence-display';
+    var sentText = document.createElement('div');
+    sentText.className = 'sentence-text';
+
+    var blankId = 'blank-' + Date.now();
+    var html = '';
+    ex.template.forEach(function(part) {
+        if (part === '_') {
+            html += '<span class="blank-slot" id="' + blankId + '">___</span>';
+        } else {
+            html += ' ' + part + ' ';
+        }
+    });
+    sentText.innerHTML = html.trim();
+    display.appendChild(sentText);
+    body.appendChild(display);
+
+    var options = document.createElement('div');
+    options.className = 'word-options';
+
+    var shuffled = shuffleArray(ex.options);
+    shuffled.forEach(function(word) {
+        var btn = document.createElement('button');
+        btn.className = 'word-opt';
+        btn.textContent = word;
+        btn.addEventListener('click', function() {
+            if (state.answered) return;
+            var blank = document.getElementById(blankId);
+            if (word === ex.correct) {
+                state.answered = true;
+                blank.textContent = word;
+                blank.classList.add('filled');
+                btn.classList.add('correct');
+                state.correctCount++;
+                options.querySelectorAll('.word-opt').forEach(function(b) { b.classList.add('disabled'); });
+                showToast(randomCheer(), 'good');
+                setTimeout(nextExercise, 1000);
+            } else {
+                btn.classList.add('wrong');
+                showToast(randomOops(), 'bad');
+                setTimeout(function() { btn.classList.remove('wrong'); }, 600);
+            }
+        });
+        options.appendChild(btn);
+    });
+
+    body.appendChild(options);
+}
+
+/* --- Build Sentence --- */
+function renderBuildSentence(ex, body) {
+    var picDiv = document.createElement('div');
+    picDiv.className = 'exercise-picture';
+    picDiv.textContent = ex.picture;
+    body.appendChild(picDiv);
+
+    var buildArea = document.createElement('div');
+    buildArea.className = 'build-area';
+    buildArea.id = 'build-area';
+    body.appendChild(buildArea);
+
+    var bank = document.createElement('div');
+    bank.className = 'tile-bank';
+    bank.id = 'tile-bank';
+
+    var correctWords = ex.words;
+    var shuffled = shuffleArray(correctWords.map(function(w, i) { return { word: w, origIdx: i }; }));
+    var placedIds = [];
+
+    function updateBuildArea() {
+        buildArea.innerHTML = '';
+        if (placedIds.length > 0) {
+            buildArea.classList.add('has-words');
+        } else {
+            buildArea.classList.remove('has-words');
+        }
+        placedIds.forEach(function(origIdx, pIdx) {
+            var span = document.createElement('span');
+            span.className = 'build-word placed';
+            span.textContent = correctWords[origIdx];
+            span.addEventListener('click', function() {
+                if (state.answered) return;
+                placedIds.splice(pIdx, 1);
+                updateBuildArea();
+                updateTiles();
+            });
+            buildArea.appendChild(span);
+        });
+
+        if (placedIds.length === 0) {
+            var hint = document.createElement('span');
+            hint.style.color = 'var(--text3)';
+            hint.style.fontWeight = '700';
+            hint.textContent = 'Tap the words in order...';
+            buildArea.appendChild(hint);
+        }
+    }
+
+    function updateTiles() {
+        bank.innerHTML = '';
+        shuffled.forEach(function(item) {
+            var tile = document.createElement('button');
+            tile.className = 'tile-word';
+            tile.textContent = item.word;
+            if (placedIds.indexOf(item.origIdx) !== -1) {
+                tile.classList.add('used');
+            }
+            tile.addEventListener('click', function() {
+                if (state.answered) return;
+                if (placedIds.indexOf(item.origIdx) !== -1) return;
+
+                // Check if this is the correct next word
+                var nextExpectedIdx = placedIds.length;
+                if (item.origIdx === nextExpectedIdx) {
+                    placedIds.push(item.origIdx);
+                    updateBuildArea();
+                    updateTiles();
+
+                    if (placedIds.length === correctWords.length) {
+                        state.answered = true;
+                        state.correctCount++;
+                        buildArea.classList.add('correct-build');
+                        showToast(randomCheer(), 'good');
+                        setTimeout(nextExercise, 1000);
+                    }
+                } else {
+                    tile.classList.add('wrong-tile');
+                    showToast(randomOops(), 'bad');
+                    setTimeout(function() { tile.classList.remove('wrong-tile'); }, 400);
+                }
+            });
+            bank.appendChild(tile);
+        });
+    }
+
+    updateBuildArea();
+    updateTiles();
+    body.appendChild(bank);
+}
+
+/* --- Pick Sentence --- */
+function renderPickSentence(ex, body) {
+    var picDiv = document.createElement('div');
+    picDiv.className = 'exercise-picture';
+    picDiv.textContent = ex.picture;
+    body.appendChild(picDiv);
+
+    var opts = document.createElement('div');
+    opts.className = 'sentence-options';
+
+    var shuffled = shuffleArray(ex.options);
+    shuffled.forEach(function(sentence) {
+        var btn = document.createElement('button');
+        btn.className = 'sentence-opt';
+        btn.textContent = sentence;
+        btn.addEventListener('click', function() {
+            if (state.answered) return;
+            if (sentence === ex.correct) {
+                state.answered = true;
+                btn.classList.add('correct');
+                state.correctCount++;
+                opts.querySelectorAll('.sentence-opt').forEach(function(b) {
+                    if (b !== btn) b.style.opacity = '0.4';
+                });
+                showToast(randomCheer(), 'good');
+                setTimeout(nextExercise, 1000);
+            } else {
+                btn.classList.add('wrong');
+                showToast(randomOops(), 'bad');
+                setTimeout(function() { btn.classList.remove('wrong'); }, 600);
+            }
+        });
+        opts.appendChild(btn);
+    });
+
+    body.appendChild(opts);
+}
+
+/* --- Navigation --- */
+function nextExercise() {
+    state.exerciseIndex++;
+    renderExercise();
+}
+
+document.getElementById('exercise-back').addEventListener('click', function() {
+    showScreen('home-screen');
+    renderHome();
+});
+
+/* ===== COMPLETE LESSON ===== */
+function completeLesson() {
+    showScreen('complete-screen');
+    createConfetti();
+
+    var lesson = LESSONS.find(function(l) { return l.id === state.currentLessonId; });
+    var total = lesson.exercises.length;
+    var correct = state.correctCount;
+    var stars = correct >= total ? 3 : correct >= Math.ceil(total * 0.6) ? 2 : 1;
+
+    var prog = state.lessonProgress[lesson.id];
+    var wasCompleted = prog.completed;
+    var oldStars = prog.stars;
+
+    prog.completed = true;
+    if (stars > prog.stars) {
+        state.totalStars += (stars - prog.stars);
+        prog.stars = stars;
+    }
+
+    if (!wasCompleted) {
+        state.streak++;
+        // Unlock next lesson
+        var nextLesson = LESSONS.find(function(l) { return l.id === lesson.id + 1; });
+        if (nextLesson) {
+            state.lessonProgress[nextLesson.id].unlocked = true;
+        }
+    }
+
+    var body = document.getElementById('complete-body');
+    body.innerHTML = '';
+
+    var mascot = document.createElement('div');
+    mascot.className = 'complete-mascot';
+    mascot.textContent = '🦊';
+    body.appendChild(mascot);
+
+    var title = document.createElement('div');
+    title.className = 'complete-title';
+    title.style.color = 'var(--text)';
+    title.textContent = correct === total ? 'Perfect!' : correct >= Math.ceil(total * 0.6) ? 'Great Job!' : 'Good Try!';
+    body.appendChild(title);
+
+    var sub = document.createElement('div');
+    sub.className = 'complete-sub';
+    sub.textContent = 'You got ' + correct + ' out of ' + total + ' right!';
+    body.appendChild(sub);
+
+    var starsDiv = document.createElement('div');
+    starsDiv.className = 'stars-display';
+    for (var s = 0; s < 3; s++) {
+        var starSpan = document.createElement('span');
+        starSpan.className = s < stars ? 'star-earned' : '';
+        starSpan.textContent = s < stars ? '⭐' : '☆';
+        starSpan.style.opacity = s < stars ? '0' : '1';
+        starsDiv.appendChild(starSpan);
+    }
+    body.appendChild(starsDiv);
+
+    var actions = document.createElement('div');
+    actions.className = 'complete-actions';
+
+    var homeBtn = document.createElement('button');
+    homeBtn.className = 'btn-home';
+    homeBtn.textContent = '🏠 Home';
+    homeBtn.addEventListener('click', function() {
+        showScreen('home-screen');
+        renderHome();
+    });
+    actions.appendChild(homeBtn);
+
+    var nextLessonData = LESSONS.find(function(l) { return l.id === lesson.id + 1; });
+    if (nextLessonData) {
+        var contBtn = document.createElement('button');
+        contBtn.className = 'btn-continue';
+        contBtn.textContent = 'Next Lesson →';
+        contBtn.addEventListener('click', function() { startLesson(nextLessonData.id); });
+        actions.appendChild(contBtn);
+    } else {
+        var replayBtn = document.createElement('button');
+        replayBtn.className = 'btn-continue';
+        replayBtn.textContent = '🔄 Play Again';
+        replayBtn.addEventListener('click', function() { startLesson(lesson.id); });
+        actions.appendChild(replayBtn);
+    }
+
+    body.appendChild(actions);
+}
+
+/* ===== INIT ===== */
+renderHome();
+</script>
+  <script>
+          // Auto-update year
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </script>
+</body>
+</html>
