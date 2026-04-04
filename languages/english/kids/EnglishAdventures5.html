@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kids English Learning Hub</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+font-family:'Nunito',sans-serif;
+margin:0;
+background:#f3f6fb;
+color:#333;
+}
+
+header{
+background:white;
+padding:25px;
+text-align:center;
+border-bottom:1px solid #e6eaf2;
+}
+
+header h1{
+margin:0;
+color:#2f80ed;
+font-size:34px;
+}
+
+.container{
+max-width:1150px;
+margin:auto;
+padding:30px;
+}
+
+/* CATEGORY */
+
+.category{
+margin-bottom:50px;
+}
+
+.category-title{
+color:white;
+padding:12px 16px;
+border-radius:8px;
+font-size:20px;
+font-weight:700;
+margin-bottom:18px;
+}
+
+.vocab{background:#4dabf7;}
+.phonics{background:#51cf66;}
+.writing{background:#f59f00;}
+.games{background:#e64980;}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+gap:16px;
+}
+
+.tile{
+background:white;
+padding:18px;
+border-radius:12px;
+text-align:center;
+cursor:pointer;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+transition:.2s;
+}
+
+.tile:hover{
+transform:translateY(-4px);
+}
+
+.tile img{
+width:60px;
+height:60px;
+margin-bottom:8px;
+}
+
+/* ACTIVITIES */
+
+.activities{
+display:none;
+margin-top:40px;
+}
+
+.activity-card{
+background:white;
+padding:30px;
+border-radius:14px;
+max-width:720px;
+margin:auto;
+box-shadow:0 6px 16px rgba(0,0,0,0.08);
+text-align:center;
+}
+
+/* DRAG DROP */
+
+.drag-area{
+display:flex;
+justify-content:center;
+gap:12px;
+flex-wrap:wrap;
+margin-bottom:20px;
+}
+
+.drag-card{
+background:#e7f0ff;
+padding:10px 16px;
+border-radius:8px;
+cursor:grab;
+font-weight:600;
+}
+
+.drop-area{
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.drop-box{
+width:90px;
+height:90px;
+border:2px dashed #2f80ed;
+border-radius:10px;
+font-size:40px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* CVC */
+
+.cvc button{
+margin:6px;
+padding:10px 16px;
+border:none;
+border-radius:8px;
+background:#2f80ed;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+/* TRACE */
+
+canvas{
+border:2px dashed #2f80ed;
+border-radius:10px;
+}
+
+/* BUTTON */
+
+button{
+padding:10px 16px;
+border:none;
+border-radius:8px;
+background:#2f80ed;
+color:white;
+cursor:pointer;
+}
+
+.back{
+background:#6c757d;
+margin-bottom:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>Kids English Learning Hub</h1>
+</header>
+
+<div class="container">
+
+<!-- VOCABULARY -->
+
+<div class="category">
+
+<div class="category-title vocab">Vocabulary Topics</div>
+
+<div class="grid">
+
+<div class="tile" onclick="openTopic('animals')">🐶 Animals</div>
+<div class="tile">🍎 Food</div>
+<div class="tile">🎨 Colors</div>
+<div class="tile">👨‍👩‍👧 Family</div>
+<div class="tile">🏫 School</div>
+<div class="tile">🌦 Weather</div>
+<div class="tile">🚗 Transport</div>
+<div class="tile">👕 Clothes</div>
+<div class="tile">🍕 Meals</div>
+<div class="tile">🐠 Sea Animals</div>
+<div class="tile">🌳 Nature</div>
+<div class="tile">⚽ Sports</div>
+
+</div>
+
+</div>
+
+<!-- PHONICS -->
+
+<div class="category">
+
+<div class="category-title phonics">Phonics & Reading</div>
+
+<div class="grid">
+
+<div class="tile" onclick="openTopic('phonics')">🔤 Letter Sounds</div>
+<div class="tile" onclick="openTopic('cvc')">📚 CVC Words</div>
+<div class="tile">🔊 Phonics Blending</div>
+<div class="tile">🧩 Word Builder</div>
+
+</div>
+
+</div>
+
+<!-- WRITING -->
+
+<div class="category">
+
+<div class="category-title writing">Writing Practice</div>
+
+<div class="grid">
+
+<div class="tile" onclick="openTopic('writing')">✏️ Trace Letters</div>
+<div class="tile">📝 Trace Words</div>
+
+</div>
+
+</div>
+
+<!-- GAMES -->
+
+<div class="category">
+
+<div class="category-title games">Learning Games</div>
+
+<div class="grid">
+
+<div class="tile">🎯 Matching Game</div>
+<div class="tile">🧠 Memory Game</div>
+<div class="tile">❓ Quiz Game</div>
+
+</div>
+
+</div>
+
+<!-- ANIMAL MATCH -->
+
+<div id="animals" class="activities">
+
+<button class="back" onclick="goHome()">Back</button>
+
+<div class="activity-card">
+
+<h2>Match the Animals</h2>
+
+<div class="drag-area">
+<div draggable="true" class="drag-card" data-word="cat">cat</div>
+<div draggable="true" class="drag-card" data-word="dog">dog</div>
+<div draggable="true" class="drag-card" data-word="fish">fish</div>
+</div>
+
+<div class="drop-area">
+<div class="drop-box" data-word="cat">🐱</div>
+<div class="drop-box" data-word="dog">🐶</div>
+<div class="drop-box" data-word="fish">🐟</div>
+</div>
+
+</div>
+
+</div>
+
+<!-- CVC READING -->
+
+<div id="cvc" class="activities">
+
+<button class="back" onclick="goHome()">Back</button>
+
+<div class="activity-card cvc">
+
+<h2>CVC Word Reading</h2>
+
+<div id="cvcWords"></div>
+
+<br>
+
+<button onclick="generateCVC()">New Words</button>
+
+</div>
+
+</div>
+
+<!-- WRITING -->
+
+<div id="writing" class="activities">
+
+<button class="back" onclick="goHome()">Back</button>
+
+<div class="activity-card">
+
+<h2>Trace the Word</h2>
+
+<canvas id="traceCanvas" width="600" height="200"></canvas>
+
+<br><br>
+
+<button onclick="clearCanvas()">Clear</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* navigation */
+
+function openTopic(id){
+
+document.querySelectorAll(".category")
+.forEach(c=>c.style.display="none")
+
+document.getElementById(id).style.display="block"
+
+}
+
+function goHome(){
+
+document.querySelectorAll(".category")
+.forEach(c=>c.style.display="block")
+
+document.querySelectorAll(".activities")
+.forEach(a=>a.style.display="none")
+
+}
+
+
+/* SPEECH */
+
+function speak(word){
+
+let msg=new SpeechSynthesisUtterance(word)
+msg.rate=0.8
+speechSynthesis.speak(msg)
+
+}
+
+
+/* CVC GENERATOR */
+
+const consonants=["b","c","d","f","h","m","p","s","t"]
+const vowels=["a","e","i","o","u"]
+
+function generateCVC(){
+
+let container=document.getElementById("cvcWords")
+container.innerHTML=""
+
+for(let i=0;i<6;i++){
+
+let word=
+consonants[Math.floor(Math.random()*consonants.length)]
++vowels[Math.floor(Math.random()*vowels.length)]
++consonants[Math.floor(Math.random()*consonants.length)]
+
+let btn=document.createElement("button")
+
+btn.innerText=word
+
+btn.onclick=()=>speak(word)
+
+container.appendChild(btn)
+
+}
+
+}
+
+generateCVC()
+
+
+/* DRAG DROP */
+
+let cards=document.querySelectorAll(".drag-card")
+let boxes=document.querySelectorAll(".drop-box")
+
+cards.forEach(card=>{
+card.addEventListener("dragstart",e=>{
+e.dataTransfer.setData("word",card.dataset.word)
+})
+})
+
+boxes.forEach(box=>{
+box.addEventListener("dragover",e=>e.preventDefault())
+
+box.addEventListener("drop",e=>{
+
+let word=e.dataTransfer.getData("word")
+
+if(word===box.dataset.word){
+box.innerHTML="✅"
+}else{
+alert("Try again!")
+}
+
+})
+})
+
+
+/* TRACING */
+
+const canvas=document.getElementById("traceCanvas")
+const ctx=canvas.getContext("2d")
+
+ctx.font="120px Arial"
+ctx.fillStyle="#e7f0ff"
+ctx.fillText("CAT",120,140)
+
+let drawing=false
+
+canvas.addEventListener("mousedown",()=>drawing=true)
+canvas.addEventListener("mouseup",()=>drawing=false)
+
+canvas.addEventListener("mousemove",e=>{
+
+if(!drawing)return
+
+let rect=canvas.getBoundingClientRect()
+
+let x=e.clientX-rect.left
+let y=e.clientY-rect.top
+
+ctx.beginPath()
+ctx.arc(x,y,8,0,Math.PI*2)
+ctx.fill()
+
+})
+
+function clearCanvas(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+
+ctx.font="120px Arial"
+ctx.fillStyle="#e7f0ff"
+ctx.fillText("CAT",120,140)
+
+}
+
+</script>
+
+</body>
+</html>
