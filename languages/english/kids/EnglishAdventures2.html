@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>English Adventures! - Interactive Activities for Kids</title>
+
+<style>
+
+body{
+font-family: "Comic Sans MS", sans-serif;
+margin:0;
+background:#f6f9ff;
+text-align:center;
+}
+
+header{
+background:#ffb84d;
+padding:20px;
+color:white;
+font-size:28px;
+}
+
+nav{
+background:#ffd699;
+padding:10px;
+}
+
+nav button{
+margin:5px;
+padding:10px 18px;
+border:none;
+border-radius:8px;
+background:#ff9933;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+.section{
+display:none;
+padding:30px;
+}
+
+.active{
+display:block;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+}
+
+/* cards */
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+margin:20px;
+box-shadow:0 5px 10px rgba(0,0,0,0.1);
+}
+
+/* drag drop */
+
+.drag-area{
+display:flex;
+justify-content:center;
+gap:10px;
+margin-bottom:20px;
+}
+
+.drag-card{
+padding:10px 20px;
+background:#ffe6cc;
+border-radius:8px;
+cursor:grab;
+font-weight:bold;
+}
+
+.drop-area{
+display:flex;
+justify-content:center;
+gap:20px;
+}
+
+.drop-box{
+width:120px;
+height:120px;
+border:3px dashed orange;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:40px;
+}
+
+/* tracing */
+
+canvas{
+border:3px dashed orange;
+background:white;
+}
+
+/* cvc */
+
+.cvc button{
+padding:15px 20px;
+margin:10px;
+font-size:20px;
+border:none;
+border-radius:10px;
+background:#66ccff;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+🌟 Fun English Adventures 🌟  
+<br>
+Interactive English Activities for Kids
+</header>
+
+<nav>
+<button onclick="showSection('home')">Home</button>
+<button onclick="showSection('vocab')">Vocabulary</button>
+<button onclick="showSection('trace')">Trace Letters</button>
+<button onclick="showSection('cvc')">CVC Reading</button>
+</nav>
+
+
+<!-- HOME -->
+
+<div id="home" class="section active">
+
+<div class="container">
+
+<div class="card">
+<h2>Vocabulary Match</h2>
+<p>Drag the words to the correct picture.</p>
+</div>
+
+<div class="card">
+<h2>Trace Letters</h2>
+<p>Practice writing letters.</p>
+</div>
+
+<div class="card">
+<h2>CVC Reading</h2>
+<p>Click words to hear them.</p>
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- VOCAB -->
+
+<div id="vocab" class="section">
+
+<h2>Drag the Word to the Picture</h2>
+
+<div class="drag-area">
+
+<div draggable="true" class="drag-card" data-word="cat">cat</div>
+<div draggable="true" class="drag-card" data-word="dog">dog</div>
+<div draggable="true" class="drag-card" data-word="sun">sun</div>
+
+</div>
+
+<div class="drop-area">
+
+<div class="drop-box" data-word="dog">🐶</div>
+<div class="drop-box" data-word="sun">☀️</div>
+<div class="drop-box" data-word="cat">🐱</div>
+
+</div>
+
+</div>
+
+
+
+<!-- TRACING -->
+
+<div id="trace" class="section">
+
+<h2>Trace the Word</h2>
+
+<p>Trace the word: <b>CAT</b></p>
+
+<canvas id="traceCanvas" width="600" height="200"></canvas>
+
+<br><br>
+
+<button onclick="clearCanvas()">Clear</button>
+
+</div>
+
+
+
+<!-- CVC -->
+
+<div id="cvc" class="section cvc">
+
+<h2>Click the Word and Listen</h2>
+
+<button onclick="speak('cat')">cat</button>
+<button onclick="speak('dog')">dog</button>
+<button onclick="speak('sun')">sun</button>
+<button onclick="speak('bat')">bat</button>
+<button onclick="speak('hat')">hat</button>
+<button onclick="speak('map')">map</button>
+
+</div>
+
+
+
+<script>
+
+/* navigation */
+
+function showSection(id){
+
+document.querySelectorAll(".section")
+.forEach(s=>s.classList.remove("active"))
+
+document.getElementById(id).classList.add("active")
+
+}
+
+
+
+/* drag drop */
+
+let cards=document.querySelectorAll(".drag-card")
+let boxes=document.querySelectorAll(".drop-box")
+
+cards.forEach(card=>{
+
+card.addEventListener("dragstart",e=>{
+
+e.dataTransfer.setData("word",card.dataset.word)
+
+})
+
+})
+
+boxes.forEach(box=>{
+
+box.addEventListener("dragover",e=>e.preventDefault())
+
+box.addEventListener("drop",e=>{
+
+let word=e.dataTransfer.getData("word")
+
+if(word===box.dataset.word){
+
+box.innerHTML="✅"
+
+}
+
+else{
+
+alert("Try again!")
+
+}
+
+})
+
+})
+
+
+
+/* tracing */
+
+const canvas=document.getElementById("traceCanvas")
+const ctx=canvas.getContext("2d")
+
+ctx.font="120px Arial"
+ctx.fillStyle="#ffe0b3"
+ctx.fillText("CAT",120,140)
+
+let drawing=false
+
+canvas.addEventListener("mousedown",()=>drawing=true)
+canvas.addEventListener("mouseup",()=>drawing=false)
+
+canvas.addEventListener("mousemove",e=>{
+
+if(!drawing)return
+
+let rect=canvas.getBoundingClientRect()
+
+let x=e.clientX-rect.left
+let y=e.clientY-rect.top
+
+ctx.beginPath()
+ctx.arc(x,y,8,0,Math.PI*2)
+ctx.fillStyle="black"
+ctx.fill()
+
+})
+
+function clearCanvas(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+
+ctx.font="120px Arial"
+ctx.fillStyle="#ffe0b3"
+ctx.fillText("CAT",120,140)
+
+}
+
+
+
+/* speech */
+
+function speak(word){
+
+let msg=new SpeechSynthesisUtterance(word)
+
+msg.rate=0.8
+
+speechSynthesis.speak(msg)
+
+}
+
+</script>
+
+</body>
+</html>
